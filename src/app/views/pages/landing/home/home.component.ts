@@ -12,4 +12,11 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onScrollToSection(sectionId: string): void {
+    const section = document.getElementById(`${sectionId}`);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
 }

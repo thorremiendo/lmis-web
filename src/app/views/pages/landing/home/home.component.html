@@ -1,5 +1,41 @@
-<p>home works!</p>
+<div class="bg-image-container" id="home">
+  <div class="row">
+    <app-header [title]="'Header'" (scrollToSection)="onScrollToSection($event)"></app-header>
+    <div class="about" >
+      <h1>MULAT-BLISTT Program</h1>
+      <p>
+        MODELLING AND UNDERSTANDING LANDSLIDE EVENTS IN BAGUIO-LA TRINIDAD-ITOGON-SABLAN-TUBLAY</p>
+      <button class="btn btn-transparent btn-read-more">Read more</button>
+    </div>
+  </div>
 
-<div class="container" style="background-color: rebeccapurple; height: 100px">
-  <i class="feather icon-arrow-right-circle icon-lg"></i>
 </div>
+<div class="container lg ">
+  <div class="logos">
+    <img src="/assets/images/others/logos/upb-logo.webp" alt="upb-logo">
+    <img src="/assets/images/others/logos/mgb-logo.webp" alt="mgb-logo">
+    <img src="/assets/images/others/logos/uc-logo.webp" alt="uc-logo">
+    <img src="/assets/images/others/logos/ub-logo.webp" alt="ub-logo">
+    <img src="/assets/images/others/logos/dost-logo.png" alt="dost-logo">
+    <img src="/assets/images/others/logos/pcieerd.png" alt="pcieerd-logo">
+    <img src="/assets/images/others/logos/blistt-logo.webp" alt="blisst-logo">
+
+  </div>
+</div>
+
+<div class="programs" id="about">
+  <app-programs></app-programs>
+</div>
+<div class="project1" id="project1">
+  <app-project1></app-project1>
+</div>
+<div class="project2" id="project2">
+  <app-project2></app-project2>
+</div>
+<div class="team" id="team">
+  <app-team></app-team>
+</div>
+<div class="footer">
+  <app-footer></app-footer>
+</div>
+
