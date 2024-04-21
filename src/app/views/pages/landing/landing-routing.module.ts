@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, ExtraOptions } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
@@ -8,6 +8,11 @@ const routes: Routes = [
     component: HomeComponent
   }
 ];
+
+const routerOptions : ExtraOptions = {
+  scrollPositionRestoration:'enabled',
+  anchorScrolling:'enabled',
+}
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

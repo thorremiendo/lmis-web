@@ -1,0 +1,16 @@
+<div class="header" [class.scrolled]="isScrolled">
+    <nav class="sticky-nav">
+        <ul class="nav-list">            
+            <h3><a (click)="onClickScrollTo('home')">MULAT-BLISST</a></h3>
+            <div class="nav-links">
+                <li><a (click)="onClickScrollTo('about')">ABOUT THE PROGRAM</a></li>
+                <li><a (click)="onClickScrollTo('project1')">PROJECT 1</a></li>
+                <li><a (click)="onClickScrollTo('project2')">PROJECT 2</a></li>
+                <li><a (click)="onClickScrollTo('team')">TEAM</a></li>
+              
+
+                <li class="login-btn"><a routerLink="/login">LOG IN</a></li>
+            </div>
+        </ul>
+    </nav>
+</div>
