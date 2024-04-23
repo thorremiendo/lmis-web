@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor( private viewportScroller: ViewportScroller) { }
 
   ngOnInit(): void {
   }
@@ -17,6 +18,18 @@ export class HomeComponent implements OnInit {
     if (section) {
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  }
+
+  onClickScrollTo(sectionId: string): void {
+    this.viewportScroller.scrollToAnchor(sectionId);
+    setTimeout(() => {
+      const stickyNavHeight = 100;
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const offsetTop = element.getBoundingClientRect().top;
+        window.scrollBy(0, offsetTop - stickyNavHeight);
+      }
+    }, 0);
   }
 
 }

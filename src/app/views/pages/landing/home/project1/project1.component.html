@@ -2,63 +2,79 @@
     <div class="row align-items-center">
         <div class="col-lg-4">
             <h1>Project 1</h1>
-            <hr>
+            <hr class="line">
             <h4>Modelling Susceptibility and Generating Rainfall-Threshold for Rainfall-Induced Landslide</h4>
             <p>One of the most exposed areas to rainfall-induced landslides is the BLISTT area of the Cordillera
-                Administrative
-                Region, which experienced nine out of ten of the country's greatest 24-hour rainfall totals during
-                tropical
-                cyclones.
+                Administrative Region, which experienced nine out of ten of the country's greatest 24-hour rainfall
+                totals during
+                tropical cyclones.
 
                 The MULAT-BLISTT, which stands for Modelling and Understanding Landslide Events in BLISTT (Baguio, La
                 Trinidad,
                 Itogon, Sablan, Tuba, Tublay), is a research program funded by the DOST-PCIEERD. The program's objective
                 is
-                to
-                increase disaster resilience in accordance with R.A. 10121, the "Philippine Disaster Risk Reduction and
+                to increase disaster resilience in accordance with R.A. 10121, the "Philippine Disaster Risk Reduction
+                and
                 Management Act of 2010," and the UN 2030 Sustainable Development Goal.</p>
-            <div class="div">
-                <button class="btn btn-transparent btn-read-more">Read more</button>
+            <div class="btn-container">
+                <button class="btn btn-transparent btn-read-more" (click)="navigateToProject1Page()">Read more</button>
             </div>
         </div>
+
+
         <div class="col-lg-8">
-            <!-- Top row with two cards -->
-            <div class="top-row">
-                <div class="card">
-                    <i class="feather icon-file-text icon-lg"></i>
-                    <h2>Catalogue of rainfall, extreme rainfall, and typhoon occurrence</h2>
-                    <p>The catalogue summarizes rainfall, extreme rainfall events, and typhoon occurrences over the past
-                        two decades.</p>
+            <div class="col align-items-center">
+                <!-- Top row with two cards -->
+                <div class="top-row">
+                    <div class="card">
+                        <div class="icon-container">
+                            <i class="feather icon-file-text icon-lg"></i>
+                        </div>
+                        <h3>Catalogue of rainfall, extreme rainfall, and typhoon occurrence</h3>
+                        <p>The catalogue summarizes rainfall, extreme rainfall events, and typhoon occurrences over the
+                            past
+                            two decades.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon-container">
+                            <i class="feather icon-file-text icon-lg"></i>
+                        </div>
+                        <h3>Catalogue and Database of Landslide reports</h3>
+                        <p>The Catalogue and Database compiles comprehensive landslide reports for analysis and
+                            mitigation.
+                        </p>
+                    </div>
                 </div>
-                <div class="card">
-                    <i class="feather icon-file-text icon-lg"></i>
-                    <h2>Catalogue and Database of Landslide reports</h2>
-                    <p>The Catalogue and Database compiles comprehensive landslide reports for analysis and mitigation.
-                    </p>
+
+                <!-- Bottom row with three cards -->
+                <div class="bottom-row">
+                    <div class="card">
+                        <div class="icon-container">
+                            <i class="feather icon-cloud-rain icon-lg"></i>
+                        </div>
+                        <h3>Rainfall Threshold for Landslides</h3>
+                        <p>The rainfall threshold for a landslide can vary depending on factors like soil type and
+                            terrain.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <div class="icon-container">
+                            <i class="feather icon-triangle icon-lg"></i>
+                        </div>
+                        <h3>Landslide Susceptibility, Vulnerability and Risk Maps</h3>
+                        <p>Assess and mitigate the potential for landslides in a given area.</p>
+                    </div>
+                    <div class="card">
+                        <div class="icon-container">
+                            <i class="feather icon-edit-3 icon-lg"></i>
+                        </div>
+                        <h3>Publication of Journals</h3>
+                        <p>Journals are published to disseminate the latest research findings and promote academic
+                            discourse.</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Bottom row with three cards -->
-            <div class="bottom-row">
-                <div class="card">
-                    <i class="feather icon-cloud-rain icon-lg"></i>
-                    <h2>Rainfall Threshold for Landslides</h2>
-                    <p>The rainfall threshold for a landslide can vary depending on factors like soil type and terrain.
-                    </p>
-                </div>
-                <div class="card">
-                    <i class="feather icon-triangle icon-lg"></i>
-                    <h2>Landslide Susceptibility, Vulnerability and Risk Maps</h2>
-                    <p>Assess and mitigate the potential for landslides in a given area.</p>
-                </div>
-                <div class="card">
-                    <i class="feather icon-edit-3 icon-lg"></i>
-                    <h2>Publication of Journals</h2>
-                    <p>Journals are published to disseminate the latest research findings and promote academic
-                        discourse.</p>
-                </div>
-            </div>
         </div>
-
     </div>
 </div>

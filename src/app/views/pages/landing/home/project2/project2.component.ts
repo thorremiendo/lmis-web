@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project2',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Project2Component implements OnInit {
 
-  constructor() { }
+  constructor(
+    private router : Router) { }
 
   ngOnInit(): void {
   }
 
+  navigateToProject2Page() {
+    console.log('Navigating to project2...');
+    this.router.navigate(['home/project2']);
+  }
 }

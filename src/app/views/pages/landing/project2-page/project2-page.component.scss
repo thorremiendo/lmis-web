@@ -1,0 +1,96 @@
+.bg-image-container {
+    background-image: url('/assets/images/others/sampleBG.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 85vh;
+}
+
+.row {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.about {
+    color: #fff;
+    text-align: center;
+    margin-top: 200px;
+}
+
+.about h1 {
+    margin-bottom: 20px;
+}
+
+.btn-read-more {
+    border: 2px solid #fff;
+    border-radius: 40px;
+    background-color: transparent;
+    color: #fff;
+    margin-top: 150px;
+    font-size: 17px;
+    padding: 10px 40px;
+}
+
+.btn-read-more:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.logos {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    padding: 33px;
+    flex-wrap: wrap;
+    margin: 40px;
+}
+
+.logos img {
+    width: 100px;
+    height: auto;
+}
+
+.overview2{
+    background-color: #F8F9FA;
+    background-size: cover;
+    background-position: center;
+    padding: 0px;
+}
+
+.goals2{
+    background-color: #FFFFFF;
+    background-size: cover;
+    background-position: center;
+    padding: 50px;
+    margin-top: 50px;
+    padding: 33px;
+}
+
+.gallery2{
+    background-color: #F8F9FA;
+    background-size: cover;
+    background-position: center;
+    margin-top: 50px;
+    padding: 33px;
+}
+.team2{
+    background-color: #FFFFFF;
+    background-size: cover;
+    background-position: center;
+    margin-top: 50px;
+    padding: 33px 33px 50px 33px;
+}
+
+.footer{
+    background-color: #F9F8F9;
+    background-size: cover;
+    background-position: center;
+    margin-top: 50px;
+    padding: 0px
+
+}
+
