@@ -1,3 +1,14 @@
+.line1 {
+    border-top: 10px solid #000000;
+    width: 70px;
+    box-sizing: border-box;
+    margin: 10px;
+}
+
+.card-container {
+    margin-top: 50px;
+}
+
 .card {
     background-color: #f0f0f0;
     padding: 20px;
@@ -5,16 +16,32 @@
     align-items: center;
     align-content: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-;}
+    ;
+}
 
 .card img {
     max-width: 40%;
-;    height: auto;
-;}
+    ;
+    height: auto;
+    ;
+}
 
 @media (max-width: 768px) {
     .card {
         width: 40%;
-        /* Set cards to full width on smaller screens */
     }
+}
+
+.circular-image {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+.line {
+    border-top: 5px solid #6d4f2e;
+    width: 50px;
+    margin: 10px 0;
 }

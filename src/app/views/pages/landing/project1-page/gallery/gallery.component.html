@@ -1,0 +1,17 @@
+<div class="container">
+    <h1>GALLERY</h1>
+    <hr class="line">
+    <div class="filter-buttons text-center">
+        <button class="btn btn-transparent btn" (click)="filterImages('all')">All</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('t')">Training</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('p')">Partnership</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('f')">Fieldwork</button>
+    </div>
+    <div class="image-gallery">
+        <div class="row">
+            <div class="col-md-3" *ngFor="let image of filteredImages">
+                <img [src]="image.src" [alt]="image.alt" [attr.data-category]="image.category">
+            </div>
+        </div>
+    </div>
+</div>

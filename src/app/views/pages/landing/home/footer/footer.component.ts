@@ -38,4 +38,16 @@ export class FooterComponent implements OnInit {
       }
     }, 0);
   }
+
+  navigateToHome() {
+    this.router.navigate(['./home'])
+  }
+
+  navigateToProject2Page() {
+    this.router.navigate(['./home/project2']);
+  }
+  
+  navigateToProject1Page() {
+    this.router.navigate(['./home/project1']);
+  }
 }
