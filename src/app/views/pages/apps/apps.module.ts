@@ -46,6 +46,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { TemperatureComponent } from './sensor-management/temperature/temperature.component';
+import { RowDetailTableComponent } from './sensor-management/row-detail-table/row-detail-table.component';
 
 const routes: Routes = [
   {
@@ -114,7 +115,8 @@ const routes: Routes = [
     SoilMoistureComponent,
     InclinometerComponent,
     AccelerometerComponent,
-    TemperatureComponent],
+    TemperatureComponent,
+    RowDetailTableComponent],
   imports: [
     NgbModule,
     NgApexchartsModule,
