@@ -122,6 +122,7 @@ export class GalleryComponent implements OnInit {
   ];
 
   filteredImages: any[] = [];
+  filter: string = 'all';
 
   constructor() { }
 
@@ -131,7 +132,7 @@ export class GalleryComponent implements OnInit {
   }
 
   filterImages(category: string) {
-    console.log('Filter Category:', category);
+    this.filter = category;
     if (category === 'all') {
       this.filteredImages = this.images; 
     } else {

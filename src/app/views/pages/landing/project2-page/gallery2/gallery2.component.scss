@@ -15,7 +15,12 @@
     color: #000000;
     margin-top: 140px;
     font-size: 14px;
-    margin: 17px;
+    margin: 5px;
+}
+
+.btn.selected {
+    background-color: #8e4646;
+    color: #fff;
 }
 
 .btn:hover {

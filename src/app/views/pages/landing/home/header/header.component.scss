@@ -64,8 +64,13 @@
 .nav-list li a {
     font-size: 17px;
     text-decoration: none;
-    color: #4d3822;
-    transition: color 0.3s; /* Add transition effect */
+    color: #e2bd95;
+    transition: color 0.3s; 
+    text-shadow:
+    -0.5px -0.5px 0 #6e4c1f,  
+    0.5px -0.5px 0 #6e4c1f,
+   -0.5px  0.5px 0 #6e4c1f,
+    0.5px  0.5px 0 #6e4c1f; 
 }
 
 .nav-list li a:hover {

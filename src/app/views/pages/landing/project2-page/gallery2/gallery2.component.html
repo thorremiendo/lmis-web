@@ -2,11 +2,16 @@
     <h1>GALLERY</h1>
     <hr class="line">
     <div class="filter-buttons text-center">
-        <button class="btn btn-transparent btn" (click)="filterImages('all')">All</button>
-        <button class="btn btn-transparent btn" (click)="filterImages('m')">Meeting</button>
-        <button class="btn btn-transparent btn" (click)="filterImages('t')">Trainings</button>
-        <button class="btn btn-transparent btn" (click)="filterImages('s')">Sites</button>
-        <button class="btn btn-transparent btn" (click)="filterImages('f')">Fieldworks</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('all')"
+            [ngClass]="{ 'selected': filter === 'all' }">All</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('m')"
+            [ngClass]="{ 'selected': filter === 'm' }">Meeting</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('t')"
+            [ngClass]="{ 'selected': filter === 't' }">Trainings</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('s')"
+            [ngClass]="{ 'selected': filter === 's' }">Sites</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('f')"
+            [ngClass]="{ 'selected': filter === 'f' }">Fieldworks</button>
     </div>
     <div class="image-gallery">
         <div class="row">

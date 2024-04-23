@@ -1,8 +1,9 @@
 .bg-image-container {
-    background-image: url('/assets/images/others/sampleBG.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/others/hero-banner-bg.webp');
     background-size: cover;
     background-position: center;
     height: 85vh;
+
 }
 
 .row {
@@ -54,14 +55,14 @@
     height: auto;
 }
 
-.programs{
+.programs {
     background-color: #F8F9FA;
     background-size: cover;
     background-position: center;
     padding: 0px;
 }
 
-.project1{
+.project1 {
     background-color: #FFFFFF;
     background-size: cover;
     background-position: center;
@@ -70,26 +71,26 @@
     padding: 33px;
 }
 
-.project2{
+.project2 {
     background-color: #F8F9FA;
     background-size: cover;
     background-position: center;
     margin-top: 50px;
     padding: 33px;
 }
-.team{
+
+.team {
     background-color: #FFFFFF;
     background-size: cover;
     background-position: center;
     margin-top: 50px;
     padding: 33px 33px 50px 33px;
 }
-.footer{
+
+.footer {
     background-color: #F9F8F9;
     background-size: cover;
     background-position: center;
     margin-top: 50px;
     padding: 0px
-
 }
-
