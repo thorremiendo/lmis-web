@@ -23,7 +23,8 @@ export class RainGaugeComponent implements OnInit {
   public loadingIndicator = true;
   public reorderable = true;
   public rainfallPeriodTotal: number
-  public alertType: string = "warning"
+  public alertType: string
+  public alertLevel: number
   ColumnMode = ColumnMode;
 
   public lineChartOptions: any = {};
@@ -176,6 +177,7 @@ export class RainGaugeComponent implements OnInit {
   }
 
   fetchSensorDataPeriod(id: number) {
+    this.errorMessage = ""
     this.isLoading = true
     let startDate: Date;
     const endDate: Date = new Date(); // current date/time
@@ -216,8 +218,117 @@ export class RainGaugeComponent implements OnInit {
 
       this.rainfallRecording.unshift(totalRow);
       this.isLoading = false
+      console.log(this.rainfallRecording[0], 'last')
+    }, err => {
+      this.errorMessage = "Please try again."
+      this.isLoading = false
     })
 
+  }
+
+  getRainfallAlertLevel(): any {
+    const rainfall = this.rainfallPeriodTotal
+    switch (this.selectedPeriod.value) {
+      case 1:
+        if (rainfall >= 0 && rainfall <= 113.24) {
+          this.alertType = "success"
+          this.alertLevel = 1
+          return 'RA-0';
+        } else if (rainfall > 113.24 && rainfall <= 182.56) {
+          this.alertType = "warning"
+          this.alertLevel = 2
+          return 'RA-1';
+        } else if (rainfall > 182.56 && rainfall <= 545.35) {
+          this.alertType = "danger"
+          this.alertLevel = 3
+          return 'RA-2';
+        } else if (rainfall > 545.35) {
+          this.alertType = "danger"
+          this.alertLevel = 4
+          return 'RA-3';
+        } else {
+          throw new Error('Invalid rainfall amount');
+        }
+      case 2:
+        if (rainfall >= 0 && rainfall <= 132.65) {
+          this.alertType = "success"
+          this.alertLevel = 1
+          return 'RA-0';
+        } else if (rainfall > 132.65 && rainfall <= 233.86) {
+          this.alertType = "warning"
+          this.alertLevel = 2
+          return 'RA-1';
+        } else if (rainfall > 233.86 && rainfall <= 743.02) {
+          this.alertType = "danger"
+          this.alertLevel = 3
+          return 'RA-2';
+        } else if (rainfall > 743.02) {
+          this.alertType = "danger"
+          this.alertLevel = 4
+          return 'RA-3';
+        } else {
+          throw new Error('Invalid rainfall amount');
+        }
+      case 3:
+        if (rainfall >= 0 && rainfall <= 150.53) {
+          this.alertType = "success"
+          this.alertLevel = 1
+          return 'RA-0';
+        } else if (rainfall > 150.53 && rainfall <= 264.8) {
+          this.alertType = "warning"
+          this.alertLevel = 2
+          return 'RA-1';
+        } else if (rainfall > 264.8 && rainfall <= 870.36) {
+          this.alertType = "danger"
+          this.alertLevel = 3
+          return 'RA-2';
+        } else if (rainfall > 870.36) {
+          this.alertType = "danger"
+          this.alertLevel = 4
+          return 'RA-3';
+        } else {
+          throw new Error('Invalid rainfall amount');
+        }
+      case 4:
+        if (rainfall >= 0 && rainfall <= 184.21) {
+          this.alertType = "success"
+          this.alertLevel = 1
+          return 'RA-0';
+        } else if (rainfall > 184.21 && rainfall <= 344.68) {
+          this.alertType = "warning"
+          this.alertLevel = 2
+          return 'RA-1';
+        } else if (rainfall > 344.68 && rainfall <= 1082.42) {
+          this.alertType = "danger"
+          this.alertLevel = 3
+          return 'RA-2';
+        } else if (rainfall > 1082.42) {
+          this.alertType = "danger"
+          this.alertLevel = 4
+          return 'RA-3';
+        } else {
+          throw new Error('Invalid rainfall amount');
+        }
+    }
+  }
+
+  fakeData(value: number) {
+    switch (value) {
+      case 1:
+        this.rainfallPeriodTotal = 101.12
+        break;
+      case 2:
+        this.rainfallPeriodTotal = 153.32
+        break;
+      case 3:
+        this.rainfallPeriodTotal = 432.12
+        break;
+      case 4:
+        this.rainfallPeriodTotal = 873.45
+        break;
+      default:
+        break;
+    }
   }
 
 
