@@ -4,19 +4,25 @@
     <div class="filter-buttons text-center">
         <button class="btn btn-transparent btn" (click)="filterImages('all')"
             [ngClass]="{ 'selected': filter === 'all' }">All</button>
-        <button class="btn btn-transparent btn" (click)="filterImages('m')"
-            [ngClass]="{ 'selected': filter === 'm' }">Meeting</button>
-        <button class="btn btn-transparent btn" (click)="filterImages('t')"
-            [ngClass]="{ 'selected': filter === 't' }">Trainings</button>
-        <button class="btn btn-transparent btn" (click)="filterImages('s')"
-            [ngClass]="{ 'selected': filter === 's' }">Sites</button>
-        <button class="btn btn-transparent btn" (click)="filterImages('f')"
-            [ngClass]="{ 'selected': filter === 'f' }">Fieldworks</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('Meeting')"
+            [ngClass]="{ 'selected': filter === 'Meeting' }">Meeting</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('Training')"
+            [ngClass]="{ 'selected': filter === 'Training' }">Trainings</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('Site')"
+            [ngClass]="{ 'selected': filter === 'Site' }">Sites</button>
+        <button class="btn btn-transparent btn" (click)="filterImages('Fieldwork')"
+            [ngClass]="{ 'selected': filter === 'Fieldwork' }">Fieldworks</button>
     </div>
     <div class="image-gallery">
         <div class="row">
-            <div class="col-md-3" *ngFor="let image of filteredImages">
-                <img [src]="image.src" [alt]="image.alt" [attr.data-category]="image.category">
+            <div class="col-md-3" *ngFor="let image of filteredImages; let i = index">
+                <div class="image-container" (click)="openLightbox(i)">
+                    <img [src]="image.src" [alt]="image.alt">
+                    <div class="alt-text">
+                        <div class="category">{{ image.category }}</div>
+                        <div class="image-alt">{{ image.alt }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

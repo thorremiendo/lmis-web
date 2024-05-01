@@ -23,10 +23,12 @@
     color: #fff;
 }
 
+
 .btn:hover {
     background-color: #fff;
     color: #000;
 }
+
 
 .image-gallery .row {
     display: flex;
@@ -41,10 +43,53 @@
     margin-top: 25px;
 }
 
+.image-gallery .image-container {
+    position: relative;
+}
+
+.image-gallery .image-container:hover img {
+    transform: scale(1.1); 
+    transition: transform 0.3s ease; 
+}
+
+
 .image-gallery img {
     max-width: 100%;
     height: auto;
     display: block;
     border-radius: 8px;
-
 }
+
+.alt-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    text-align: center;
+}
+
+.image-container:hover .alt-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.category {
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.image-alt {
+    font-size: 12px;
+    font-weight: 200;
+}
+

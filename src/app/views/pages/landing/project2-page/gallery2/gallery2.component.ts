@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
   selector: 'app-gallery2',
@@ -9,134 +10,146 @@ export class Gallery2Component implements OnInit {
   images = [
     {
       src: '/assets/images/others/project2-gallery/train-gis-dost.jpg',
-      alt: 'train-gis-dost',
-      category: 't'
+      alt: 'GIS TRAINING',
+      category: 'Training'
     },
     {
       src: '/assets/images/others/project2-gallery/train-asti-dost.jpg',
-      alt: 'train-asti-dost',
-      category: 't'
+      alt: 'DOST-ASTI TRAINING',
+      category: 'Training'
     },
     {
       src: '/assets/images/others/project2-gallery/fldwrk-kibungan.jpg',
-      alt: 'fldwrk-kibungan',
-      category: 'f'
+      alt: 'LITTLE KIBUNGAN SURVEY',
+      category: 'Fieldwork'
     },
     {
       src: '/assets/images/others/project2-gallery/mtng-cdrrmo-bag.jpg',
-      alt: 'mtng-cdrrmo-bag',
-      category: 'm'
+      alt: 'MEETING WITH BAGUIO CITY-CDRRMO',
+      category: 'Meeting'
     },
 
   
     {
       src: '/assets/images/others/project2-gallery/moa-ltb.jpg',
-      alt: 'moa-ltb',
-      category: 'm'
+      alt: 'MOA SIGNING WITH LTB LGU',
+      category: 'Meeting'
     },
     {
       src: '/assets/images/others/project2-gallery/fldwrk-oi-bag.jpg',
-      alt: 'fldwrk-oi-bag',
-      category: 'f'
+      alt: 'OCCULAR INSPECTION IN BAGUIO CITY',
+      category: 'Fieldwork'
     },
     {
       src: '/assets/images/others/project2-gallery/mtng-sb-tublay.jpg',
-      alt: 'mtng-sb-tublay',
-      category: 'm'
+      alt: 'TUBLAY SB MEETING',
+      category: 'Meeting'
     },
     {
       src: '/assets/images/others/project2-gallery/train-drone.jpg',
-      alt: 'train-drone',
-      category: 't'
+      alt: 'DRONE OPERATION TRAINING',
+      category: 'Training'
     },
   
 
     {
       src: '/assets/images/others/project2-gallery/sites-itogon.jpg',
-      alt: 'sites-itogon',
-      category: 's'
+      alt: 'ITOGON SITE',
+      category: 'Site'
     },
     {
       src: '/assets/images/others/project2-gallery/sites-sablan.jpg',
-      alt: 'sites-sablan',
-      category: 's'
+      alt: 'SABLAN SITE',
+      category: 'Site'
     },
     {
       src: '/assets/images/others/project2-gallery/sites-tuba.jpg',
-      alt: 'sites-tuba',
-      category: 's'
+      alt: 'TUBA SITE',
+      category: 'Site'
     },
     {
       src: '/assets/images/others/project2-gallery/sites-tublay.jpg',
-      alt: 'sites-tublay',
-      category: 's'
+      alt: 'TUBLAY SITE',
+      category: 'Site'
     },
 
   
 
     {
       src: '/assets/images/others/project2-gallery/fldwrk-itogon-sws.jpg',
-      alt: 'fldwrk-itogon-sws',
-      category: 'f'
+      alt: 'ITOGON SWS',
+      category: 'Fieldwork'
     },
     {
       src: '/assets/images/others/project2-gallery/sites-sablan-mayor.jpg',
-      alt: 'sites-sablan-mayor',
-      category: 's'
+      alt: 'SABLAN SITE WITH MAYOR',
+      category: 'Site'
     },
     {
       src: '/assets/images/others/project2-gallery/sites-baguio.jpg',
-      alt: 'sites-baguio',
-      category: 's'
+      alt: 'BAGUIO SITE',
+      category: 'Site'
     },
     {
       src: '/assets/images/others/project2-gallery/mtng-fldwrk-ltb.jpg',
-      alt: 'mtng-fldwrk-ltb',
-      category: ['m', 'f']
+      alt: 'MEETING AND FIELDWORK IN LA TRINIDAD, BENGUET',
+      category: ['Meeting', 'f']
     },
 
 
     {
       src: '/assets/images/others/project2-gallery/mtng-sablan.jpg',
-      alt: 'mtng-sablan',
-      category: 'm'
+      alt: 'MEETING WITH SABLAN',
+      category: 'Meeting'
     },
     {
       src: '/assets/images/others/project2-gallery/mtng-fldwrk-rst.jpg',
-      alt: 'mtng-fldwrk-rst',
-      category: 'm'
+      alt: 'COORDINATION MEETING AND RST',
+      category: 'Meeting'
     },
     {
       src: '/assets/images/others/project2-gallery/mtng-itogon.jpg',
-      alt: 'mtng-itogon',
-      category: 'm'
+      alt: 'COORDINATION MEETING WITH ITOGON LGU',
+      category: 'Meeting'
     },
     {
       src: '/assets/images/others/project2-gallery/mtng-tublay.jpg',
-      alt: 'mtng-tublay',
-      category: 'm'
+      alt: 'COORDINATION MEETING WITH TUBLAY LGUS',
+      category: 'Meeting'
     },
     {
       src: '/assets/images/others/project2-gallery/train-ipi.jpg',
-      alt: 'train-ipi',
-      category: 't'
+      alt: 'TRAINING AND TESTING OF IPI',
+      category: 'Training'
     },
 
   
-
-
-
   ];
 
-  filteredImages: any[] = [];
-  filter: string = 'all';
-
-  constructor() { }
+  
+  constructor(private lightbox: Lightbox) { }
 
   ngOnInit(): void {
     this.filteredImages = this.images;
-    console.log('Filtered Images:', this.filteredImages);
   }
+
+  openLightbox(index: number): void {
+    this.lightbox.open(this.filteredImages.map(image => ({
+      src: image.src,
+      caption: image.alt,
+      thumb: image.src,
+      fadeDuration: 0.7,
+      showImagNumberLaber: true
+    })), index);
+    console.log(this.lightbox )
+  }
+
+  closeLightbox(): void {
+    this.lightbox.close();
+  }
+  filteredImages: any[] = [];
+  filter: string = 'all';
+
 
   filterImages(category: string) {
     this.filter = category

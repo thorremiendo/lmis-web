@@ -25,8 +25,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
 }
+
 
 .nav-list h3 {
     background-color: #996D3F;
@@ -34,6 +35,18 @@
     padding: 20px;
     font-weight: 900;
     margin-right: 31%;
+}
+
+.home-btn {
+    font-family: Arial, Helvetica, sans-serif ;
+    font-size: 24px;
+    text-decoration: none;
+    background-color: #996D3F;
+    color: #fff;
+    padding: 20px 40px 20px 40px;
+    font-weight: 900;
+    margin-right: 23.5%;
+    border-color: #996D3F;
 }
 
 .nav-list li {
@@ -63,16 +76,17 @@
 
 .nav-list li a {
     font-size: 17px;
+    font-weight: 500;
     text-decoration: none;
-    color: #e2bd95;
-    transition: color 0.3s; 
-    text-shadow:
-    -0.5px -0.5px 0 #6e4c1f,  
-    0.5px -0.5px 0 #6e4c1f,
-   -0.5px  0.5px 0 #6e4c1f,
-    0.5px  0.5px 0 #6e4c1f; 
+    color: #a38564;
+    transition: color 0.3s;
+    //     text-shadow:
+    //     -0.5px -0.5px 0 #6e4c1f,  
+    //     0.5px -0.5px 0 #6e4c1f,
+    //    -0.5px  0.5px 0 #6e4c1f,
+    //     0.5px  0.5px 0 #6e4c1f; 
 }
 
 .nav-list li a:hover {
-    color: #996D3F; 
+    color: #996D3F;
 }

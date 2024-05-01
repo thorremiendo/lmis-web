@@ -55,6 +55,11 @@
     height: auto;
 }
 
+.logos img:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
 .programs {
     background-color: #F8F9FA;
     background-size: cover;

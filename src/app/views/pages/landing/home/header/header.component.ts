@@ -38,6 +38,14 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  navigateToHome() {
+    this.router.navigate(['./home'])
+  }
+
+  navigateToLogin(){
+    this.router.navigate(['./login'])
+  }
+
   onClickScrollTo(sectionId: string): void {
     this.viewportScroller.scrollToAnchor(sectionId);
     setTimeout(() => {

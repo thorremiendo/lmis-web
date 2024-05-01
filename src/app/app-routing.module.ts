@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { BaseComponent } from './views/layout/base/base.component';
 import { AuthGuard } from './core/guard/auth.guard';
 import { ErrorPageComponent } from './views/pages/error-page/error-page.component';
+import { LoginPageComponent } from './views/pages/login-page/login-page.component';
+import { LoginComponent } from './views/pages/auth/login/login.component';
 
 
 const routes: Routes = [
@@ -11,6 +13,10 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: () => import('./views/pages/landing/landing.module').then(m => m.LandingModule)
+  },
+  {
+    path:'login',
+    component: LoginComponent
   },
   {
     path: '',

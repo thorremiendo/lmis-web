@@ -20,6 +20,7 @@ import { Goals2Component } from './project2-page/goals2/goals2.component';
 import { Gallery2Component } from './project2-page/gallery2/gallery2.component';
 import { Project2TeamComponent } from './project2-page/project2-team/project2-team.component';
 import { TopNavComponent } from './project1-page/top-nav/top-nav.component';
+import { LightboxModule } from 'ngx-lightbox';
 
 
 @NgModule({
@@ -46,7 +47,9 @@ import { TopNavComponent } from './project1-page/top-nav/top-nav.component';
   imports: [
     CommonModule,
     LandingRoutingModule,
-    // MatButtonModule,
+    LightboxModule,
+    
+    
   ]
 })
 export class LandingModule { }
