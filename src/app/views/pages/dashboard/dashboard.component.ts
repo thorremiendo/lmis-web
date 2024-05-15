@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { SensorsService } from '../apps/services/sensors.service';
+import { SensorParams } from '../apps/models/sensor-params';
+import { SensorSites } from '../apps/models/sensor-site-type.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +12,31 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
   preserveWhitespaces: true
 })
 export class DashboardComponent implements OnInit {
-
+  public selectedSite: any
+  public rainfallRecording: { datetime: string, value: number }[] = [];
+  public rainfallPeriodTotal: number
+  public isLoading: boolean = false
+  public errorMessage: string = ""
+  public selectedSensor: any
+  public alertLevel: number
+  public sensors = [
+    {
+      value: 1,
+      title: 'Sablan'
+    },
+    {
+      value: 2,
+      title: 'La Trinidad'
+    },
+    {
+      value: 3,
+      title: 'Tuba'
+    },
+    {
+      value: 4,
+      title: 'Tublay'
+    },
+  ]
   /**
    * Apex chart
    */
@@ -19,22 +46,24 @@ export class DashboardComponent implements OnInit {
   public revenueChartOptions: any = {};
   public monthlySalesChartOptions: any = {};
   public cloudStorageChartOptions: any = {};
+  public rainfallChartOptions: any = {};
+
 
   // colors and font variables for apex chart 
   obj = {
-    primary        : "#774C29",
-    secondary      : "#7987a1",
-    success        : "#05a34a",
-    info           : "#66d1d1",
-    warning        : "#fbbc06",
-    danger         : "#ff3366",
-    light          : "#e9ecef",
-    dark           : "#060c17",
-    muted          : "#7987a1",
-    gridBorder     : "rgba(77, 138, 240, .15)",
-    bodyColor      : "#000",
-    cardBg         : "#fff",
-    fontFamily     : "'Roboto', Helvetica, sans-serif"
+    primary: "#774C29",
+    secondary: "#7987a1",
+    success: "#05a34a",
+    info: "#66d1d1",
+    warning: "#fbbc06",
+    danger: "#ff3366",
+    light: "#e9ecef",
+    dark: "#060c17",
+    muted: "#7987a1",
+    gridBorder: "rgba(77, 138, 240, .15)",
+    bodyColor: "#000",
+    cardBg: "#fff",
+    fontFamily: "'Roboto', Helvetica, sans-serif"
   }
 
   /**
@@ -42,9 +71,11 @@ export class DashboardComponent implements OnInit {
    */
   currentDate: NgbDateStruct;
 
-  constructor(private calendar: NgbCalendar) {}
+  constructor(private calendar: NgbCalendar, private sensorService: SensorsService) { }
 
   ngOnInit(): void {
+    this.selectedSensor = this.sensors[1]
+    this.onSelectPeriod(this.selectedSensor)
     this.currentDate = this.calendar.getToday();
 
     this.customersChartOptions = getCustomerseChartOptions(this.obj);
@@ -58,8 +89,59 @@ export class DashboardComponent implements OnInit {
     if (document.querySelector('html')?.getAttribute('dir') === 'rtl') {
       this.addRtlOptions();
     }
-
   }
+
+  onSelectPeriod(sensor: any) {
+    this.isLoading = true
+    this.selectedSensor = sensor
+    let startDate: Date;
+    const endDate: Date = new Date(); // current date/time
+
+    startDate = new Date(endDate.getTime() - 24 * 60 * 60 * 1000); // subtract 24 hours
+
+    let sensorParams: SensorParams = {
+      device_sn: "",
+      start_date: toLocalISOString(startDate),
+      end_date: toLocalISOString(endDate),
+      output_format: 'json',
+      page_num: 1,
+      per_page: 500,
+      device_depth: true,
+      sort_by: 'descending'
+    };
+
+    sensorParams.device_sn = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : SensorSites.Tublay;
+    this.sensorService.getSensorData(sensorParams).subscribe(res => {
+      this.rainfallRecording = res["Precipitation"][0].readings
+      this.rainfallPeriodTotal = +this.rainfallRecording.reduce((n, { value }) => n + value, 0).toFixed(2)
+      this.rainfallChartOptions = getRainfallChartOptions(this.obj, this.rainfallRecording);
+      console.log(this.rainfallRecording, this.rainfallPeriodTotal)
+      this.isLoading = false
+    }, err => {
+      this.errorMessage = "Please try again."
+      this.isLoading = false
+    })
+  }
+
+  getRainfallAlertLevel(): any {
+    const rainfall = this.rainfallPeriodTotal
+    if (rainfall >= 0 && rainfall <= 113.24) {
+      this.alertLevel = 1
+      return 'RA-0';
+    } else if (rainfall > 113.24 && rainfall <= 182.56) {
+      this.alertLevel = 2
+      return 'RA-1';
+    } else if (rainfall > 182.56 && rainfall <= 545.35) {
+      this.alertLevel = 3
+      return 'RA-2';
+    } else if (rainfall > 545.35) {
+      this.alertLevel = 4
+      return 'RA-3';
+    } else {
+      throw new Error('Invalid rainfall amount');
+    }
+  }
+
 
 
   /**
@@ -77,9 +159,38 @@ export class DashboardComponent implements OnInit {
 }
 
 
-/**
- * Customerse chart options
- */
+function getRainfallChartOptions(obj: any, precipitationData: any[]) {
+  const precipitationValues = precipitationData.map(item => item.value);
+  const categories = precipitationData.map(item => item.datetime);
+
+  return {
+    series: [
+      {
+        name: "Precipitation",
+        data: precipitationValues
+      }
+    ],
+    chart: {
+      type: "line",
+      height: 60,
+      sparkline: {
+        enabled: !0
+      }
+    },
+    colors: [obj.primary],
+    plotOptions: {
+      bar: {
+        borderRadius: 2,
+        columnWidth: "60%"
+      }
+    },
+    xaxis: {
+      type: 'datetime',
+      categories: categories
+    }
+  }
+};
+
 function getCustomerseChartOptions(obj: any) {
   return {
     series: [{
@@ -360,11 +471,11 @@ function getRevenueChartOptions(obj: any) {
     xaxis: {
       type: "datetime",
       categories: [
-        "Jan 01 2022", "Jan 02 2022", "jan 03 2022", "Jan 04 2022", "Jan 05 2022", "Jan 06 2022", "Jan 07 2022", "Jan 08 2022", "Jan 09 2022", "Jan 10 2022", "Jan 11 2022", "Jan 12 2022", "Jan 13 2022", "Jan 14 2022", "Jan 15 2022", "Jan 16 2022", "Jan 17 2022", "Jan 18 2022", "Jan 19 2022", "Jan 20 2022","Jan 21 2022", "Jan 22 2022", "Jan 23 2022", "Jan 24 2022", "Jan 25 2022", "Jan 26 2022", "Jan 27 2022", "Jan 28 2022", "Jan 29 2022", "Jan 30 2022", "Jan 31 2022",
-        "Feb 01 2022", "Feb 02 2022", "Feb 03 2022", "Feb 04 2022", "Feb 05 2022", "Feb 06 2022", "Feb 07 2022", "Feb 08 2022", "Feb 09 2022", "Feb 10 2022", "Feb 11 2022", "Feb 12 2022", "Feb 13 2022", "Feb 14 2022", "Feb 15 2022", "Feb 16 2022", "Feb 17 2022", "Feb 18 2022", "Feb 19 2022", "Feb 20 2022","Feb 21 2022", "Feb 22 2022", "Feb 23 2022", "Feb 24 2022", "Feb 25 2022", "Feb 26 2022", "Feb 27 2022", "Feb 28 2022",
-        "Mar 01 2022", "Mar 02 2022", "Mar 03 2022", "Mar 04 2022", "Mar 05 2022", "Mar 06 2022", "Mar 07 2022", "Mar 08 2022", "Mar 09 2022", "Mar 10 2022", "Mar 11 2022", "Mar 12 2022", "Mar 13 2022", "Mar 14 2022", "Mar 15 2022", "Mar 16 2022", "Mar 17 2022", "Mar 18 2022", "Mar 19 2022", "Mar 20 2022","Mar 21 2022", "Mar 22 2022", "Mar 23 2022", "Mar 24 2022", "Mar 25 2022", "Mar 26 2022", "Mar 27 2022", "Mar 28 2022", "Mar 29 2022", "Mar 30 2022", "Mar 31 2022",
-        "Apr 01 2022", "Apr 02 2022", "Apr 03 2022", "Apr 04 2022", "Apr 05 2022", "Apr 06 2022", "Apr 07 2022", "Apr 08 2022", "Apr 09 2022", "Apr 10 2022", "Apr 11 2022", "Apr 12 2022", "Apr 13 2022", "Apr 14 2022", "Apr 15 2022", "Apr 16 2022", "Apr 17 2022", "Apr 18 2022", "Apr 19 2022", "Apr 20 2022","Apr 21 2022", "Apr 22 2022", "Apr 23 2022", "Apr 24 2022", "Apr 25 2022", "Apr 26 2022", "Apr 27 2022", "Apr 28 2022", "Apr 29 2022", "Apr 30 2022",
-        "May 01 2022", "May 02 2022", "May 03 2022", "May 04 2022", "May 05 2022", "May 06 2022", "May 07 2022", "May 08 2022", "May 09 2022", "May 10 2022", "May 11 2022", "May 12 2022", "May 13 2022", "May 14 2022", "May 15 2022", "May 16 2022", "May 17 2022", "May 18 2022", "May 19 2022", "May 20 2022","May 21 2022", "May 22 2022", "May 23 2022", "May 24 2022", "May 25 2022", "May 26 2022", "May 27 2022", "May 28 2022", "May 29 2022", "May 30 2022",
+        "Jan 01 2022", "Jan 02 2022", "jan 03 2022", "Jan 04 2022", "Jan 05 2022", "Jan 06 2022", "Jan 07 2022", "Jan 08 2022", "Jan 09 2022", "Jan 10 2022", "Jan 11 2022", "Jan 12 2022", "Jan 13 2022", "Jan 14 2022", "Jan 15 2022", "Jan 16 2022", "Jan 17 2022", "Jan 18 2022", "Jan 19 2022", "Jan 20 2022", "Jan 21 2022", "Jan 22 2022", "Jan 23 2022", "Jan 24 2022", "Jan 25 2022", "Jan 26 2022", "Jan 27 2022", "Jan 28 2022", "Jan 29 2022", "Jan 30 2022", "Jan 31 2022",
+        "Feb 01 2022", "Feb 02 2022", "Feb 03 2022", "Feb 04 2022", "Feb 05 2022", "Feb 06 2022", "Feb 07 2022", "Feb 08 2022", "Feb 09 2022", "Feb 10 2022", "Feb 11 2022", "Feb 12 2022", "Feb 13 2022", "Feb 14 2022", "Feb 15 2022", "Feb 16 2022", "Feb 17 2022", "Feb 18 2022", "Feb 19 2022", "Feb 20 2022", "Feb 21 2022", "Feb 22 2022", "Feb 23 2022", "Feb 24 2022", "Feb 25 2022", "Feb 26 2022", "Feb 27 2022", "Feb 28 2022",
+        "Mar 01 2022", "Mar 02 2022", "Mar 03 2022", "Mar 04 2022", "Mar 05 2022", "Mar 06 2022", "Mar 07 2022", "Mar 08 2022", "Mar 09 2022", "Mar 10 2022", "Mar 11 2022", "Mar 12 2022", "Mar 13 2022", "Mar 14 2022", "Mar 15 2022", "Mar 16 2022", "Mar 17 2022", "Mar 18 2022", "Mar 19 2022", "Mar 20 2022", "Mar 21 2022", "Mar 22 2022", "Mar 23 2022", "Mar 24 2022", "Mar 25 2022", "Mar 26 2022", "Mar 27 2022", "Mar 28 2022", "Mar 29 2022", "Mar 30 2022", "Mar 31 2022",
+        "Apr 01 2022", "Apr 02 2022", "Apr 03 2022", "Apr 04 2022", "Apr 05 2022", "Apr 06 2022", "Apr 07 2022", "Apr 08 2022", "Apr 09 2022", "Apr 10 2022", "Apr 11 2022", "Apr 12 2022", "Apr 13 2022", "Apr 14 2022", "Apr 15 2022", "Apr 16 2022", "Apr 17 2022", "Apr 18 2022", "Apr 19 2022", "Apr 20 2022", "Apr 21 2022", "Apr 22 2022", "Apr 23 2022", "Apr 24 2022", "Apr 25 2022", "Apr 26 2022", "Apr 27 2022", "Apr 28 2022", "Apr 29 2022", "Apr 30 2022",
+        "May 01 2022", "May 02 2022", "May 03 2022", "May 04 2022", "May 05 2022", "May 06 2022", "May 07 2022", "May 08 2022", "May 09 2022", "May 10 2022", "May 11 2022", "May 12 2022", "May 13 2022", "May 14 2022", "May 15 2022", "May 16 2022", "May 17 2022", "May 18 2022", "May 19 2022", "May 20 2022", "May 21 2022", "May 22 2022", "May 23 2022", "May 24 2022", "May 25 2022", "May 26 2022", "May 27 2022", "May 28 2022", "May 29 2022", "May 30 2022",
       ],
       lines: {
         show: true
@@ -384,7 +495,7 @@ function getRevenueChartOptions(obj: any) {
     yaxis: {
       title: {
         text: 'Revenue ( $1000 x )',
-        style:{
+        style: {
           size: 9,
           color: obj.muted
         }
@@ -420,8 +531,8 @@ function getRevenueChartOptions(obj: any) {
 function getMonthlySalesChartOptions(obj: any) {
   return {
     series: [{
-      name: 'Sales',
-      data: [152,109,93,113,126,161,188,143,102,113,116,124]
+      name: 'Level',
+      data: [12, 12, 12, 20, 12, 12, 20, 12, 12, 12, 12, 12, 12, 12, 12, 20, 12, 12, 20, 12, 12, 12, 12, 12]
     }],
     chart: {
       type: 'bar',
@@ -433,10 +544,10 @@ function getMonthlySalesChartOptions(obj: any) {
         show: false
       },
     },
-    colors: [obj.primary],  
+    colors: ["#01401D"],
     fill: {
       opacity: .9
-    } , 
+    },
     grid: {
       padding: {
         bottom: -4
@@ -449,8 +560,8 @@ function getMonthlySalesChartOptions(obj: any) {
       }
     },
     xaxis: {
-      type: 'datetime',
-      categories: ['01/01/2022','02/01/2022','03/01/2022','04/01/2022','05/01/2022','06/01/2022','07/01/2022', '08/01/2022','09/01/2022','10/01/2022', '11/01/2022', '12/01/2022'],
+      type: 'time',
+      categories: Array.from({ length: 24 }, (_, i) => `${i + 1}:00`),
       axisBorder: {
         color: obj.gridBorder,
       },
@@ -460,8 +571,8 @@ function getMonthlySalesChartOptions(obj: any) {
     },
     yaxis: {
       title: {
-        text: 'Number of Sales',
-        style:{
+        text: 'Risk Score',
+        style: {
           size: 9,
           color: obj.muted
         }
@@ -509,7 +620,7 @@ function getMonthlySalesChartOptions(obj: any) {
 /**
  * Cloud storage chart options
  */
- function getCloudStorageChartOptions(obj: any) {
+function getCloudStorageChartOptions(obj: any) {
   return {
     series: [67],
     chart: {
@@ -528,7 +639,7 @@ function getMonthlySalesChartOptions(obj: any) {
           background: obj.light,
           strokeWidth: '100%',
           opacity: 1,
-          margin: 5, 
+          margin: 5,
         },
         dataLabels: {
           showOn: "always",
@@ -555,3 +666,10 @@ function getMonthlySalesChartOptions(obj: any) {
     labels: ["Storage Used"]
   }
 };
+
+function toLocalISOString(date: Date) {
+  const offset = date.getTimezoneOffset() * 60000;
+  const localISOTime = (new Date(date.getTime() - offset)).toISOString().slice(0, -1);
+  return localISOTime;
+}
+

@@ -108,6 +108,10 @@ export class TemperatureComponent implements OnInit {
         return "Tuba"
       case 4:
         return "Tublay"
+      case 5:
+        return "Baguio"
+      case 6:
+        return "Itogon"
       default:
         return "No site selected"
     }
@@ -131,7 +135,7 @@ export class TemperatureComponent implements OnInit {
       device_depth: true,
       sort_by: 'descending'
     };
-    sensorParams.device_sn = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : SensorSites.Tublay;
+    sensorParams.device_sn = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : this.selectedSite == 4 ? SensorSites.Tublay : this.selectedSite == 5 ? SensorSites.Baguio : SensorSites.Itogon;
     this.sensorService.getSensorData(sensorParams).subscribe(res => {
       let countdownInterval = setInterval(() => {
         this.countdown--;

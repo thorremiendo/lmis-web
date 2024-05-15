@@ -1,0 +1,62 @@
+<ngx-datatable
+  *ngIf="rows.length > 0"
+  #myTable
+  class="material expandable"
+  [columnMode]="ColumnMode.force"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="50"
+  [scrollbarV]="true"
+  [rows]="rows"
+  (page)="onPage($event)"
+  [limit]="10"
+>
+  <!-- Row Detail Template -->
+  <ngx-datatable-row-detail
+    [rowHeight]="50"
+    #myDetailRow
+    (toggle)="onDetailToggle($event)"
+  >
+    <ng-template
+      let-row="row"
+      let-expanded="expanded"
+      ngx-datatable-row-detail-template
+    >
+      <div style="padding-left: 35px">Hello World!</div>
+    </ng-template>
+  </ngx-datatable-row-detail>
+
+  <!-- Column Templates -->
+  <ngx-datatable-column
+    [width]="50"
+    [resizeable]="false"
+    [sortable]="false"
+    [draggable]="false"
+    [canAutoResize]="false"
+  >
+    <ng-template
+      let-row="row"
+      let-expanded="expanded"
+      ngx-datatable-cell-template
+    >
+      <a
+        href="javascript:void(0)"
+        [class.datatable-icon-right]="!expanded"
+        [class.datatable-icon-down]="expanded"
+        title="Expand/Collapse Row"
+        (click)="toggleExpandRow(row)"
+      >
+      </a>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="datetime" [width]="50">
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <strong>{{ value }}</strong>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="value" [width]="50">
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <strong>{{ value }}</strong>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>
