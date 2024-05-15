@@ -113,7 +113,7 @@ export class DashboardComponent implements OnInit {
     sensorParams.device_sn = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : SensorSites.Tublay;
     this.sensorService.getSensorData(sensorParams).subscribe(res => {
       this.rainfallRecording = res["Precipitation"][0].readings
-      this.rainfallPeriodTotal = this.rainfallRecording.reduce((n, { value }) => n + value, 0)
+      this.rainfallPeriodTotal = +this.rainfallRecording.reduce((n, { value }) => n + value, 0).toFixed(2)
       this.rainfallChartOptions = getRainfallChartOptions(this.obj, this.rainfallRecording);
       console.log(this.rainfallRecording, this.rainfallPeriodTotal)
       this.isLoading = false

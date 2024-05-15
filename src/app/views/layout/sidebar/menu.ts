@@ -15,7 +15,7 @@ export const MENU: MenuItem[] = [
     isTitle: true
   },
   {
-    label: 'Sensor Management',
+    label: 'Sensor Monitoring',
     icon: 'activity',
     subItems: [
       {
