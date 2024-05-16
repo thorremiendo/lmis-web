@@ -21,6 +21,10 @@ import { Gallery2Component } from './project2-page/gallery2/gallery2.component';
 import { Project2TeamComponent } from './project2-page/project2-team/project2-team.component';
 import { TopNavComponent } from './project1-page/top-nav/top-nav.component';
 import { LightboxModule } from 'ngx-lightbox';
+import { LandslideReportComponent } from './landslide-report/landslide-report.component';
+import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
 
 
 @NgModule({
@@ -42,14 +46,18 @@ import { LightboxModule } from 'ngx-lightbox';
     Goals2Component,
     Gallery2Component,
     Project2TeamComponent,
-    TopNavComponent
+    TopNavComponent,
+    LandslideReportComponent
   ],
   imports: [
     CommonModule,
     LandingRoutingModule,
     LightboxModule,
-    
-    
+    NgbModule,
+    NgbDatepickerModule,
+    DropzoneModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class LandingModule { }

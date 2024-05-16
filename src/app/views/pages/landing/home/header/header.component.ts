@@ -46,6 +46,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['./login'])
   }
 
+  navigateToReport(){
+    this.router.navigate(['../landslide-report'])
+  }
+
   onClickScrollTo(sectionId: string): void {
     this.viewportScroller.scrollToAnchor(sectionId);
     setTimeout(() => {

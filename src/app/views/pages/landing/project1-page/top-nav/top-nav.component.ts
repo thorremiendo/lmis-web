@@ -61,4 +61,8 @@ export class TopNavComponent implements OnInit {
   navigateToProject1Page() {
     this.router.navigate(['./home/project1']);
   }
+
+  navigateToReport(){
+    this.router.navigate(['../landslide-report'])
+  }
 }

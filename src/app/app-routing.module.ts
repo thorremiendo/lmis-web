@@ -6,6 +6,7 @@ import { AuthGuard } from './core/guard/auth.guard';
 import { ErrorPageComponent } from './views/pages/error-page/error-page.component';
 import { LoginPageComponent } from './views/pages/login-page/login-page.component';
 import { LoginComponent } from './views/pages/auth/login/login.component';
+import { LandslideReportComponent } from './views/pages/landing/landslide-report/landslide-report.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path:'login',
     component: LoginComponent
+  },
+  {
+    path:'landslide-report',
+    component: LandslideReportComponent
   },
   {
     path: '',

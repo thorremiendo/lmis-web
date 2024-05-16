@@ -1,0 +1,94 @@
+<div class="bg-image-container" id="home">
+
+    <app-header></app-header>
+
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="col-md-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+
+                    <h6 class="card-title">Report a Landslide Incident</h6>
+
+                    <form [formGroup]="reportForm" class="forms-sample" (ngSubmit)="submitForm()">
+                        <div class="row mb-3">
+                            <label for="dateTimePicker" class="col-sm-3 col-form-label">Date and Time</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker
+                                        #d="ngbDatepicker" (click)="d.toggle()" formControlName="date">
+                                    <input type="time" class="form-control" formControlName="time">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="location" class="col-sm-3 col-form-label">Location</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <input class="form-control" [value]="selectedBarangay" readonly
+                                        formControlName="barangay">
+                                    <div ngbDropdown>
+                                        <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            ngbDropdownToggle>
+                                            Select Barangay
+                                        </button>
+                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                            <button type="button" ngbDropdownItem *ngFor="let barangay of barangays"
+                                                (click)="selectBarangay(barangay)">
+                                                {{ barangay }}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <input class="form-control" [value]="selectedMunicipality" readonly
+                                        formControlName="municipality">
+                                    <div ngbDropdown>
+                                        <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            ngbDropdownToggle>
+                                            Select Municipality
+                                        </button>
+                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                            <button type="button" ngbDropdownItem
+                                                *ngFor="let municipality of municipalities"
+                                                (click)="selectMunicipality(municipality)">
+                                                {{ municipality }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="remarks" class="col-sm-3 col-form-label">Other Remarks</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" id="remarks" name="remarks" rows="3"
+                                    placeholder="Add remarks" formControlName="remarks"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="media" class="col-sm-3 col-form-label">Upload media</label>
+
+                            <div class="col-sm-9">
+                                <div class="dropzone" [dropzone]="config" (error)="onUploadError($event)"
+                                    (success)="onUploadSuccess($event)">
+                                </div>
+
+                                <button type="button" class="btn btn-secondary mt-2 d-block ms-auto"
+                                    (click)="resetDropzoneUploads()">Reset</button>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <button type="submit" class="btn btn-primary me-2">Submit</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

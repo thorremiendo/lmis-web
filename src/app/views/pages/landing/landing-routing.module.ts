@@ -3,6 +3,7 @@ import { RouterModule, Routes, ExtraOptions } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { Project1PageComponent } from './project1-page/project1-page.component';
 import { Project2PageComponent } from './project2-page/project2-page.component';
+import { LandslideReportComponent } from './landslide-report/landslide-report.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,11 @@ const routes: Routes = [
     path: 'project2',
     component:
       Project2PageComponent,
+  },
+  {
+    path: 'landslide-report',
+    component:
+      LandslideReportComponent,
   }
 ];
 

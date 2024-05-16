@@ -1,0 +1,33 @@
+.bg-image-container {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/others/hero-banner-bg.webp');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+
+}
+
+.card {
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+.card-title {
+    font-size: x-large;
+    font-weight: 800;
+    padding-bottom: 20px;
+}
+
+.input-group-text {
+    cursor: pointer;
+}
+
+.btn-dropdown{
+    border: #999;
+}
+
+.placeholder-text {
+    position:absolute;
+    top: 55%;
+    left: 58%;
+    color: #999;
+}
