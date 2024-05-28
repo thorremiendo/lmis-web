@@ -47,6 +47,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { TemperatureComponent } from './sensor-management/temperature/temperature.component';
 import { RowDetailTableComponent } from './sensor-management/row-detail-table/row-detail-table.component';
+import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
   {
@@ -90,6 +91,10 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'reports',
+        component: ReportsComponent
+      },
+      {
         path: 'chat',
         component: ChatComponent
       },
@@ -116,7 +121,8 @@ const routes: Routes = [
     InclinometerComponent,
     AccelerometerComponent,
     TemperatureComponent,
-    RowDetailTableComponent],
+    RowDetailTableComponent,
+    ReportsComponent],
   imports: [
     NgbModule,
     NgApexchartsModule,

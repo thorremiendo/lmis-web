@@ -9,12 +9,16 @@ import { environment } from 'src/environments/environment';
 export class ApiService {
     constructor(private httpClient: HttpClient) { }
 
-    get(url: string, params: HttpParams): Observable<any> {
+    get(url: string, params: HttpParams | null = null): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        });
+
         const completeUrl = this.generateUrl(url);
 
-        return this.httpClient.get(completeUrl, {
-            params,
-        });
+        return this.httpClient.get(completeUrl, { headers: headers, params });
     }
 
     post(url: any, body: string): Observable<any> {

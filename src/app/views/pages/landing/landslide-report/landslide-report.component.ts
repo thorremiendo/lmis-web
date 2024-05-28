@@ -3,6 +3,8 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { DropzoneDirective, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { time } from 'console';
+import { DataService } from 'src/app/core/services/data.service';
+import { SwalService } from 'src/app/core/services/swal.service';
 
 @Component({
   selector: 'app-landslide-report',
@@ -10,17 +12,17 @@ import { time } from 'console';
   styleUrls: ['./landslide-report.component.scss']
 })
 export class LandslideReportComponent implements OnInit {
-
+  public isLoading: boolean = false
   selectedDate: NgbDateStruct;
   selectedTime: string;
 
   remarks: string = '';
 
-  barangays: string[] = ['barangay 1', 'barangay 2', 'barangay 3', 'barangay 4', 'barangay 5'];
-  municipalities: string[] = ['munisipyu 1', 'munisipyu 2', 'munisipyu 3', 'munisipyu 4', 'munisipyu 5'];
+  barangays = []
+  municipalities = []
 
-  selectedBarangay: string = '';
-  selectedMunicipality: string = '';
+  selectedBarangay
+  selectedMunicipality
 
   reportForm: FormGroup
 
@@ -37,11 +39,15 @@ export class LandslideReportComponent implements OnInit {
 
   @ViewChild(DropzoneDirective, { static: false }) directiveRef?: DropzoneDirective;
 
-  constructor(private calendar: NgbCalendar, private fb: FormBuilder) {
+  constructor(private calendar: NgbCalendar, private fb: FormBuilder, private dataService: DataService, private swalService: SwalService) {
     this.selectToday();
   }
 
   ngOnInit(): void {
+    this.dataService.getMunicipalities().subscribe(res => {
+      this.municipalities = res
+    })
+
     this.reportForm = this.fb.group({
       date: new FormControl(""),
       time: new FormControl(""),
@@ -59,14 +65,17 @@ export class LandslideReportComponent implements OnInit {
   }
 
   //location
-  selectBarangay(barangay: string) {
+  selectBarangay(barangay) {
     this.selectedBarangay = barangay;
-    this.reportForm.patchValue({ barangay });
+    this.reportForm.patchValue({ barangay: barangay.id });
   }
 
-  selectMunicipality(municipality: string) {
+  selectMunicipality(municipality) {
     this.selectedMunicipality = municipality;
-    this.reportForm.patchValue({ municipality });
+    this.reportForm.patchValue({ municipality: municipality.id });
+    this.dataService.getBarangays(municipality.id).subscribe(res => {
+      this.barangays = res
+    })
   }
 
 
@@ -87,6 +96,26 @@ export class LandslideReportComponent implements OnInit {
 
   //form data
   submitForm() {
-    console.log(this.reportForm.value);
+    this.isLoading = true
+    const { date, time, municipality, barangay, remarks } = this.reportForm.controls
+    const body = {
+      "dateOfIncident": this.convertToISODate(date.value),
+      "timeOfIncident": time.value,
+      "municipalityId": municipality.value,
+      "barangayId": barangay.value,
+      "remarks": remarks.value,
+    }
+
+    this.dataService.submitReport(body).subscribe(res => {
+      this.swalService.showSuccess()
+      this.isLoading = false
+    })
+  }
+
+  convertToISODate(dateObj: { year: number, month: number, day: number }): string {
+    const date = new Date(dateObj.year, dateObj.month - 1, dateObj.day);
+    return date.toISOString();
   }
 }
+
+

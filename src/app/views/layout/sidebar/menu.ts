@@ -32,4 +32,9 @@ export const MENU: MenuItem[] = [
       },
     ]
   },
+  {
+    label: 'Landslide Reports',
+    icon: 'triangle',
+    link: '/apps/reports'
+  },
 ];

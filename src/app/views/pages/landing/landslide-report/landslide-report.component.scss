@@ -2,7 +2,8 @@
     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/others/hero-banner-bg.webp');
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    max-height: 100vh;
+    overflow: auto;
 
 }
 
@@ -21,13 +22,18 @@
     cursor: pointer;
 }
 
-.btn-dropdown{
+.btn-dropdown {
     border: #999;
 }
 
 .placeholder-text {
-    position:absolute;
+    position: absolute;
     top: 55%;
     left: 58%;
     color: #999;
+}
+
+.dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
 }

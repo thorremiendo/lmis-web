@@ -17,17 +17,18 @@
             <h5 class="text-muted fw-normal mb-4">
               Landslide Monitoring and Information System
             </h5>
-            <form class="forms-sample">
+            <form class="forms-sample" [formGroup]="loginForm">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label"
-                  >Email address</label
+                  >Username</label
                 >
                 <input
-                  type="email"
+                  type="text"
                   class="form-control"
                   id="exampleInputEmail1"
-                  placeholder="Email"
-                  value="admin@demo.com"
+                  placeholder="Username"
+                  value="adminUser"
+                  formControlName="username"
                 />
               </div>
               <div class="mb-3">
@@ -41,6 +42,7 @@
                   autocomplete="current-password"
                   placeholder="Password"
                   value="12345678"
+                  formControlName="password"
                 />
               </div>
               <div class="form-check mb-3">

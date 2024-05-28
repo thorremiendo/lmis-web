@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { SwalService } from 'src/app/core/services/swal.service';
 
 @Component({
   selector: 'app-login',
@@ -9,20 +12,40 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   returnUrl: any;
+  public loginForm: FormGroup
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private authService: AuthService, private swalService: SwalService) { }
 
   ngOnInit(): void {
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.loginForm = new FormGroup({
+      username: new FormControl(''),
+      password: new FormControl(''),
+    });
   }
 
   onLoggedin(e: Event) {
     e.preventDefault();
-    localStorage.setItem('isLoggedin', 'true');
-    if (localStorage.getItem('isLoggedin')) {
-      this.router.navigate([this.returnUrl]);
+    const body = {
+      username: this.loginForm.value.username,
+      password: this.loginForm.value.password
     }
+
+    this.authService.login(body).subscribe((res) => {
+      this.swalService.showSuccessMessage("Login Successful!")
+      localStorage.setItem('isLoggedin', 'true');
+      localStorage.setItem('lmisUser', res.data);
+      localStorage.setItem('lmisToken', res.token);
+
+      if (localStorage.getItem('lmisUser')) {
+        this.router.navigate([this.returnUrl]);
+      }
+    }, err => {
+      console.log(err)
+      this.swalService.showInfo(err.error.message)
+    })
+
   }
 
 }
