@@ -1,0 +1,97 @@
+<input type="file" hidden #fileInput />
+<button
+  *ngIf="user.role !== 'Others'"
+  type="button"
+  class="btn btn-primary btn-icon-text my-3"
+  (click)="fileInput.click()"
+>
+  <i class="feather icon-check-square btn-icon-prepend"></i>
+  Import
+</button>
+
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="input-group">
+      <input
+        class="form-control"
+        [value]="selectedMunicipality?.name"
+        readonly
+      />
+      <div ngbDropdown>
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle"
+          ngbDropdownToggle
+        >
+          Select Municipality
+        </button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button
+            type="button"
+            ngbDropdownItem
+            *ngFor="let municipality of municipalities"
+            (click)="selectMunicipality(municipality)"
+          >
+            {{ municipality.name }}
+          </button>
+        </div>
+      </div>
+      <input class="form-control" [value]="selectedBarangay?.name" readonly />
+      <div ngbDropdown>
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle"
+          ngbDropdownToggle
+        >
+          Select Barangay
+        </button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button
+            type="button"
+            ngbDropdownItem
+            *ngFor="let barangay of barangays"
+            (click)="selectBarangay(barangay)"
+          >
+            {{ barangay.name }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="reportsData.length">
+  <div class="col-md-12 stretch-card grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Contact List</h6>
+        <div class="table-responsive">
+          <ngx-datatable
+            class="bootstrap"
+            [rows]="reportsData"
+            [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force"
+            [footerHeight]="50"
+            [limit]="10"
+            rowHeight="auto"
+          >
+            <ngx-datatable-column name="Barangay" prop="barangay">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Name" prop="name">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Contact" prop="contact">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -37,7 +37,25 @@ export class SwalService {
       icon: "success",
       title: message,
       showConfirmButton: false,
-      timer: 1500
+      timer: 3000
+    });
+  }
+
+  showWarning(message: string, title: string, buttonText: string) {
+    Swal.fire({
+      title: title,
+      text: message,
+      icon: "error",
+      confirmButtonText: buttonText
+    });
+  }
+
+  showFullSuccess(message: string) {
+    Swal.fire({
+      title: "SUCCESS",
+      text: message,
+      icon: "success",
+      confirmButtonText: "Proceed"
     });
   }
 

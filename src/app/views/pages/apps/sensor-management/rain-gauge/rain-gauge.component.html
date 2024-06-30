@@ -92,9 +92,6 @@
           >
             {{ isLoading ? "Loading.." : "Load Data" }}
           </button>
-          <p class="text-muted" *ngIf="countdown > 0 && countdown !== 60">
-            You can try again in {{ countdown }}
-          </p>
         </div>
       </div>
     </div>
@@ -104,18 +101,40 @@
     <div class="col-xl-12 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h6 class="card-title">Line Chart</h6>
+          <h6 class="card-title">Precipitation</h6>
 
           <apx-chart
-            [series]="lineChartOptions.series"
-            [chart]="lineChartOptions.chart"
-            [colors]="lineChartOptions.colors"
-            [grid]="lineChartOptions.grid"
-            [xaxis]="lineChartOptions.xaxis"
-            [yaxis]="lineChartOptions.yaxis"
-            [markers]="lineChartOptions.markers"
-            [legend]="lineChartOptions.legend"
-            [stroke]="lineChartOptions.stroke"
+            [series]="precipitationOptions.series"
+            [chart]="precipitationOptions.chart"
+            [colors]="precipitationOptions.colors"
+            [grid]="precipitationOptions.grid"
+            [xaxis]="precipitationOptions.xaxis"
+            [yaxis]="precipitationOptions.yaxis"
+            [markers]="precipitationOptions.markers"
+            [legend]="precipitationOptions.legend"
+            [stroke]="precipitationOptions.stroke"
+          ></apx-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Max Precipitation</h6>
+
+          <apx-chart
+            [series]="maxPrepOptions.series"
+            [chart]="maxPrepOptions.chart"
+            [colors]="maxPrepOptions.colors"
+            [grid]="maxPrepOptions.grid"
+            [xaxis]="maxPrepOptions.xaxis"
+            [yaxis]="maxPrepOptions.yaxis"
+            [markers]="maxPrepOptions.markers"
+            [legend]="maxPrepOptions.legend"
+            [stroke]="maxPrepOptions.stroke"
           ></apx-chart>
         </div>
       </div>
@@ -163,122 +182,6 @@
               <ngx-datatable-column name="datetime"></ngx-datatable-column>
               <ngx-datatable-column name="value"></ngx-datatable-column>
             </ngx-datatable>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <h6 class="card-title mb-0">Alert Warning System</h6>
-          <div ngbDropdown class="my-3">
-            <button
-              class="btn btn-primary"
-              id="dropdownBasic1"
-              ngbDropdownToggle
-            >
-              {{
-                selectedPeriod
-                  ? selectedPeriod.title
-                  : "Choose Observation Period"
-              }}
-            </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button
-                ngbDropdownItem
-                *ngFor="let item of periods"
-                (click)="onSelectPeriod(item)"
-              >
-                {{ item.title }}
-              </button>
-            </div>
-          </div>
-          <div>
-            <button
-              type="button"
-              class="btn btn-outline-primary"
-              (click)="fetchSensorDataPeriod(selectedPeriod.value)"
-              [disabled]="!selectedPeriod"
-            >
-              {{ isLoading ? "Loading.." : "Load Data" }}
-            </button>
-          </div>
-          <div class="my-3" *ngIf="rainfallPeriodTotal !== undefined">
-            <ngb-alert
-              [dismissible]="false"
-              [ngStyle]="{
-                'background-color':
-                  alertLevel === 1
-                    ? 'green'
-                    : alertLevel === 2
-                    ? '#FFEC00'
-                    : alertLevel === 3
-                    ? 'orange'
-                    : 'red',
-                color: alertLevel === 2 ? 'black' : 'white'
-              }"
-              style="font-weight: bold"
-            >
-              <div class="d-flex align-items-center">
-                <i class="feather icon-alert-circle"></i>
-                <div>
-                  <p>
-                    Rainfall Alert Level:
-                    <span class="fw-bold"> {{ getRainfallAlertLevel() }}</span>
-                  </p>
-                  <p>Sum of Rainfall: {{ rainfallPeriodTotal }}</p>
-                </div>
-              </div>
-            </ngb-alert>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="table-responsive">
-                <ngx-datatable
-                  class="bootstrap"
-                  [rows]="rainfallRecording"
-                  [loadingIndicator]="loadingIndicator"
-                  [columnMode]="ColumnMode.force"
-                  [footerHeight]="50"
-                  [limit]="10"
-                  rowHeight="auto"
-                >
-                  <ngx-datatable-column
-                    name="Date & Time"
-                    prop="datetime"
-                  ></ngx-datatable-column>
-                  <ngx-datatable-column
-                    name="Recorded Rainfall"
-                    prop="value"
-                  ></ngx-datatable-column>
-                </ngx-datatable>
-              </div>
-              <!-- 
-              <div ngbDropdown class="mt-5">
-                <button
-                  class="btn btn-secondary"
-                  id="dropdownBasic1"
-                  ngbDropdownToggle
-                >
-                  Simulate Alert
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button ngbDropdownItem (click)="fakeData(1)">RA-0</button>
-                  <button ngbDropdownItem (click)="fakeData(2)">RA-1</button>
-                  <button ngbDropdownItem (click)="fakeData(3)">RA-2</button>
-                  <button ngbDropdownItem (click)="fakeData(4)">RA-3</button>
-                </div>
-              </div> -->
-            </div>
-            <!-- <div class="col-lg-6">
-              <app-row-detail-table
-                *ngIf="rainfallRecording.length > 0"
-                [data]="rainfallRecording"
-              ></app-row-detail-table>
-            </div> -->
           </div>
         </div>
       </div>

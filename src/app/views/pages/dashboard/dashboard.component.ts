@@ -4,6 +4,7 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { SensorsService } from '../apps/services/sensors.service';
 import { SensorParams } from '../apps/models/sensor-params';
 import { SensorSites } from '../apps/models/sensor-site-type.enum';
+import { SwalService } from 'src/app/core/services/swal.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -71,11 +72,13 @@ export class DashboardComponent implements OnInit {
    */
   currentDate: NgbDateStruct;
 
-  constructor(private calendar: NgbCalendar, private sensorService: SensorsService) { }
+  constructor(private calendar: NgbCalendar, private sensorService: SensorsService, private swal: SwalService) { }
 
   ngOnInit(): void {
+    this.swal.showWarning("A landslide alert has been issued at Critical Alert Level 3. Immediate action is required. ", "WARNING", "Proceed")
+
     this.selectedSensor = this.sensors[1]
-    this.onSelectPeriod(this.selectedSensor)
+    // this.onSelectPeriod(this.selectedSensor)
     this.currentDate = this.calendar.getToday();
 
     this.customersChartOptions = getCustomerseChartOptions(this.obj);
@@ -101,13 +104,9 @@ export class DashboardComponent implements OnInit {
 
     let sensorParams: SensorParams = {
       device_sn: "",
-      start_date: toLocalISOString(startDate),
-      end_date: toLocalISOString(endDate),
-      output_format: 'json',
-      page_num: 1,
-      per_page: 500,
-      device_depth: true,
-      sort_by: 'descending'
+      reading_type: '',
+      from: toLocalISOString(startDate),
+      until: toLocalISOString(endDate),
     };
 
     sensorParams.device_sn = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : SensorSites.Tublay;
@@ -544,7 +543,7 @@ function getMonthlySalesChartOptions(obj: any) {
         show: false
       },
     },
-    colors: ["#01401D"],
+    colors: ["#cf3636"],
     fill: {
       opacity: .9
     },

@@ -50,24 +50,27 @@
                 {{ value == "1" ? "Verified" : "Unverified" }}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Update Status">
+            <ngx-datatable-column
+              name="Update Status"
+              *ngIf="user.role !== 'Others'"
+            >
               <ng-template let-row="row" ngx-datatable-cell-template>
                 <select
                   class="form-select"
                   id="exampleFormControlSelect1"
                   (change)="onSelect($event.target.value, row)"
                 >
-                  <option value="" >Select</option>
+                  <option value="">Select</option>
                   <option *ngFor="let item of status" [value]="item.value">
                     {{ item.name }}
                   </option>
                 </select>
-                <!-- <button
-                  class="btn btn-outline-primary"
+                <button
+                  class="mt-2 btn btn-outline-primary"
                   (click)="openScrollableModal(scrollableModal, row)"
                 >
                   Edit
-                </button> -->
+                </button>
               </ng-template>
             </ngx-datatable-column>
           </ngx-datatable>
@@ -89,7 +92,7 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
-      <!-- <div class="mb-3">
+      <div class="mb-3">
         <label for="exampleInputText1" class="form-label">Built-up Areas</label>
         <input
           type="text"
@@ -186,7 +189,7 @@
             {{ item }}
           </option>
         </select>
-      </div> -->
+      </div>
     </form>
   </div>
   <div class="modal-footer">

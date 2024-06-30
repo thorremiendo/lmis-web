@@ -1,0 +1,122 @@
+<div class="row">
+  <div class="col-md-12 stretch-card grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Landslide Inventory</h6>
+        <div class="table-responsive">
+          <ngx-datatable
+            class="bootstrap"
+            [rows]="reportsData"
+            [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force"
+            [footerHeight]="50"
+            [limit]="10"
+            rowHeight="auto"
+          >
+            <ngx-datatable-column name="Date of Incident" prop="dateOfIncident">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Time of Incident" prop="timeOfIncident">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date Reported" prop="dateReported">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Municipality" prop="municipalityName">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Barangay" prop="barangayName">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Latitude" prop="latitude">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Longitude" prop="longitude">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Source of Information" prop="source">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Road Networks" prop="roadNetwork">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Displaced" prop="displaced">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Injured" prop="injured">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Dead" prop="dead">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Landslide Category" prop="category">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column
+              name="Triggering Mechanism"
+              prop="triggeringMechanism"
+            >
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column
+              name="Landslide Susceptibility"
+              prop="susceptibility"
+            >
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column
+              name="Flooding Susceptibility"
+              prop="floodingSusceptibility"
+            >
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Remarks" prop="remarks">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Status" prop="status">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value == "1" ? "Verified" : "Unverified" }}
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

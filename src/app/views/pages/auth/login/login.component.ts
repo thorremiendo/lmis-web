@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     // get return url from route parameters or default to '/'
+    window.localStorage.clear()
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.loginForm = new FormGroup({
       username: new FormControl(''),
@@ -35,15 +36,17 @@ export class LoginComponent implements OnInit {
     this.authService.login(body).subscribe((res) => {
       this.swalService.showSuccessMessage("Login Successful!")
       localStorage.setItem('isLoggedin', 'true');
-      localStorage.setItem('lmisUser', res.data);
+      localStorage.setItem('lmisUser', JSON.stringify(res.data));
       localStorage.setItem('lmisToken', res.token);
 
       if (localStorage.getItem('lmisUser')) {
-        this.router.navigate([this.returnUrl]);
+        setTimeout(() => {
+          this.router.navigate([this.returnUrl]);
+        }, 2000);
       }
     }, err => {
       console.log(err)
-      this.swalService.showInfo(err.error.message)
+      this.swalService.showWarning(err.error.message, "Login Failed", "Close")
     })
 
   }

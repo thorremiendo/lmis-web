@@ -4,3 +4,8 @@
   align-items: center;
   justify-content: center;
 }
+
+.dropdown-menu {
+  max-height: 280px;
+  overflow-y: auto;
+}

@@ -13,13 +13,14 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
+  public user = JSON.parse(localStorage.getItem('lmisUser'));
 
   @ViewChild('sidebarToggler') sidebarToggler: ElementRef;
 
   menuItems: MenuItem[] = [];
   @ViewChild('sidebarMenu') sidebarMenu: ElementRef;
 
-  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, router: Router) { 
+  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, router: Router) {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
 
@@ -55,7 +56,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // activate menu item
     new MetisMenu(this.sidebarMenu.nativeElement);
-    
+
     this._activateMenuDropdown();
   }
 
@@ -88,7 +89,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
    * Open sidebar when hover (in folded folded state)
    */
   operSidebarFolded() {
-    if (this.document.body.classList.contains('sidebar-folded')){
+    if (this.document.body.classList.contains('sidebar-folded')) {
       this.document.body.classList.add("open-sidebar-folded");
     }
   }
@@ -98,7 +99,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
    * Fold sidebar after mouse leave (in folded state)
    */
   closeSidebarFolded() {
-    if (this.document.body.classList.contains('sidebar-folded')){
+    if (this.document.body.classList.contains('sidebar-folded')) {
       this.document.body.classList.remove("open-sidebar-folded");
     }
   }
@@ -149,42 +150,42 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   resetMenuItems() {
 
     const links = document.getElementsByClassName('nav-link-ref');
-    
+
     for (let i = 0; i < links.length; i++) {
       const menuItemEl = links[i];
       menuItemEl.classList.remove('mm-active');
       const parentEl = menuItemEl.parentElement;
 
       if (parentEl) {
-          parentEl.classList.remove('mm-active');
-          const parent2El = parentEl.parentElement;
-          
-          if (parent2El) {
-            parent2El.classList.remove('mm-show');
-          }
+        parentEl.classList.remove('mm-active');
+        const parent2El = parentEl.parentElement;
 
-          const parent3El = parent2El?.parentElement;
-          if (parent3El) {
-            parent3El.classList.remove('mm-active');
+        if (parent2El) {
+          parent2El.classList.remove('mm-show');
+        }
 
-            if (parent3El.classList.contains('side-nav-item')) {
-              const firstAnchor = parent3El.querySelector('.side-nav-link-a-ref');
+        const parent3El = parent2El?.parentElement;
+        if (parent3El) {
+          parent3El.classList.remove('mm-active');
 
-              if (firstAnchor) {
-                firstAnchor.classList.remove('mm-active');
-              }
-            }
+          if (parent3El.classList.contains('side-nav-item')) {
+            const firstAnchor = parent3El.querySelector('.side-nav-link-a-ref');
 
-            const parent4El = parent3El.parentElement;
-            if (parent4El) {
-              parent4El.classList.remove('mm-show');
-
-              const parent5El = parent4El.parentElement;
-              if (parent5El) {
-                parent5El.classList.remove('mm-active');
-              }
+            if (firstAnchor) {
+              firstAnchor.classList.remove('mm-active');
             }
           }
+
+          const parent4El = parent3El.parentElement;
+          if (parent4El) {
+            parent4El.classList.remove('mm-show');
+
+            const parent5El = parent4El.parentElement;
+            if (parent5El) {
+              parent5El.classList.remove('mm-active');
+            }
+          }
+        }
       }
     }
   };
@@ -198,54 +199,66 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     const links: any = document.getElementsByClassName('nav-link-ref');
 
     let menuItemEl = null;
-    
+
     for (let i = 0; i < links.length; i++) {
       // tslint:disable-next-line: no-string-literal
-        if (window.location.pathname === links[i]['pathname']) {
-          
-            menuItemEl = links[i];
-            
-            break;
-        }
+      if (window.location.pathname === links[i]['pathname']) {
+
+        menuItemEl = links[i];
+
+        break;
+      }
     }
 
     if (menuItemEl) {
-        menuItemEl.classList.add('mm-active');
-        const parentEl = menuItemEl.parentElement;
+      menuItemEl.classList.add('mm-active');
+      const parentEl = menuItemEl.parentElement;
 
-        if (parentEl) {
-            parentEl.classList.add('mm-active');
+      if (parentEl) {
+        parentEl.classList.add('mm-active');
 
-            const parent2El = parentEl.parentElement;
-            if (parent2El) {
-                parent2El.classList.add('mm-show');
-            }
-
-            const parent3El = parent2El.parentElement;
-            if (parent3El) {
-                parent3El.classList.add('mm-active');
-
-                if (parent3El.classList.contains('side-nav-item')) {
-                    const firstAnchor = parent3El.querySelector('.side-nav-link-a-ref');
-
-                    if (firstAnchor) {
-                        firstAnchor.classList.add('mm-active');
-                    }
-                }
-
-                const parent4El = parent3El.parentElement;
-                if (parent4El) {
-                    parent4El.classList.add('mm-show');
-
-                    const parent5El = parent4El.parentElement;
-                    if (parent5El) {
-                        parent5El.classList.add('mm-active');
-                    }
-                }
-            }
+        const parent2El = parentEl.parentElement;
+        if (parent2El) {
+          parent2El.classList.add('mm-show');
         }
+
+        const parent3El = parent2El.parentElement;
+        if (parent3El) {
+          parent3El.classList.add('mm-active');
+
+          if (parent3El.classList.contains('side-nav-item')) {
+            const firstAnchor = parent3El.querySelector('.side-nav-link-a-ref');
+
+            if (firstAnchor) {
+              firstAnchor.classList.add('mm-active');
+            }
+          }
+
+          const parent4El = parent3El.parentElement;
+          if (parent4El) {
+            parent4El.classList.add('mm-show');
+
+            const parent5El = parent4El.parentElement;
+            if (parent5El) {
+              parent5El.classList.add('mm-active');
+            }
+          }
+        }
+      }
     }
   };
 
+  shouldHide(item) {
+    if (this.user.role == 'Others') {
+      if (item.label == 'Sensor Monitoring' || item.label == 'Alert Warning') {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return true
+    }
+
+  }
 
 }

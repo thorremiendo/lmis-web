@@ -48,6 +48,12 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { TemperatureComponent } from './sensor-management/temperature/temperature.component';
 import { RowDetailTableComponent } from './sensor-management/row-detail-table/row-detail-table.component';
 import { ReportsComponent } from './reports/reports.component';
+import { AlertWarningComponent } from './alert-warning/alert-warning.component';
+import { RainfallComponent } from './alert-warning/rainfall/rainfall.component';
+import { ContactListComponent } from './contact-list/contact-list.component';
+import { LandslideEvacuationComponent } from './landslide-evacuation/landslide-evacuation.component';
+import { MapComponent } from './map/map.component';
+import { LandslideInventoryComponent } from './landslide-inventory/landslide-inventory.component';
 
 const routes: Routes = [
   {
@@ -91,8 +97,35 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'alert-warning',
+        component: AlertWarningComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'rainfall',
+            pathMatch: 'full'
+          },
+          {
+            path: 'rainfall',
+            component: RainfallComponent
+          },
+        ]
+      },
+      {
         path: 'reports',
         component: ReportsComponent
+      },
+      {
+        path: 'landslide-inventory',
+        component: LandslideInventoryComponent
+      },
+      {
+        path: 'contact-list',
+        component: ContactListComponent
+      },
+      {
+        path: 'evacuation',
+        component: LandslideEvacuationComponent
       },
       {
         path: 'chat',
@@ -122,7 +155,14 @@ const routes: Routes = [
     AccelerometerComponent,
     TemperatureComponent,
     RowDetailTableComponent,
-    ReportsComponent],
+    ReportsComponent,
+    AlertWarningComponent,
+    RainfallComponent,
+    ContactListComponent,
+    LandslideEvacuationComponent,
+    MapComponent,
+    LandslideInventoryComponent
+  ],
   imports: [
     NgbModule,
     NgApexchartsModule,
@@ -141,6 +181,7 @@ const routes: Routes = [
     NgSelectModule,
     QuillModule.forRoot(), // ngx-quill
   ],
+  exports: [MapComponent],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,

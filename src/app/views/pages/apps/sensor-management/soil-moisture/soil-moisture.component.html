@@ -88,13 +88,9 @@
           type="button"
           class="btn btn-outline-primary"
           (click)="getSensorData()"
-          [disabled]="countdown > 0"
         >
           {{ isLoading ? "Loading.." : "Load Data" }}
         </button>
-        <p class="text-muted" *ngIf="countdown > 0 && countdown !== 60">
-          You can try again in {{ countdown }}
-        </p>
       </div>
     </div>
   </div>
@@ -104,18 +100,59 @@
   <div class="col-xl-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h6 class="card-title">Line Chart</h6>
-
+        <h6 class="card-title">Water Content</h6>
         <apx-chart
-          [series]="lineChartOptions.series"
-          [chart]="lineChartOptions.chart"
-          [colors]="lineChartOptions.colors"
-          [grid]="lineChartOptions.grid"
-          [xaxis]="lineChartOptions.xaxis"
-          [yaxis]="lineChartOptions.yaxis"
-          [markers]="lineChartOptions.markers"
-          [legend]="lineChartOptions.legend"
-          [stroke]="lineChartOptions.stroke"
+          [series]="waterContentOptions.series"
+          [chart]="waterContentOptions.chart"
+          [colors]="waterContentOptions.colors"
+          [grid]="waterContentOptions.grid"
+          [xaxis]="waterContentOptions.xaxis"
+          [yaxis]="waterContentOptions.yaxis"
+          [markers]="waterContentOptions.markers"
+          [legend]="waterContentOptions.legend"
+          [stroke]="waterContentOptions.stroke"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Soil Temperature</h6>
+        <apx-chart
+          [series]="soilTempOptions.series"
+          [chart]="soilTempOptions.chart"
+          [colors]="soilTempOptions.colors"
+          [grid]="soilTempOptions.grid"
+          [xaxis]="soilTempOptions.xaxis"
+          [yaxis]="soilTempOptions.yaxis"
+          [markers]="soilTempOptions.markers"
+          [legend]="soilTempOptions.legend"
+          [stroke]="soilTempOptions.stroke"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Saturation Extract</h6>
+        <apx-chart
+          [series]="saturationExtOptions.series"
+          [chart]="saturationExtOptions.chart"
+          [colors]="saturationExtOptions.colors"
+          [grid]="saturationExtOptions.grid"
+          [xaxis]="saturationExtOptions.xaxis"
+          [yaxis]="saturationExtOptions.yaxis"
+          [markers]="saturationExtOptions.markers"
+          [legend]="saturationExtOptions.legend"
+          [stroke]="saturationExtOptions.stroke"
         ></apx-chart>
       </div>
     </div>

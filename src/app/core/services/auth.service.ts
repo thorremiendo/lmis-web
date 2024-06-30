@@ -12,4 +12,9 @@ export class AuthService {
     const url = `/auth/login`;
     return this.apiService.post(url, body);
   }
+
+  register(body) {
+    const url = `/auth/register`;
+    return this.apiService.post(url, body);
+  }
 }

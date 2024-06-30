@@ -88,13 +88,9 @@
           type="button"
           class="btn btn-outline-primary"
           (click)="getSensorData()"
-          [disabled]="countdown > 0"
         >
           {{ isLoading ? "Loading.." : "Load Data" }}
         </button>
-        <p class="text-muted" *ngIf="countdown > 0 && countdown !== 60">
-          You can try again in {{ countdown }}
-        </p>
         <div class="d-flex justify-content-center" *ngIf="isLoading">
           <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -109,18 +105,80 @@
   <div class="col-xl-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h6 class="card-title">Line Chart</h6>
-
+        <h6 class="card-title">Air Temperature</h6>
         <apx-chart
-          [series]="lineChartOptions.series"
-          [chart]="lineChartOptions.chart"
-          [colors]="lineChartOptions.colors"
-          [grid]="lineChartOptions.grid"
-          [xaxis]="lineChartOptions.xaxis"
-          [yaxis]="lineChartOptions.yaxis"
-          [markers]="lineChartOptions.markers"
-          [legend]="lineChartOptions.legend"
-          [stroke]="lineChartOptions.stroke"
+          [series]="airTempOptions.series"
+          [chart]="airTempOptions.chart"
+          [colors]="airTempOptions.colors"
+          [grid]="airTempOptions.grid"
+          [xaxis]="airTempOptions.xaxis"
+          [yaxis]="airTempOptions.yaxis"
+          [markers]="airTempOptions.markers"
+          [legend]="airTempOptions.legend"
+          [stroke]="airTempOptions.stroke"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Atmospheric Pressure</h6>
+        <apx-chart
+          [series]="atmoshpericOptions.series"
+          [chart]="atmoshpericOptions.chart"
+          [colors]="atmoshpericOptions.colors"
+          [grid]="atmoshpericOptions.grid"
+          [xaxis]="atmoshpericOptions.xaxis"
+          [yaxis]="atmoshpericOptions.yaxis"
+          [markers]="atmoshpericOptions.markers"
+          [legend]="atmoshpericOptions.legend"
+          [stroke]="atmoshpericOptions.stroke"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">VPD</h6>
+        <apx-chart
+          [series]="vaporOptions.series"
+          [chart]="vaporOptions.chart"
+          [colors]="vaporOptions.colors"
+          [grid]="vaporOptions.grid"
+          [xaxis]="vaporOptions.xaxis"
+          [yaxis]="vaporOptions.yaxis"
+          [markers]="vaporOptions.markers"
+          [legend]="vaporOptions.legend"
+          [stroke]="vaporOptions.stroke"
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Reference Pressure</h6>
+        <apx-chart
+          [series]="refPressureOptions.series"
+          [chart]="refPressureOptions.chart"
+          [colors]="refPressureOptions.colors"
+          [grid]="refPressureOptions.grid"
+          [xaxis]="refPressureOptions.xaxis"
+          [yaxis]="refPressureOptions.yaxis"
+          [markers]="refPressureOptions.markers"
+          [legend]="refPressureOptions.legend"
+          [stroke]="refPressureOptions.stroke"
         ></apx-chart>
       </div>
     </div>

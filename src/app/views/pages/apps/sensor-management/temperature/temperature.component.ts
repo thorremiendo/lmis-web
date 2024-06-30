@@ -4,6 +4,7 @@ import { SensorParams } from '../../models/sensor-params';
 import { SensorSites } from '../../models/sensor-site-type.enum';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-temperature',
@@ -24,7 +25,11 @@ export class TemperatureComponent implements OnInit {
   loadingIndicator = true;
   reorderable = true;
   ColumnMode = ColumnMode;
-  public lineChartOptions: any = {};
+  public airTempOptions: any = {};
+  public vaporOptions: any = {};
+  public atmoshpericOptions: any = {};
+  public refPressureOptions: any = {};
+
 
   obj = {
     primary: "#6571ff",
@@ -119,76 +124,69 @@ export class TemperatureComponent implements OnInit {
 
   selectSite(id: number) {
     this.selectedSite = id
+  }
 
+  convertToUTC(dateObj: { year: number, month: number, day: number }): string {
+    let date = new Date(Date.UTC(dateObj.year, dateObj.month - 1, dateObj.day));
+    return date.toISOString();
   }
 
   getSensorData() {
     this.isLoading = true
-    this.countdown = 60
-    let sensorParams: SensorParams = {
-      device_sn: "",
-      start_date: this.convertToDate(this.fromDate),
-      end_date: this.convertToDate(this.toDate),
-      output_format: 'json',
-      page_num: 1,
-      per_page: 500,
-      device_depth: true,
-      sort_by: 'descending'
+    const device = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : this.selectedSite == 4 ? SensorSites.Tublay : this.selectedSite == 5 ? SensorSites.Baguio : SensorSites.Itogon;
+    const airTempParams: SensorParams = {
+      device_sn: device,
+      reading_type: "Air Temperature",
+      from: this.convertToUTC(this.fromDate),
+      until: this.convertToUTC(this.toDate),
     };
-    sensorParams.device_sn = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : this.selectedSite == 4 ? SensorSites.Tublay : this.selectedSite == 5 ? SensorSites.Baguio : SensorSites.Itogon;
-    this.sensorService.getSensorData(sensorParams).subscribe(res => {
-      let countdownInterval = setInterval(() => {
-        this.countdown--;
-        if (this.countdown <= 0) {
-          clearInterval(countdownInterval);
-        }
-      }, 1000);
-      this.sensorDetails = res
-      this.airTempRows = this.sensorDetails["Air Temperature"][0].readings
-      this.vaporPressureRows = this.sensorDetails["VPD"][0].readings
-      this.atmosphericRows = this.sensorDetails["Atmospheric Pressure"][0].readings
-      this.referencePressureRows = this.sensorDetails["Reference Pressure"][0].readings
+    const vpdParams: SensorParams = {
+      device_sn: device,
+      reading_type: "VPD",
+      from: this.convertToUTC(this.fromDate),
+      until: this.convertToUTC(this.toDate),
+    };
+    const atmosphericParams: SensorParams = {
+      device_sn: device,
+      reading_type: "Atmospheric Pressure",
+      from: this.convertToUTC(this.fromDate),
+      until: this.convertToUTC(this.toDate),
+    };
+    const refPressureParams: SensorParams = {
+      device_sn: device,
+      reading_type: "Reference Pressure",
+      from: this.convertToUTC(this.fromDate),
+      until: this.convertToUTC(this.toDate),
+    };
 
-      this.lineChartOptions = getLineChartOptions(this.obj, this.airTempRows, this.vaporPressureRows, this.atmosphericRows, this.referencePressureRows);
-
-      this.isLoading = false
-      if (res.data = {}) {
+    forkJoin([this.sensorService.getSensorData(airTempParams), this.sensorService.getSensorData(vpdParams), this.sensorService.getSensorData(atmosphericParams), this.sensorService.getSensorData(refPressureParams)])
+      .subscribe(([airTemperature, vpd, atmosphericPressure, referencePressure]) => {
+        this.airTempRows = airTemperature;
+        this.vaporPressureRows = vpd;
+        this.atmosphericRows = atmosphericPressure;
+        this.referencePressureRows = referencePressure;
+        this.airTempOptions = getOptions(this.obj, this.airTempRows, "Air Temperature")
+        this.vaporOptions = getOptions(this.obj, vpd, "VPD")
+        this.atmoshpericOptions = getOptions(this.obj, atmosphericPressure, "Atmospheric Pressure")
+        this.refPressureOptions = getOptions(this.obj, referencePressure, "Reference Pressure")
         this.isLoading = false
-      }
-    }, err => {
-      this.errorMessage = err.message
-      this.isLoading = false
-    })
+      }, err => {
+        this.errorMessage = err.message
+        this.isLoading = false
+      })
   }
 }
 
-function getLineChartOptions(obj: any, airTempData: any[], vaporPressureData: any[], atmosphericData: any[], referencePressureData: any[]) {
-  const airTempValues = airTempData.map(item => item.value);
-  const vaporPressureValues = vaporPressureData.map(item => item.value);
-  const atmosphericValues = atmosphericData.map(item => item.value);
-  const referencePressureValues = referencePressureData.map(item => item.value);
-
-  const categories = airTempData.map(item => item.datetime);
+function getOptions(obj: any, data: any[], name: string) {
+  const dataValues = data.map(item => item.value);
+  const categories = data.map(item => item.datetime);
 
   return {
     series: [
       {
-        name: "Air Temperature",
-        data: airTempValues
+        name: name,
+        data: dataValues
       },
-      {
-        name: "Vapor Pressure",
-        data: vaporPressureValues
-      },
-      {
-        name: "Atmospheric Pressure",
-        data: atmosphericValues
-      },
-      {
-        name: "Reference Pressure",
-        data: referencePressureValues
-      },
-
     ],
     chart: {
       type: "line",

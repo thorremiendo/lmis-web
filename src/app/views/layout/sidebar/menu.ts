@@ -33,8 +33,34 @@ export const MENU: MenuItem[] = [
     ]
   },
   {
+    label: 'Alert Warning',
+    icon: 'alert-triangle',
+    subItems: [
+      {
+        label: 'Rainfall',
+        link: '/apps/alert-warning/rainfall',
+      },
+    ]
+  },
+  {
+    label: 'Landslide Evacuation',
+    icon: 'map-pin',
+    link: '/apps/evacuation'
+  },
+  {
     label: 'Landslide Reports',
-    icon: 'triangle',
+    icon: 'file-plus',
     link: '/apps/reports'
   },
+  {
+    label: 'Landslide Inventory',
+    icon: 'archive',
+    link: '/apps/landslide-inventory'
+  },
+  {
+    label: 'Contact List',
+    icon: 'book',
+    link: '/apps/contact-list'
+  },
+
 ];

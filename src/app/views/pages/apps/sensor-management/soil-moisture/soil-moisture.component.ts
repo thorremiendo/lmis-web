@@ -4,6 +4,7 @@ import { SensorParams } from '../../models/sensor-params';
 import { SensorSites } from '../../models/sensor-site-type.enum';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-soil-moisture',
@@ -24,7 +25,10 @@ export class SoilMoistureComponent implements OnInit {
   reorderable = true;
   ColumnMode = ColumnMode;
 
-  public lineChartOptions: any = {};
+  public waterContentOptions: any = {};
+  public soilTempOptions: any = {};
+  public saturationExtOptions: any = {};
+
 
   obj = {
     primary: "#6571ff",
@@ -119,69 +123,63 @@ export class SoilMoistureComponent implements OnInit {
 
   selectSite(id: number) {
     this.selectedSite = id
+  }
 
+  convertToUTC(dateObj: { year: number, month: number, day: number }): string {
+    let date = new Date(Date.UTC(dateObj.year, dateObj.month - 1, dateObj.day));
+    return date.toISOString();
   }
 
   getSensorData() {
     this.isLoading = true
-    this.countdown = 60
-    let sensorParams: SensorParams = {
-      device_sn: "",
-      start_date: this.convertToDate(this.fromDate),
-      end_date: this.convertToDate(this.toDate),
-      output_format: 'json',
-      page_num: 1,
-      per_page: 500,
-      device_depth: true,
-      sort_by: 'descending'
-    };
-    sensorParams.device_sn = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : this.selectedSite == 4 ? SensorSites.Tublay : this.selectedSite == 5 ? SensorSites.Baguio : SensorSites.Itogon;
-    this.sensorService.getSensorData(sensorParams).subscribe(res => {
-      let countdownInterval = setInterval(() => {
-        this.countdown--;
-        if (this.countdown <= 0) {
-          clearInterval(countdownInterval);
-        }
-      }, 1000);
-      this.sensorDetails = res
-      this.waterContentRows = this.sensorDetails["Water Content"][0].readings
-      this.soilTempRows = this.sensorDetails["Soil Temperature"][0].readings
-      this.saturationExtractRows = this.sensorDetails["Saturation Extract EC"][0].readings
-      this.lineChartOptions = getLineChartOptions(this.obj, this.waterContentRows, this.soilTempRows, this.saturationExtractRows);
+    const device = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : this.selectedSite == 4 ? SensorSites.Tublay : this.selectedSite == 5 ? SensorSites.Baguio : SensorSites.Itogon;
 
-      this.isLoading = false
-      if (res.data = {}) {
+    const waterContentParams: SensorParams = {
+      device_sn: device,
+      reading_type: "Water Content",
+      from: this.convertToUTC(this.fromDate),
+      until: this.convertToUTC(this.toDate),
+    };
+    const soilTempParams: SensorParams = {
+      device_sn: device,
+      reading_type: "Soil Temperature",
+      from: this.convertToUTC(this.fromDate),
+      until: this.convertToUTC(this.toDate),
+    };
+    const saturationExtParams: SensorParams = {
+      device_sn: device,
+      reading_type: "Saturation Extract EC",
+      from: this.convertToUTC(this.fromDate),
+      until: this.convertToUTC(this.toDate),
+    };
+
+    forkJoin([this.sensorService.getSensorData(waterContentParams), this.sensorService.getSensorData(soilTempParams), this.sensorService.getSensorData(saturationExtParams)])
+      .subscribe(([waterContent, soilTemp, saturationExt]) => {
+        this.waterContentRows = waterContent
+        this.soilTempRows = soilTemp
+        this.saturationExtractRows = saturationExt
+        this.waterContentOptions = getOptions(this.obj, this.waterContentRows, "Water Content");
+        this.soilTempOptions = getOptions(this.obj, this.soilTempRows, "Soil Temperature");
+        this.saturationExtOptions = getOptions(this.obj, this.saturationExtractRows, "Saturation Extract EC");
+
         this.isLoading = false
-      }
-    }, err => {
-      this.errorMessage = err.message
-      this.isLoading = false
-    })
+      }, err => {
+        this.errorMessage = err.message
+        this.isLoading = false
+      })
   }
 }
 
-function getLineChartOptions(obj: any, waterContentData: any[], soiltempData: any[], saturationExtractData: any[]) {
-  const waterContentValues = waterContentData.map(item => item.value);
-  const soilTempValues = soiltempData.map(item => item.value);
-  const saturationExtractValues = saturationExtractData.map(item => item.value);
-
-  const categories = waterContentData.map(item => item.datetime);
+function getOptions(obj: any, data: any[], name: string) {
+  const dataValues = data.map(item => item.value);
+  const categories = data.map(item => item.datetime);
 
   return {
     series: [
       {
-        name: "Water Content",
-        data: waterContentValues
+        name: name,
+        data: dataValues
       },
-      {
-        name: "Soil temperature",
-        data: soilTempValues
-      },
-      {
-        name: "Saturation Extract",
-        data: saturationExtractValues
-      },
-
     ],
     chart: {
       type: "line",

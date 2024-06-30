@@ -64,29 +64,30 @@
         <div class="col-md-4 grid-margin stretch-card">
           <div
             class="card"
-            style="background-color: #e6f6ed; border: 1px solid #b8efd0"
+            style="background-color: #f5cfcf; border: 1px solid #ec8282"
           >
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-baseline">
                 <h6 class="card-title mb-0">Rainfall</h6>
               </div>
-              <div class="row" *ngIf="rainfallPeriodTotal !== undefined">
+              <div class="row">
                 <div class="col-6 col-md-12 col-xl-5">
-                  <h3 class="mb-2">{{ rainfallPeriodTotal }} mm</h3>
+                  <h3 class="mb-2">700 mm</h3>
                   <div class="d-flex align-items-baseline">
                     <p class="text-success">
                       <i
                         data-feather="alert-octagon"
                         appFeatherIcon
                         class="icon-sm mb-1"
+                        style="color: red"
                       ></i>
-                      <span class="fw-bold">{{ getRainfallAlertLevel() }}</span>
+                      <span class="fw-bold" style="color: red">RA-3</span>
                     </p>
                   </div>
                 </div>
                 <div class="col-6 col-md-12 col-xl-7">
                   <div class="mt-md-3 mt-xl-0">
-                    <apx-chart
+                    <!-- <apx-chart
                       [series]="rainfallChartOptions.series"
                       [chart]="rainfallChartOptions.chart"
                       [colors]="rainfallChartOptions.colors"
@@ -96,7 +97,7 @@
                       [markers]="rainfallChartOptions.markers"
                       [legend]="rainfallChartOptions.legend"
                       [stroke]="rainfallChartOptions.stroke"
-                    ></apx-chart>
+                    ></apx-chart> -->
                   </div>
                 </div>
               </div>
@@ -106,7 +107,7 @@
         <div class="col-md-4 grid-margin stretch-card">
           <div
             class="card"
-            style="background-color: #e6f6ed; border: 1px solid #b8efd0"
+            style="background-color: #f5cfcf; border: 1px solid #ec8282"
           >
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-baseline">
@@ -114,15 +115,16 @@
               </div>
               <div class="row">
                 <div class="col-6 col-md-12 col-xl-5">
-                  <h3 class="mb-2">33%</h3>
+                  <h3 class="mb-2">97%</h3>
                   <div class="d-flex align-items-baseline">
                     <p class="text-success">
                       <i
                         data-feather="alert-octagon"
                         appFeatherIcon
                         class="icon-sm mb-1"
+                        style="color: red"
                       ></i>
-                      <span class="fw-bold">WC-0</span>
+                      <span class="fw-bold" style="color: red">WC-0</span>
                     </p>
                   </div>
                 </div>
@@ -145,7 +147,7 @@
         <div class="col-md-4 grid-margin stretch-card">
           <div
             class="card"
-            style="background-color: #e6f6ed; border: 1px solid #b8efd0"
+            style="background-color: #f5cfcf; border: 1px solid #ec8282"
           >
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-baseline">
@@ -153,15 +155,16 @@
               </div>
               <div class="row">
                 <div class="col-6 col-md-12 col-xl-5">
-                  <h3 class="mb-2">52 mm</h3>
+                  <h3 class="mb-2">414 mm</h3>
                   <div class="d-flex align-items-baseline">
                     <p class="text-success">
                       <i
                         data-feather="alert-octagon"
                         appFeatherIcon
                         class="icon-sm mb-1"
+                        style="color: red"
                       ></i>
-                      <span class="fw-bold">SM-0</span>
+                      <span class="fw-bold" style="color: red">SM-0</span>
                     </p>
                   </div>
                 </div>
@@ -185,6 +188,16 @@
     </div>
   </div>
   <!-- row -->
+
+  <div class="row">
+    <div class="col-12 col-xl-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <app-map></app-map>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-12 col-xl-12 grid-margin stretch-card">

@@ -11,6 +11,7 @@ import { SwalService } from 'src/app/core/services/swal.service';
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent implements OnInit {
+  public user = JSON.parse(localStorage.getItem('lmisUser'));
   public reportsData = []
   public loadingIndicator = true;
   public ColumnMode = ColumnMode;
@@ -22,9 +23,42 @@ export class ReportsComponent implements OnInit {
       value: "RockFall"
     },
     {
-      name: "Soil Cover Collapse",
-      value: "SoilCoverCollapse"
+      name: "Block Slide",
+      value: "BlockSlide"
     },
+    {
+      name: "Debris Flow",
+      value: "DebrisFlow"
+    },
+    {
+      name: "Debris Avalanche",
+      value: "DebrisAvalanche"
+    },
+    {
+      name: "Creep",
+      value: "Creep"
+    },
+    {
+      name: "Rotational",
+      value: "Rotational"
+    },
+    {
+      name: "Translational",
+      value: "Translational"
+    },
+    {
+      name: "Topple",
+      value: "Topple"
+    },
+    {
+      name: "Earth Flow",
+      value: "EarthFlow"
+    },
+    {
+      name: "Lateral Spread",
+      value: "LateralSpread"
+    },
+
   ]
 
   public susceptibility = ["High", "Medium", "Low"]
@@ -131,7 +165,7 @@ export class ReportsComponent implements OnInit {
     console.log(body)
 
     this.dataService.updateReport(row.id, body).subscribe(res => {
-      console.log(res)
+      this.getReports()
     })
   }
 }
