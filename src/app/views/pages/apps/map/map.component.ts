@@ -14,7 +14,63 @@ export class MapComponent implements OnInit {
   lat: number = 16.3773406;
   lng: number = 120.5585654;
   directions
-  sites = [{ lng: 120.5669193, lat: 16.3778389 }, { lng: 120.573431, lat: 16.4481207 }, { lng: 120.5731177, lat: 16.44873 }]
+  sites = [
+    {
+      id: 1,
+      municipality: "Baguio City",
+      coords: { lng: 120.5659538, lat: 16.3772419 }
+    },
+    {
+      id: 2,
+      municipality: "La Trinidad",
+      coords: { lng: 120.573431, lat: 16.4481207 },
+    },
+    {
+      id: 3,
+      municipality: "La Trinidad",
+      coords: { lng: 120.5731177, lat: 16.44873 },
+    },
+    {
+      id: 4,
+      municipality: "Itogon",
+      coords: { lng: 120.6306466, lat: 16.3463546 },
+    },
+    {
+      id: 5,
+      municipality: "Itogon",
+      coords: { lng: 120.652561, lat: 16.3254651 },
+    },
+    {
+      id: 6,
+      municipality: "Sablan",
+      coords: { lng: 120.5133252, lat: 16.478773 },
+    },
+    {
+      id: 7,
+      municipality: "Sablan",
+      coords: { lng: 120.5138543, lat: 16.4786505 },
+    },
+    {
+      id: 8,
+      municipality: "Tuba",
+      coords: { lng: 120.5877935, lat: 16.2892371 },
+    },
+    {
+      id: 9,
+      municipality: "Tuba",
+      coords: { lng: 120.5900898, lat: 16.2895354 },
+    },
+    {
+      id: 10,
+      municipality: "Tublay",
+      coords: { lng: 120.651141, lat: 16.4974758 },
+    },
+    {
+      id: 11,
+      municipality: "Tublay",
+      coords: { lng: 120.6508378, lat: 16.4972556 },
+    },
+  ]
 
   constructor() { }
 
@@ -59,7 +115,7 @@ export class MapComponent implements OnInit {
 
     this.sites.forEach((site) => {
       new mapboxgl.Marker()
-        .setLngLat([site.lng, site.lat])
+        .setLngLat([site.coords.lng, site.coords.lat])
         .addTo(this.map);
     })
 
@@ -73,9 +129,10 @@ export class MapComponent implements OnInit {
     this.map.on('load', () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
+          // this.directions.setOrigin([position.coords.longitude, position.coords.latitude])
           this.directions.setOrigin([120.5585654, 16.3773406])
           // this.directions.setOrigin([120.5585654, 16.3773406])
-          this.directions.setDestination([120.5669193, 16.3778389])
+          // this.directions.setDestination([120.5669193, 16.3778389])
         })
       }
     })
@@ -87,34 +144,71 @@ export class MapComponent implements OnInit {
     switch (site) {
       case 1:
         setTimeout(() => {
-          this.directions.setDestination([120.5669193, 16.3778389])
+          const site = this.sites.find(e => e.id === 1)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
         }, 1500);
         break;
       case 2:
         setTimeout(() => {
-          this.directions.setDestination([120.573431, 16.4481207])
+          const site = this.sites.find(e => e.id === 2)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
         }, 1500);
         break;
       case 3:
         setTimeout(() => {
-          this.directions.setDestination([120.6306466, 16.3463546])
+          const site = this.sites.find(e => e.id === 3)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
         }, 1500);
         break;
       case 4:
         setTimeout(() => {
-          this.directions.setDestination([120.5133252, 16.478773])
+          const site = this.sites.find(e => e.id === 4)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
         }, 1500);
         break;
       case 5:
         setTimeout(() => {
-          this.directions.setDestination([120.5877935, 16.2892371])
+          const site = this.sites.find(e => e.id === 5)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
         }, 1500);
         break;
       case 6:
         setTimeout(() => {
-          this.directions.setDestination([120.651141, 16.4974758])
+          const site = this.sites.find(e => e.id === 6)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
         }, 1500);
         break;
+      case 7:
+        setTimeout(() => {
+          const site = this.sites.find(e => e.id === 7)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
+        }, 1500);
+        break;
+      case 8:
+        setTimeout(() => {
+          const site = this.sites.find(e => e.id === 8)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
+        }, 1500);
+        break;
+      case 9:
+        setTimeout(() => {
+          const site = this.sites.find(e => e.id === 9)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
+        }, 1500);
+        break;
+      case 10:
+        setTimeout(() => {
+          const site = this.sites.find(e => e.id === 10)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
+        }, 1500);
+        break;
+      case 11:
+        setTimeout(() => {
+          const site = this.sites.find(e => e.id === 11)
+          this.directions.setDestination([site.coords.lng, site.coords.lat])
+        }, 1500);
+        break;
+
 
       default:
         break;

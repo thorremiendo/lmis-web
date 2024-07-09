@@ -27,7 +27,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.getMunicipalities().subscribe(res => {
       this.municipalities = res
-      this.selectMunicipality(this.municipalities[0])
     })
     this.signupForm = new FormGroup({
       username: new FormControl(''),
@@ -36,6 +35,7 @@ export class RegisterComponent implements OnInit {
       contactNumber: new FormControl(''),
       password: new FormControl(''),
       barangay: new FormControl(""),
+      municipality: new FormControl("")
     });
   }
 
@@ -47,6 +47,30 @@ export class RegisterComponent implements OnInit {
     this.selectedMunicipality = municipality;
     this.dataService.getBarangays(municipality.id).subscribe(res => {
       this.barangays = res
+      switch (this.selectedMunicipality.id) {
+        case 1:
+          this.barangays = this.barangays.filter(e => e.name.includes("DONTOGAN"))
+          break;
+        case 2:
+          this.barangays = this.barangays.filter(e => e.name.includes("PUGUIS"))
+          break;
+        case 3:
+          this.barangays = this.barangays.filter(e => e.name.includes("AMPUCAO"))
+          break;
+        case 4:
+          this.barangays = this.barangays.filter(e => e.name.includes("BANANGAN"))
+          break;
+        case 5:
+          this.barangays = this.barangays.filter(e => e.name.includes("CAMP 3"))
+          break;
+        case 6:
+          this.barangays = this.barangays.filter(e => e.name.includes("AMBASSADOR"))
+          break;
+
+
+        default:
+          break;
+      }
     })
   }
 

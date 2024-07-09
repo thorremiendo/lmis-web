@@ -7,6 +7,7 @@ import { ErrorPageComponent } from './views/pages/error-page/error-page.componen
 import { LoginPageComponent } from './views/pages/login-page/login-page.component';
 import { LoginComponent } from './views/pages/auth/login/login.component';
 import { LandslideReportComponent } from './views/pages/landing/landslide-report/landslide-report.component';
+import { GlossaryComponent } from './views/pages/landing/glossary/glossary.component';
 
 
 const routes: Routes = [
@@ -16,12 +17,16 @@ const routes: Routes = [
     loadChildren: () => import('./views/pages/landing/landing.module').then(m => m.LandingModule)
   },
   {
-    path:'login',
+    path: 'login',
     component: LoginComponent
   },
   {
-    path:'landslide-report',
+    path: 'landslide-report',
     component: LandslideReportComponent
+  },
+  {
+    path: 'glossary',
+    component: GlossaryComponent
   },
   {
     path: '',

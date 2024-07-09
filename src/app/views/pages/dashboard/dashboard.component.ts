@@ -1,10 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-
-import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import * as mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+import { NgbDateStruct, NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { SensorsService } from '../apps/services/sensors.service';
 import { SensorParams } from '../apps/models/sensor-params';
 import { SensorSites } from '../apps/models/sensor-site-type.enum';
 import { SwalService } from 'src/app/core/services/swal.service';
+import { environment } from '../../../../environments/environment';
+import { forkJoin } from 'rxjs';
+import { ChartService } from 'src/app/core/services/chart.service';
+import { ChartData } from 'chart.js';
+import { start } from 'repl';
+import { ThresholdService } from 'src/app/core/services/threshold.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,113 +19,320 @@ import { SwalService } from 'src/app/core/services/swal.service';
   preserveWhitespaces: true
 })
 export class DashboardComponent implements OnInit {
-  public selectedSite: any
-  public rainfallRecording: { datetime: string, value: number }[] = [];
-  public rainfallPeriodTotal: number
+  public selectedSensor: any
+  public rainfallRecording = [];
+  public rainfallPeriodTotal: any
+  public soilMoistureAverage: any
+  public calculatedSoilMoisture: any
+  public soilMoistureRecording = [];
+  public soilMoistureTotal: any
   public isLoading: boolean = false
   public errorMessage: string = ""
-  public selectedSensor: any
   public alertLevel: number
   public sensors = [
     {
+      value: 0,
+      title: 'All',
+    },
+    {
       value: 1,
-      title: 'Sablan'
+      title: 'Purok 10, Dontogan',
+      coords: [120.5683764, 16.3731997]
     },
     {
       value: 2,
-      title: 'La Trinidad'
+      title: 'Sitio Little Kibungan, Puguis',
+      coords: [120.5710988, 16.4461463]
     },
     {
       value: 3,
-      title: 'Tuba'
+      title: 'Sitio Manganese, Ampucao',
+      coords: [120.6331639, 16.3459756]
     },
     {
       value: 4,
-      title: 'Tublay'
+      title: 'Sitio Kalipkip, Banangan',
+      coords: [120.5189059, 16.4753295]
+    },
+    {
+      value: 5,
+      title: 'Kiangan Village, Camp 3',
+      coords: [120.5921309, 16.2899291]
+    },
+    {
+      value: 6,
+      title: 'Sitio Tabeyo, Ambassador',
+      coords: [120.6656292, 16.4908632]
     },
   ]
-  /**
-   * Apex chart
-   */
-  public customersChartOptions: any = {};
-  public ordersChartOptions: any = {};
-  public growthChartOptions: any = {};
-  public revenueChartOptions: any = {};
-  public monthlySalesChartOptions: any = {};
-  public cloudStorageChartOptions: any = {};
+  public period = [
+    {
+      name: '1 day',
+      value: 1
+    },
+    {
+      name: '1 week',
+      value: 2
+    },
+    {
+      name: '1 month',
+      value: 3
+    },
+    {
+      name: 'Select Range',
+      value: 4
+    }
+  ]
+  public barChartData
+  public barChartOptions
+  public barChartPlugins
+  public barChartType
+  public lineChartData
+  public lineChartOptions
+  public lineChartType
+  public lineChartPlugins
+  public soilMoistureChartData
+  public soilMoistureBarChartData
+
+  from: any;
+  until: any
+  hoveredDate: NgbDate | null = null;
+  fromDate: NgbDate | null;
+  toDate: NgbDate | null;
+  map: mapboxgl.Map;
+  marker: mapboxgl.Marker;
+  style = 'mapbox://styles/mapbox/satellite-streets-v11';
+  lat = 16.416665;
+  lng = 120.5999976;
+  zoom = 15;
+  public currentMarkers = [];
   public rainfallChartOptions: any = {};
-
-
-  // colors and font variables for apex chart 
-  obj = {
-    primary: "#774C29",
-    secondary: "#7987a1",
-    success: "#05a34a",
-    info: "#66d1d1",
-    warning: "#fbbc06",
-    danger: "#ff3366",
-    light: "#e9ecef",
-    dark: "#060c17",
-    muted: "#7987a1",
-    gridBorder: "rgba(77, 138, 240, .15)",
-    bodyColor: "#000",
-    cardBg: "#fff",
-    fontFamily: "'Roboto', Helvetica, sans-serif"
-  }
-
-  /**
-   * NgbDatepicker
-   */
+  public selectedPeriod: any
   currentDate: NgbDateStruct;
 
-  constructor(private calendar: NgbCalendar, private sensorService: SensorsService, private swal: SwalService) { }
+  constructor(
+    private calendar: NgbCalendar,
+    private sensorService: SensorsService,
+    private swal: SwalService,
+    public formatter: NgbDateParserFormatter,
+    private chartService: ChartService,
+    private threshold: ThresholdService
+  ) {
+    this.barChartData = this.chartService.barChartData
+    this.barChartOptions = this.chartService.barChartOptions
+    this.barChartPlugins = this.chartService.barChartPlugins
+    this.barChartType = this.chartService.barChartType
+    this.lineChartData = this.chartService.lineChartData
+    this.lineChartOptions = this.chartService.lineChartOptions
+    this.lineChartType = this.chartService.lineChartType
+    this.lineChartPlugins = this.chartService.lineChartPlugins
+    this.soilMoistureChartData = this.chartService.soilMoistureChartData
+    this.soilMoistureBarChartData = this.chartService.soilMoistureBarChartData
+    this.toDate = calendar.getToday();
+    this.fromDate = calendar.getPrev(this.toDate, 'd', 7);
+    this.from = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+    this.until = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+    mapboxgl.accessToken = environment.mapboxToken;
+  }
 
   ngOnInit(): void {
-    this.swal.showWarning("A landslide alert has been issued at Critical Alert Level 3. Immediate action is required. ", "WARNING", "Proceed")
-
-    this.selectedSensor = this.sensors[1]
-    // this.onSelectPeriod(this.selectedSensor)
+    // this.swal.showWarning("A landslide alert has been issued at Critical Alert Level 3. Immediate action is required. ", "WARNING", "Proceed")
+    this.selectedSensor = this.sensors[0]
+    this.selectedPeriod = this.period[0]
     this.currentDate = this.calendar.getToday();
+    this.buildMap()
+    this.sensors.forEach((site) => {
+      if (site.coords) {
+        new mapboxgl.Marker()
+          .setLngLat([site.coords[0], site.coords[1]])
+          .addTo(this.map);
+      }
+    })
+    this.fetchSensorDataPeriod()
+  }
 
-    this.customersChartOptions = getCustomerseChartOptions(this.obj);
-    this.ordersChartOptions = getOrdersChartOptions(this.obj);
-    this.growthChartOptions = getGrowthChartOptions(this.obj);
-    this.revenueChartOptions = getRevenueChartOptions(this.obj);
-    this.monthlySalesChartOptions = getMonthlySalesChartOptions(this.obj);
-    this.cloudStorageChartOptions = getCloudStorageChartOptions(this.obj);
+  fetchSensorDataPeriod() {
+    this.barChartData.labels = []
+    this.barChartData.datasets[0].data = []
+    this.lineChartData.labels = []
+    this.lineChartData.datasets[0].data = []
+    this.soilMoistureChartData.labels = []
+    this.soilMoistureChartData.datasets[0].data = []
+    this.soilMoistureBarChartData.labels = []
+    this.soilMoistureBarChartData.datasets[0].data = []
+    this.errorMessage = ""
+    this.isLoading = true
+    let startDate: Date
+    let endDate: Date
+    if (this.selectedPeriod.value == 4) { //DATE RANGE
+      startDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+      endDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+    } else if (this.selectedPeriod.value == 1) { //1 DAY
+      startDate = new Date(new Date().setDate(new Date().getDate() - 1));
+      endDate = new Date();
+    } else if (this.selectedPeriod.value == 2) {//1 WEEK
+      startDate = new Date(new Date().setDate(new Date().getDate() - 7));
+      endDate = new Date();
+    } else if (this.selectedPeriod.value == 3) {//1 MONTH
+      startDate = new Date(new Date().setDate(new Date().getDate() - 30));
+      endDate = new Date();
+    }
 
-    // Some RTL fixes. (feel free to remove if you are using LTR))
-    if (document.querySelector('html')?.getAttribute('dir') === 'rtl') {
-      this.addRtlOptions();
+    if (this.selectedSensor.value !== 0) {
+      this.fetchRainfallData(startDate, endDate)
+      this.fetchSoilMoisture(startDate, endDate)
+    } else {
+      this.fetchAllRainfallData(startDate, endDate)
+      this.fetchAllSoilMoisture(startDate, endDate)
     }
   }
 
-  onSelectPeriod(sensor: any) {
-    this.isLoading = true
-    this.selectedSensor = sensor
-    let startDate: Date;
-    const endDate: Date = new Date(); // current date/time
+  fetchAllRainfallData(startDate, endDate) {
+    this.rainfallPeriodTotal = 0
+    const devices = [SensorSites.Baguio, SensorSites.LaTrinidad, SensorSites.Itogon, SensorSites.Sablan, SensorSites.Tuba, SensorSites.Tublay]
+    const apiCalls = devices.map((deviceNumber) =>
+      this.sensorService.getSensorData({
+        device_sn: deviceNumber,
+        reading_type: "Precipitation",
+        from: this.convertToUTC(startDate.toISOString()),
+        until: this.convertToUTC(endDate.toISOString()),
+      })
+    );
+    forkJoin(apiCalls).subscribe(results => {
+      const total = results.map(rainfallRecordings =>
+        parseFloat(rainfallRecordings.reduce((total, { value }) => total + value, 0).toFixed(2))
+      );
+      this.rainfallPeriodTotal = total.reduce((total, current) => total + current, 0).toFixed(2)
+      total.forEach((rainfall) => {
+        this.barChartData.datasets[0].data.push(rainfall)
+      })
+      devices.forEach((device) => {
+        this.barChartData.labels.push(this.chartService.getKeyByValue(device))
+      })
+      this.isLoading = false
+    });
+  }
 
-    startDate = new Date(endDate.getTime() - 24 * 60 * 60 * 1000); // subtract 24 hours
-
+  fetchRainfallData(startDate, endDate) {
+    this.rainfallRecording = []
+    const device = this.selectedSensor.value == 1 ? SensorSites.Baguio : this.selectedSensor.value == 2 ? SensorSites.LaTrinidad : this.selectedSensor.value == 3 ? SensorSites.Itogon : this.selectedSensor.value == 4 ? SensorSites.Sablan : this.selectedSensor.value == 5 ? SensorSites.Tuba : SensorSites.Tublay;
     let sensorParams: SensorParams = {
-      device_sn: "",
-      reading_type: '',
-      from: toLocalISOString(startDate),
-      until: toLocalISOString(endDate),
+      device_sn: device,
+      reading_type: "Precipitation",
+      from: this.convertToUTC(startDate.toISOString()),
+      until: this.convertToUTC(endDate.toISOString()),
     };
-
-    sensorParams.device_sn = this.selectedSite == 1 ? SensorSites.Sablan : this.selectedSite == 2 ? SensorSites.LaTrinidad : this.selectedSite == 3 ? SensorSites.Tuba : SensorSites.Tublay;
+    //RAINFALL AMOUNT
     this.sensorService.getSensorData(sensorParams).subscribe(res => {
-      this.rainfallRecording = res["Precipitation"][0].readings
-      this.rainfallPeriodTotal = +this.rainfallRecording.reduce((n, { value }) => n + value, 0).toFixed(2)
-      this.rainfallChartOptions = getRainfallChartOptions(this.obj, this.rainfallRecording);
-      console.log(this.rainfallRecording, this.rainfallPeriodTotal)
+      this.rainfallRecording = res
+      this.rainfallPeriodTotal = parseFloat(this.rainfallRecording.reduce((n, { value }) => n + value, 0).toFixed(2))
+      if (!this.currentMarkers.length && this.selectedSensor.value !== 0) {
+        this.buildMap()
+        this.flyTo(this.selectedSensor.coords[0], this.selectedSensor.coords[1])
+      }
+      this.rainfallRecording.forEach((rainfall) => {
+        this.lineChartData.labels.push(rainfall.datetime)
+        this.lineChartData.datasets[0].data.push(rainfall.value)
+        this.lineChartData.datasets[0].label = this.chartService.getKeyByValue(device)
+      })
       this.isLoading = false
     }, err => {
       this.errorMessage = "Please try again."
       this.isLoading = false
     })
+  }
+
+  fetchSoilMoisture(startDate, endDate) {
+    this.soilMoistureRecording = []
+    const device = this.selectedSensor.value == 1 ? SensorSites.Baguio : this.selectedSensor.value == 2 ? SensorSites.LaTrinidad : this.selectedSensor.value == 3 ? SensorSites.Itogon : this.selectedSensor.value == 4 ? SensorSites.Sablan : this.selectedSensor.value == 5 ? SensorSites.Tuba : SensorSites.Tublay;
+    let sensorParams: SensorParams = {
+      device_sn: device,
+      reading_type: "Raw VWC",
+      from: this.convertToUTC(startDate.toISOString()),
+      until: this.convertToUTC(endDate.toISOString()),
+    };
+    //SOIL MOISTURE AMOUNT
+    this.sensorService.getSensorData(sensorParams).subscribe(res => {
+      this.soilMoistureRecording = res
+      this.soilMoistureAverage = parseFloat(
+        (this.soilMoistureRecording.reduce((n, { value }) => n + value, 0) / this.soilMoistureRecording.length).toFixed(2)
+      );
+      this.calculatedSoilMoisture = this.threshold.calculateSoilMoisture(this.selectedSensor.value, this.soilMoistureAverage).toFixed(2)
+      this.soilMoistureRecording.forEach((rainfall) => {
+        this.soilMoistureChartData.labels.push(rainfall.datetime)
+        this.soilMoistureChartData.datasets[0].data.push(rainfall.value)
+        this.soilMoistureChartData.datasets[0].label = this.chartService.getKeyByValue(device)
+      })
+      this.isLoading = false
+    }, err => {
+      this.errorMessage = "Please try again."
+      this.isLoading = false
+    })
+  }
+
+  fetchAllSoilMoisture(startDate, endDate) {
+    this.calculatedSoilMoisture = 0
+
+    const devices = [SensorSites.Baguio, SensorSites.LaTrinidad, SensorSites.Itogon, SensorSites.Sablan, SensorSites.Tuba, SensorSites.Tublay]
+    const apiCalls = devices.map((deviceNumber) =>
+      this.sensorService.getSensorData({
+        device_sn: deviceNumber,
+        reading_type: "Raw VWC",
+        from: this.convertToUTC(startDate.toISOString()),
+        until: this.convertToUTC(endDate.toISOString()),
+      })
+    );
+    forkJoin(apiCalls).subscribe(results => {
+      const averages = results.map(soilMoistureRecording =>
+        parseFloat((soilMoistureRecording.reduce((total, { value }) => total + value, 0) / soilMoistureRecording.length).toFixed(2))
+      );
+      let calculated = []
+      averages.forEach((e, index) => {
+        calculated.push(parseFloat(this.threshold.calculateSoilMoisture(index + 1, e).toFixed(2)))
+        if (index == averages.length - 1) {
+          this.calculatedSoilMoisture = parseFloat((calculated.reduce((total, current) => total + current, 0) / calculated.length).toFixed(2))
+          console.log(averages)
+          calculated.forEach((rainfall) => {
+            this.soilMoistureBarChartData.datasets[0].data.push(rainfall)
+          })
+          devices.forEach((device) => {
+            this.soilMoistureBarChartData.labels.push(this.chartService.getKeyByValue(device))
+          })
+        }
+      })
+
+
+    });
+  }
+
+  convertToUTC(dateString: string): string {
+    let date = new Date(dateString);
+    return date.toISOString();
+  }
+
+  onDateSelection(date: NgbDate) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+      this.toDate = date;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+    this.from = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+    this.until = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+    this.fetchSensorDataPeriod()
+  }
+
+  onSelectSite(sensor: any) {
+    this.isLoading = true
+    this.selectedSensor = sensor
+    this.fetchSensorDataPeriod()
+  }
+
+  onSelectPeriod(e) {
+    this.selectedPeriod = e
+    this.fetchSensorDataPeriod()
   }
 
   getRainfallAlertLevel(): any {
@@ -142,533 +355,82 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  buildMap() {
+    this.map = new mapboxgl.Map({
+      container: 'map',
+      style: this.style,
+      zoom: this.zoom,
+      center: [this.lng, this.lat],
+    });
+    this.map.addControl(new mapboxgl.NavigationControl());
+    this.map.on('load', () => {
 
-  /**
-   * Only for RTL (feel free to remove if you are using LTR)
-   */
-  addRtlOptions() {
-    // Revenue chart
-    this.revenueChartOptions.yaxis.labels.offsetX = -25;
-    this.revenueChartOptions.yaxis.title.offsetX = -75;
-
-    //  Monthly sales chart
-    this.monthlySalesChartOptions.yaxis.labels.offsetX = -10;
-    this.monthlySalesChartOptions.yaxis.title.offsetX = -70;
+    })
   }
-}
 
-
-function getRainfallChartOptions(obj: any, precipitationData: any[]) {
-  const precipitationValues = precipitationData.map(item => item.value);
-  const categories = precipitationData.map(item => item.datetime);
-
-  return {
-    series: [
-      {
-        name: "Precipitation",
-        data: precipitationValues
+  removeMarker() {
+    if (this.currentMarkers !== null) {
+      for (var i = this.currentMarkers.length - 1; i >= 0; i--) {
+        this.currentMarkers[i].remove();
       }
-    ],
-    chart: {
-      type: "line",
-      height: 60,
-      sparkline: {
-        enabled: !0
-      }
-    },
-    colors: [obj.primary],
-    plotOptions: {
-      bar: {
-        borderRadius: 2,
-        columnWidth: "60%"
-      }
-    },
-    xaxis: {
-      type: 'datetime',
-      categories: categories
     }
   }
-};
 
-function getCustomerseChartOptions(obj: any) {
-  return {
-    series: [{
-      name: '',
-      data: [3844, 3855, 3841, 3867, 3822, 3843, 3821, 3841, 3856, 3827, 3843]
-    }],
-    chart: {
-      type: "line",
-      height: 60,
-      sparkline: {
-        enabled: !0
-      }
-    },
-    colors: [obj.primary],
-    xaxis: {
-      type: 'datetime',
-      categories: ["Jan 01 2022", "Jan 02 2022", "Jan 03 2022", "Jan 04 2022", "Jan 05 2022", "Jan 06 2022", "Jan 07 2022", "Jan 08 2022", "Jan 09 2022", "Jan 10 2022", "Jan 11 2022",],
-    },
-    stroke: {
-      width: 2,
-      curve: "smooth"
-    },
-    markers: {
-      size: 0
-    },
+  flyTo(x, y) {
+    this.removeMarker()
+    this.map.flyTo({
+      center: [x, y],
+      essential: true,
+    });
+    this.marker = new mapboxgl.Marker({
+      draggable: true,
+    })
+      .setLngLat([x, y])
+      .addTo(this.map);
+    this.currentMarkers.push(this.marker);
+    this.marker.on('dragend', (e) => {
+      this.lng = e.target._lngLat.lng;
+      this.lat = e.target._lngLat.lat;
+    });
   }
-};
 
 
-
-/**
- * Orders chart options
- */
-function getOrdersChartOptions(obj: any) {
-  return {
-    series: [{
-      name: '',
-      data: [36, 77, 52, 90, 74, 35, 55, 23, 47, 10, 63]
-    }],
-    chart: {
-      type: "bar",
-      height: 60,
-      sparkline: {
-        enabled: !0
-      }
-    },
-    colors: [obj.primary],
-    plotOptions: {
-      bar: {
-        borderRadius: 2,
-        columnWidth: "60%"
-      }
-    },
-    xaxis: {
-      type: 'datetime',
-      categories: ["Jan 01 2022", "Jan 02 2022", "Jan 03 2022", "Jan 04 2022", "Jan 05 2022", "Jan 06 2022", "Jan 07 2022", "Jan 08 2022", "Jan 09 2022", "Jan 10 2022", "Jan 11 2022",],
-    }
+  isHovered(date: NgbDate) {
+    return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
   }
-};
 
-
-
-/**
- * Growth chart options
- */
-function getGrowthChartOptions(obj: any) {
-  return {
-    series: [{
-      name: '',
-      data: [41, 45, 44, 46, 52, 54, 43, 74, 82, 82, 89]
-    }],
-    chart: {
-      type: "line",
-      height: 60,
-      sparkline: {
-        enabled: !0
-      }
-    },
-    colors: [obj.primary],
-    xaxis: {
-      type: 'datetime',
-      categories: ["Jan 01 2022", "Jan 02 2022", "Jan 03 2022", "Jan 04 2022", "Jan 05 2022", "Jan 06 2022", "Jan 07 2022", "Jan 08 2022", "Jan 09 2022", "Jan 10 2022", "Jan 11 2022",],
-    },
-    stroke: {
-      width: 2,
-      curve: "smooth"
-    },
-    markers: {
-      size: 0
-    },
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
   }
-};
 
-
-
-/**
- * Revenue chart options
- */
-function getRevenueChartOptions(obj: any) {
-  return {
-    series: [{
-      name: "Revenue",
-      data: [
-        49.3,
-        48.7,
-        50.6,
-        53.3,
-        54.7,
-        53.8,
-        54.6,
-        56.7,
-        56.9,
-        56.1,
-        56.5,
-        60.3,
-        58.7,
-        61.4,
-        61.1,
-        58.5,
-        54.7,
-        52.0,
-        51.0,
-        47.4,
-        48.5,
-        48.9,
-        53.5,
-        50.2,
-        46.2,
-        48.6,
-        51.7,
-        51.3,
-        50.2,
-        54.6,
-        52.4,
-        53.0,
-        57.0,
-        52.9,
-        48.7,
-        52.6,
-        53.5,
-        58.5,
-        55.1,
-        58.0,
-        61.3,
-        57.7,
-        60.2,
-        61.0,
-        57.7,
-        56.8,
-        58.9,
-        62.4,
-        58.7,
-        58.4,
-        56.7,
-        52.7,
-        52.3,
-        50.5,
-        55.4,
-        50.4,
-        52.4,
-        48.7,
-        47.4,
-        43.3,
-        38.9,
-        34.7,
-        31.0,
-        32.6,
-        36.8,
-        35.8,
-        32.7,
-        33.2,
-        30.8,
-        28.6,
-        28.4,
-        27.7,
-        27.7,
-        25.9,
-        24.3,
-        21.9,
-        22.0,
-        23.5,
-        27.3,
-        30.2,
-        27.2,
-        29.9,
-        25.1,
-        23.0,
-        23.7,
-        23.4,
-        27.9,
-        23.2,
-        23.9,
-        19.2,
-        15.1,
-        15.0,
-        11.0,
-        9.20,
-        7.47,
-        11.6,
-        15.7,
-        13.9,
-        12.5,
-        13.5,
-        15.0,
-        13.9,
-        13.2,
-        18.1,
-        20.6,
-        21.0,
-        25.3,
-        25.3,
-        20.9,
-        18.7,
-        15.3,
-        14.5,
-        17.9,
-        15.9,
-        16.3,
-        14.1,
-        12.1,
-        14.8,
-        17.2,
-        17.7,
-        14.0,
-        18.6,
-        18.4,
-        22.6,
-        25.0,
-        28.1,
-        28.0,
-        24.1,
-        24.2,
-        28.2,
-        26.2,
-        29.3,
-        26.0,
-        23.9,
-        28.8,
-        25.1,
-        21.7,
-        23.0,
-        20.7,
-        29.7,
-        30.2,
-        32.5,
-        31.4,
-        33.6,
-        30.0,
-        34.2,
-        36.9,
-        35.5,
-        34.7,
-        36.9
-      ]
-    }],
-    chart: {
-      type: "line",
-      height: '400',
-      parentHeightOffset: 0,
-      foreColor: obj.bodyColor,
-      background: obj.cardBg,
-      toolbar: {
-        show: false
-      },
-    },
-    colors: [obj.primary, obj.danger, obj.warning],
-    grid: {
-      padding: {
-        bottom: -4,
-      },
-      borderColor: obj.gridBorder,
-      xaxis: {
-        lines: {
-          show: true
-        }
-      }
-    },
-    xaxis: {
-      type: "datetime",
-      categories: [
-        "Jan 01 2022", "Jan 02 2022", "jan 03 2022", "Jan 04 2022", "Jan 05 2022", "Jan 06 2022", "Jan 07 2022", "Jan 08 2022", "Jan 09 2022", "Jan 10 2022", "Jan 11 2022", "Jan 12 2022", "Jan 13 2022", "Jan 14 2022", "Jan 15 2022", "Jan 16 2022", "Jan 17 2022", "Jan 18 2022", "Jan 19 2022", "Jan 20 2022", "Jan 21 2022", "Jan 22 2022", "Jan 23 2022", "Jan 24 2022", "Jan 25 2022", "Jan 26 2022", "Jan 27 2022", "Jan 28 2022", "Jan 29 2022", "Jan 30 2022", "Jan 31 2022",
-        "Feb 01 2022", "Feb 02 2022", "Feb 03 2022", "Feb 04 2022", "Feb 05 2022", "Feb 06 2022", "Feb 07 2022", "Feb 08 2022", "Feb 09 2022", "Feb 10 2022", "Feb 11 2022", "Feb 12 2022", "Feb 13 2022", "Feb 14 2022", "Feb 15 2022", "Feb 16 2022", "Feb 17 2022", "Feb 18 2022", "Feb 19 2022", "Feb 20 2022", "Feb 21 2022", "Feb 22 2022", "Feb 23 2022", "Feb 24 2022", "Feb 25 2022", "Feb 26 2022", "Feb 27 2022", "Feb 28 2022",
-        "Mar 01 2022", "Mar 02 2022", "Mar 03 2022", "Mar 04 2022", "Mar 05 2022", "Mar 06 2022", "Mar 07 2022", "Mar 08 2022", "Mar 09 2022", "Mar 10 2022", "Mar 11 2022", "Mar 12 2022", "Mar 13 2022", "Mar 14 2022", "Mar 15 2022", "Mar 16 2022", "Mar 17 2022", "Mar 18 2022", "Mar 19 2022", "Mar 20 2022", "Mar 21 2022", "Mar 22 2022", "Mar 23 2022", "Mar 24 2022", "Mar 25 2022", "Mar 26 2022", "Mar 27 2022", "Mar 28 2022", "Mar 29 2022", "Mar 30 2022", "Mar 31 2022",
-        "Apr 01 2022", "Apr 02 2022", "Apr 03 2022", "Apr 04 2022", "Apr 05 2022", "Apr 06 2022", "Apr 07 2022", "Apr 08 2022", "Apr 09 2022", "Apr 10 2022", "Apr 11 2022", "Apr 12 2022", "Apr 13 2022", "Apr 14 2022", "Apr 15 2022", "Apr 16 2022", "Apr 17 2022", "Apr 18 2022", "Apr 19 2022", "Apr 20 2022", "Apr 21 2022", "Apr 22 2022", "Apr 23 2022", "Apr 24 2022", "Apr 25 2022", "Apr 26 2022", "Apr 27 2022", "Apr 28 2022", "Apr 29 2022", "Apr 30 2022",
-        "May 01 2022", "May 02 2022", "May 03 2022", "May 04 2022", "May 05 2022", "May 06 2022", "May 07 2022", "May 08 2022", "May 09 2022", "May 10 2022", "May 11 2022", "May 12 2022", "May 13 2022", "May 14 2022", "May 15 2022", "May 16 2022", "May 17 2022", "May 18 2022", "May 19 2022", "May 20 2022", "May 21 2022", "May 22 2022", "May 23 2022", "May 24 2022", "May 25 2022", "May 26 2022", "May 27 2022", "May 28 2022", "May 29 2022", "May 30 2022",
-      ],
-      lines: {
-        show: true
-      },
-      axisBorder: {
-        color: obj.gridBorder,
-      },
-      axisTicks: {
-        color: obj.gridBorder,
-      },
-      crosshairs: {
-        stroke: {
-          color: obj.secondary,
-        },
-      },
-    },
-    yaxis: {
-      title: {
-        text: 'Revenue ( $1000 x )',
-        style: {
-          size: 9,
-          color: obj.muted
-        }
-      },
-      tickAmount: 4,
-      tooltip: {
-        enabled: true
-      },
-      crosshairs: {
-        stroke: {
-          color: obj.secondary,
-        },
-      },
-      labels: {
-        offsetX: 0,
-      },
-    },
-    markers: {
-      size: 0,
-    },
-    stroke: {
-      width: 2,
-      curve: "straight",
-    },
+  isRange(date: NgbDate) {
+    return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) || this.isInside(date) || this.isHovered(date);
   }
-};
 
+  validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
+    const parsed = this.formatter.parse(input);
+    return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  }
 
-
-/**
- * Monthly sales chart options
- */
-function getMonthlySalesChartOptions(obj: any) {
-  return {
-    series: [{
-      name: 'Level',
-      data: [12, 12, 12, 20, 12, 12, 20, 12, 12, 12, 12, 12, 12, 12, 12, 20, 12, 12, 20, 12, 12, 12, 12, 12]
-    }],
-    chart: {
-      type: 'bar',
-      height: '318',
-      parentHeightOffset: 0,
-      foreColor: obj.bodyColor,
-      background: obj.cardBg,
-      toolbar: {
-        show: false
-      },
-    },
-    colors: ["#cf3636"],
-    fill: {
-      opacity: .9
-    },
-    grid: {
-      padding: {
-        bottom: -4
-      },
-      borderColor: obj.gridBorder,
-      xaxis: {
-        lines: {
-          show: true
-        }
-      }
-    },
-    xaxis: {
-      type: 'time',
-      categories: Array.from({ length: 24 }, (_, i) => `${i + 1}:00`),
-      axisBorder: {
-        color: obj.gridBorder,
-      },
-      axisTicks: {
-        color: obj.gridBorder,
-      },
-    },
-    yaxis: {
-      title: {
-        text: 'Risk Score',
-        style: {
-          size: 9,
-          color: obj.muted
-        }
-      },
-      labels: {
-        offsetX: 0,
-      },
-    },
-    legend: {
-      show: true,
-      position: "top",
-      horizontalAlign: 'center',
-      fontFamily: obj.fontFamily,
-      itemMargin: {
-        horizontal: 8,
-        vertical: 0
-      },
-    },
-    stroke: {
-      width: 0
-    },
-    dataLabels: {
-      enabled: true,
-      style: {
-        fontSize: '10px',
-        fontFamily: obj.fontFamily,
-      },
-      offsetY: -27
-    },
-    plotOptions: {
-      bar: {
-        columnWidth: "50%",
-        borderRadius: 4,
-        dataLabels: {
-          position: 'top',
-          orientation: 'vertical',
-        }
-      },
-    }
+  dateToReadable(datetime) {
+    const date = new Date(datetime);
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false // Use 24-hour format. Set to true for 12-hour format.
+    };
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    return formattedDate;
   }
 }
 
 
 
-/**
- * Cloud storage chart options
- */
-function getCloudStorageChartOptions(obj: any) {
-  return {
-    series: [67],
-    chart: {
-      height: 260,
-      type: "radialBar"
-    },
-    colors: [obj.primary],
-    plotOptions: {
-      radialBar: {
-        hollow: {
-          margin: 15,
-          size: "70%"
-        },
-        track: {
-          show: true,
-          background: obj.light,
-          strokeWidth: '100%',
-          opacity: 1,
-          margin: 5,
-        },
-        dataLabels: {
-          showOn: "always",
-          name: {
-            offsetY: -11,
-            show: true,
-            color: obj.muted,
-            fontSize: "13px"
-          },
-          value: {
-            color: obj.bodyColor,
-            fontSize: "30px",
-            show: true
-          }
-        }
-      }
-    },
-    fill: {
-      opacity: 1
-    },
-    stroke: {
-      lineCap: "round",
-    },
-    labels: ["Storage Used"]
-  }
-};
 
-function toLocalISOString(date: Date) {
-  const offset = date.getTimezoneOffset() * 60000;
-  const localISOTime = (new Date(date.getTime() - offset)).toISOString().slice(0, -1);
-  return localISOTime;
-}
+
+
 

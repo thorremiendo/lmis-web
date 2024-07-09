@@ -1,0 +1,240 @@
+{
+    "A": [
+        {
+            "term": "Alluvial fan",
+            "description": "An outspread, gently sloping mass of alluvium deposited by a stream, especially in an arid or semiarid region where a stream issues from a narrow canyon onto a plain or valley floor. Viewed from above, it has the shape of an open fan, the apex being at the valley mouth."
+        },
+        {
+            "term": "Alluvium",
+            "description": "Loose sediments deposited by running water."
+        }
+    ],
+    "B": [
+        {
+            "term": "Bedrock",
+            "description": "The solid rock underlying gravel, sand, clay, etc.; any solid rock exposed at the surface of the earth or overlain by unconsolidated (loose) material."
+        },
+        {
+            "term": "Borehole",
+            "description": "A circular hole drilled into the earth, often to a great depth, as a prospective oil well, or for exploratory purposes."
+        }
+    ],
+    "C": [
+        {
+            "term": "Catch basin",
+            "description": "A large basin into which a debris flow runs or is directed, and where it quickly dissipates its energy and deposits its load. Abandoned gravel pits or rock quarries can often be incorporated."
+        },
+        {
+            "term": "Colluvium",
+            "description": "A general term applied to loose and mixed deposits, usually at the foot of a slope or cliff and brought there chiefly by gravity."
+        },
+        {
+            "term": "Creep",
+            "description": "The slow, steady, downward movement of slope-forming soil or rock. (1) Seasonal, where movement is within the depth of soil affected by seasonal changes in soil moisture and soil temperature; (2) Continuous, where shear stress continuously exceeds the strength of the material; (3) Progressive, where slopes are reaching the point of failure as other types of mass movements; (4) Complex, Combination of two or more of the above types."
+        }
+    ],
+    "D": [
+        {
+            "term": "Debris avalanche",
+            "description": "A variety of very rapid to extremely rapid debris flow."
+        },
+        {
+            "term": "Debris flow",
+            "description": "Debris flows occur when masses of poorly sorted sediment, agitated and saturated with water, surge down slopes in response to gravity."
+        },
+        {
+            "term": "Differential weathering",
+            "description": "When weathering across a rock face or exposure occurs at different rates, mainly due to variations in the composition and resistance of the rock. This results in an uneven surface with the more resistant material protruding."
+        },
+        {
+            "term": "Digital elevation model (DEM)",
+            "description": "A digital file consisting of terrain elevations for ground positions at regular intervals."
+        },
+        {
+            "term": "Digital surface model (DSM)",
+            "description": "Three-dimensional model of digital elevation data for cartographic representations taking into account all objects (structures, buildings, etc.) on the surface."
+        },
+        {
+            "term": "Digital terrain model (DTM)",
+            "description": "A three-dimensional model of digital elevation data for cartographic representation. Terrain models are often displayed as grids, superimposed over topography maps to illustrate peaks and valleys."
+        },
+        {
+            "term": "Drawdown",
+            "description": "Lowering of water levels in rivers, lakes, or underground aquifers due to pumping or artesian flow. Drawdown may leave unsupported banks or poorly packed earth that can cause subsidence or landslide."
+        }
+    ],
+    "E": [
+        {
+            "term": "Earth flow",
+            "description": "Have a characteristic 'hourglass' shape. The slope material liquefies and runs out, forming a bowl or depression at the head. The flow itself is elongated and usually occurs in fine-grained materials or clay-bearing rocks on moderate slopes and under saturated conditions."
+        },
+        {
+            "term": "Epicenter",
+            "description": "The point on the earth's surface directly above the focus of an earthquake."
+        },
+        {
+            "term": "Expansive soils",
+            "description": "Types of soil that shrink or swell as the moisture content decreases or increases. Structures built on these soils may experience shifting, cracking, and breaking damage as soils shrink and subside or expand."
+        }
+    ],
+    "F": [
+        {
+            "term": "Falls",
+            "description": "Abrupt movements of masses of geologic materials, such as rocks and boulders, that become detached from steep slopes or cliffs, strongly influenced by gravity, mechanical weathering, and the presence of interstitial water."
+        },
+        {
+            "term": "Fracture",
+            "description": "Breaks in rocks due to intense folding or faulting; can be caused by breaking oil-, gas-, or water-bearing strata by injecting a fluid under such pressure as to cause partings in the rock."
+        }
+    ],
+    "G": [
+        {
+            "term": "Geodesic/geodetic measurements",
+            "description": "The investigation of any scientific questions connected with the shape and dimensions of the Earth."
+        },
+        {
+            "term": "Geographic Information System (GIS)",
+            "description": "A computer system for the capture, storage, retrieval, analysis, and display of spatial data."
+        },
+        {
+            "term": "Geologic hazard",
+            "description": "A geologic condition, either natural or man-made, that poses a potential danger to life and property. Examples: earthquake, landslides, flooding, faulting, beach erosion, and land subsidence."
+        },
+        {
+            "term": "Geologic map",
+            "description": "A map on which is recorded the distribution, nature, and age relationships of rock units and the occurrence of structural features."
+        },
+        {
+            "term": "Geomorphology",
+            "description": "The science that treats the general configuration of the earth's surface; specifically, the study of the classification, description, nature, origin, and development of landforms and their relationships to underlying structures, and the history of geologic changes as recorded by these surface features."
+        }
+    ],
+    "H": [
+        {
+            "term": "Hydrology",
+            "description": "The science that relates to the water of the earth."
+        }
+    ],
+    "L": [
+        {
+            "term": "Lahar",
+            "description": "Slurries of volcanic sediment, debris and water that cascade down volcano’s slopes through rivers and channels."
+        },
+        {
+            "term": "Landslide hazard map",
+            "description": "Hazard maps that show the areal extent of threatening processes: where landslide processes have occurred in the past, where they occur now, and the likelihood in various areas that a landslide will occur in the future."
+        },
+        {
+            "term": "Landslide inventory maps",
+            "description": "Inventories that identify areas that appear to have failed by landslide processes, including debris flows and cut-and-fill failures."
+        },
+        {
+            "term": "Landslide risk map",
+            "description": "These maps show landslide hazards and the probability that they will occur, expressed in statistical recurrence rates; risk maps may show cost/benefit relationships, loss potential and other potential socio-economic impacts on an area and/or community."
+        },
+        {
+            "term": "Landslide susceptibility map",
+            "description": "These maps go beyond an inventory map and depict areas that have the potential for landsliding. These areas are determined by correlating some of the principal factors that contribute to landsliding, such as steep slopes, weak geologic units that lose strength when saturated, and poorly drained rock or soil, with the past distribution of landslides."
+        },
+        {
+            "term": "Lateral Spreads",
+            "description": "They are distinctive because they usually occur on very gentle slopes or flat terrain. The dominant mode of movement is lateral extension accompanied by shear or tensile fractures."
+        },
+        {
+            "term": "LIDAR (Light Detection and Ranging)",
+            "description": "A remote sensing technology that uses light in the form of laser to detect, scan and characterize topography."
+        },
+        {
+            "term": "Liquefaction",
+            "description": "The transformation of saturated, loosely packed, coarse-grained soils from a solid to a liquid state. The soil grains temporarily lose contact with each other and the particle weight is transferred to the pore water."
+        },
+        {
+            "term": "Lithology",
+            "description": "The physical character of a rock, generally as determined at the microscopic level, or with the aid of a low-power magnifier; the microscopic study and description of rocks."
+        }
+    ],
+    "M": [
+        {
+            "term": "Mechanical weathering",
+            "description": "The physical processes by which rocks exposed to the weather change in character, decay, and crumble into soil. Processes include temperature change (expansion and shrinkage), freeze-thaw cycle, and the burrowing activity of animals."
+        },
+        {
+            "term": "Mitigation",
+            "description": "Activities that reduce or eliminate the probability of occurrence of a disaster and/or activities that dissipate or lessen the effects of emergencies or disasters when they actually occur."
+        },
+        {
+            "term": "Mudflow",
+            "description": "A general term for a mass-movement landform and process characterized by a flowing mass of fine-grained earth material with a high degree of fluidity. The water content may range up to 60%."
+        }
+    ],
+    "R": [
+        {
+            "term": "Rain gauge",
+            "description": "A device used to measure the amount of rainfall over a given period."
+        },
+        {
+            "term": "Reconnaissance mapping",
+            "description": "A rapid, high-level investigation of an area, usually in preparation for a more detailed survey. Often used to identify and delineate areas where landslides have occurred or might occur."
+        },
+        {
+            "term": "Relief",
+            "description": "The physical configuration of the Earth's surface, depicted on a map by contour lines and spot heights."
+        },
+        {
+            "term": "Risk",
+            "description": "The probability or chance of a loss or damage occurring from a landslide, earthquake, flood, etc., and the impact it has on people, structures, and economic activity."
+        },
+        {
+            "term": "Rock mechanics",
+            "description": "The theoretical and applied science of the mechanical behavior of rock and rock masses; it is that branch of mechanics concerned with the response of rock to the force fields of its physical environment."
+        },
+        {
+            "term": "Rotational slide",
+            "description": "Slump of coherent mass of loosely consolidated materials or rock layers that move downslope along a concave-upward failure surface."
+        }
+    ],
+    "S": [
+        {
+            "term": "Soil erosion",
+            "description": "The removal of the topsoil by water, wind, or tillage."
+        },
+        {
+            "term": "Stress",
+            "description": "A force per unit area that tends to deform the body on which it acts."
+        },
+        {
+            "term": "Subsidence",
+            "description": "A local mass movement that involves the gradual downward settling or sinking of the Earth's surface with little or no horizontal motion."
+        },
+        {
+            "term": "Surficial geology",
+            "description": "Study of landforms and the unconsolidated sediments that lie beneath them. This includes loose material, such as soil, and other deposits, such as glacial till."
+        },
+        {
+            "term": "Swelling soils",
+            "description": "Soils that expand when they absorb moisture and shrink when they lose moisture, potentially causing damage to foundations and structures built on them."
+        }
+    ],
+    "T": [
+        {
+            "term": "Topples",
+            "description": "Topples consist of the forward rotation of a unit or units about some pivotal point, below or low in the unit, under the actions of gravity and forces exerted by adjacent units or by fluids in cracks."
+        }
+    ],
+    "V": [
+        {
+            "term": "Vulnerability assessment",
+            "description": "Evaluation of the degree of loss (from 0 to 100 percent) resulting from a potential damaging phenomenon. Vulnerability is assessed for each element at risk, including buildings, population groups, and economic activities."
+        }
+    ],
+    "W": [
+        {
+            "term": "Watershed",
+            "description": "An area of land that catches rain and snow, and drains into a stream, river, lake, or other body of water."
+        },
+        {
+            "term": "Weathering",
+            "description": "The chemical and physical processes that break down rocks exposed to the atmosphere. It includes the mechanical breakdown of rocks and the chemical alterations that occur over time."
+        }
+    ]
+}

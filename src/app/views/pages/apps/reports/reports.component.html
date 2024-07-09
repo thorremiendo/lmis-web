@@ -50,6 +50,12 @@
                 {{ value == "1" ? "Verified" : "Unverified" }}
               </ng-template>
             </ngx-datatable-column>
+
+            <ngx-datatable-column name="Verified By:" prop="verifiedBy">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column
               name="Update Status"
               *ngIf="user.role !== 'Others'"

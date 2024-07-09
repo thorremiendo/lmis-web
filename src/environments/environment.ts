@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  // apiUrl: 'https://3c81-120-29-90-3.ngrok-free.app/api',
   apiUrl: 'http://localhost:3000/api',
   mapboxToken: 'pk.eyJ1IjoiZGV2LXRob3JyZW1pZW5kbyIsImEiOiJjbHh0bWx5cHAxdDFxMmlzaDl4YWViczk1In0.P0CFPqf7yCWyolgD8m4GxA'
 };

@@ -65,9 +65,37 @@
                   formControlName="contactNumber"
                 />
               </div>
-              <div class="row mb-3" *ngIf="barangays.length !== 0">
-                <div class="col-lg-12">
+              <div class="mb-3">
+                <label for="location" class="col-sm-3 col-form-label"
+                  >Location</label
+                >
+                <div class="col-sm-12">
                   <div class="input-group">
+                    <input
+                      class="form-control"
+                      [value]="selectedMunicipality?.name"
+                      readonly
+                      formControlName="municipality"
+                    />
+                    <div ngbDropdown>
+                      <button
+                        type="button"
+                        class="btn btn-secondary dropdown-toggle"
+                        ngbDropdownToggle
+                      >
+                        Select Municipality
+                      </button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button
+                          type="button"
+                          ngbDropdownItem
+                          *ngFor="let municipality of municipalities"
+                          (click)="selectMunicipality(municipality)"
+                        >
+                          {{ municipality.name }}
+                        </button>
+                      </div>
+                    </div>
                     <input
                       class="form-control"
                       [value]="selectedBarangay?.name"
@@ -77,7 +105,7 @@
                     <div ngbDropdown>
                       <button
                         type="button"
-                        class="btn btn-primary dropdown-toggle"
+                        class="btn btn-secondary dropdown-toggle"
                         ngbDropdownToggle
                       >
                         Select Barangay

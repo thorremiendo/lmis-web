@@ -1,0 +1,44 @@
+<div class="bg-image-container" id="home">
+  <app-header></app-header>
+
+  <div class="d-flex justify-content-center container">
+    <div class="col-md-12 grid-margin">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Glossary</h6>
+          <div class="mb-3">
+            <!-- <div class="col-3">
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="searchQuery"
+                placeholder="Search words..."
+                (input)="filterWords()"
+              />
+            </div> -->
+            <div class="col-12">
+              <div class="letters-container my-3">
+                <button
+                  *ngFor="let letter of letters"
+                  (click)="selectLetter(letter)"
+                >
+                  {{ letter }}
+                </button>
+              </div>
+
+              <div class="words">
+                <div *ngFor="let word of filteredWords" class="card">
+                  <h3 style="color: #996D40;">{{ word.term }}</h3>
+                  <p class="mt-2">{{ word.description }}</p>
+                </div>
+                <div class="text-center" *ngIf="filteredWords.length == 0">
+                  <p>No words.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

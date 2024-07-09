@@ -11,6 +11,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
 
 import { DashboardComponent } from './dashboard.component';
 import { AppsModule } from '../apps/apps.module';
+import { NgChartsModule } from 'ng2-charts';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
+    NgChartsModule,
     CommonModule,
     RouterModule.forChild(routes),
     FormsModule,

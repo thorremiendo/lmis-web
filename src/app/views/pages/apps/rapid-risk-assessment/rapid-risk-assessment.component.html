@@ -1,0 +1,166 @@
+<div class="row">
+  <div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Rapid Risk Assessment</h6>
+
+        <form class="forms-sample">
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label"
+              >Vegetation Cover (vFactor)</label
+            >
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onVfactor($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of vFactor" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label"
+              >Occurrence or frequency of failure (fFactor)
+            </label>
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onFfactor($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of fFactor" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label"
+              >Slope Material
+            </label>
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onSlope($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of slopeMaterial" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3" *ngIf="slope == 1">
+            <label for="exampleInputUsername1" class="form-label"
+              >Rock mass strength rating (SRating)
+            </label>
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onSRating($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of rockSRating" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3" *ngIf="slope == 2">
+            <label for="exampleInputUsername1" class="form-label"
+              >Soil mass strength rating (SRating)
+            </label>
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onSRating($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of soilSRating" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label"
+              >Presence of springs (sRed)
+            </label>
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onSRed($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of sRed" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label"
+              >Condition of drainage canal/system (dRed)
+            </label>
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onDRed($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of dRed" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label"
+              >Slope rating (αRating)
+            </label>
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onARating($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of slopeRating" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label"
+              >Land use (lFactor)
+            </label>
+            <select
+              class="form-select"
+              id="exampleFormControlSelect1"
+              (change)="onLFactor($event.target.value)"
+            >
+              <option value="">Select</option>
+              <option *ngFor="let item of landUse" [value]="item.value">
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <div *ngIf="calculatedFs" class="summary">
+              <p>
+                Factor of Safety:
+                <span class="fw-bold">
+                  {{ this.calculatedFs }}
+                </span>
+              </p>
+              <p>
+                Assessment:
+                <span class="fw-bold">
+                  {{ this.assessment }}
+                </span>
+              </p>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" (click)="onCalculate()">
+            Calculate
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -54,6 +54,7 @@ import { ContactListComponent } from './contact-list/contact-list.component';
 import { LandslideEvacuationComponent } from './landslide-evacuation/landslide-evacuation.component';
 import { MapComponent } from './map/map.component';
 import { LandslideInventoryComponent } from './landslide-inventory/landslide-inventory.component';
+import { RapidRiskAssessmentComponent } from './rapid-risk-assessment/rapid-risk-assessment.component';
 
 const routes: Routes = [
   {
@@ -135,6 +136,10 @@ const routes: Routes = [
         path: 'calendar',
         component: CalendarComponent
       },
+      {
+        path: 'risk-assessment',
+        component: RapidRiskAssessmentComponent
+      },
     ]
   }
 ]
@@ -161,7 +166,8 @@ const routes: Routes = [
     ContactListComponent,
     LandslideEvacuationComponent,
     MapComponent,
-    LandslideInventoryComponent
+    LandslideInventoryComponent,
+    RapidRiskAssessmentComponent,
   ],
   imports: [
     NgbModule,

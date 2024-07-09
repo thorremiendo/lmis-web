@@ -25,6 +25,7 @@ import { LandslideReportComponent } from './landslide-report/landslide-report.co
 import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { GlossaryComponent } from './glossary/glossary.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { DropzoneModule } from 'ngx-dropzone-wrapper';
     Gallery2Component,
     Project2TeamComponent,
     TopNavComponent,
-    LandslideReportComponent
+    LandslideReportComponent,
+    GlossaryComponent
   ],
   imports: [
     CommonModule,

@@ -9,12 +9,8 @@
 
 .container {
     height: auto;
+    min-height: 100vh;
     margin-top: 150px;
-}
-
-.card {
-    margin-left: 100px;
-    margin-right: 100px;
 }
 
 .card-title {
@@ -23,26 +19,23 @@
     padding-bottom: 20px;
 }
 
-.input-group-text {
-    cursor: pointer;
+.letters-container {
+    display: flex;
+    justify-content: space-around;
+
 }
 
-.btn-dropdown {
-    border: #999;
+.letters-container button {
+    flex-grow: 1;
+    text-align: center;
+    border: 1px solid grey;
+    border-radius: 6px;
+    margin: 0 4px
 }
 
-.placeholder-text {
-    position: absolute;
-    top: 55%;
-    left: 58%;
-    color: #999;
-}
-
-.dropdown-menu {
-    max-height: 280px;
-    overflow-y: auto;
-}
-
-.match-parent {
-    width: 100%;
+.card {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }

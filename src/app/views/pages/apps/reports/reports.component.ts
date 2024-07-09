@@ -160,11 +160,13 @@ export class ReportsComponent implements OnInit {
 
   onSelect(e, row) {
     const body = {
-      status: parseInt(e)
+      status: parseInt(e),
+      verifiedBy: this.user.firstName
     }
     console.log(body)
 
     this.dataService.updateReport(row.id, body).subscribe(res => {
+      this.swalService.showSuccess()
       this.getReports()
     })
   }

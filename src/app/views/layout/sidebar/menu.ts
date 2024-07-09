@@ -43,6 +43,11 @@ export const MENU: MenuItem[] = [
     ]
   },
   {
+    label: 'Rapid Risk Assessment',
+    icon: 'trending-up',
+    link: '/apps/risk-assessment'
+  },
+  {
     label: 'Landslide Evacuation',
     icon: 'map-pin',
     link: '/apps/evacuation'
