@@ -3,6 +3,17 @@
     href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css"
     rel="stylesheet"
   />
+  <div class="mb-3 form-check form-switch mb-2">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      id="formSwitch1"
+      [(ngModel)]="isObservation"
+      (ngModelChange)="onObsevationChange($event)"
+    />
+    <label class="form-check-label" for="formSwitch1">Observation Period</label>
+  </div>
+
   <div
     class="d-flex justify-content-between align-items-center flex-wrap grid-margin"
   >
@@ -22,7 +33,7 @@
             </button>
           </div>
         </div>
-        <div ngbDropdown>
+        <div ngbDropdown *ngIf="!isObservation">
           <button
             class="btn btn-secondary ms-2"
             id="dropdownBasic1"
@@ -35,6 +46,24 @@
               ngbDropdownItem
               *ngFor="let item of period"
               (click)="onSelectPeriod(item)"
+            >
+              {{ item.name }}
+            </button>
+          </div>
+        </div>
+        <div ngbDropdown *ngIf="isObservation">
+          <button
+            class="btn btn-secondary ms-2"
+            id="dropdownBasic1"
+            ngbDropdownToggle
+          >
+            {{ selectedObservation.name }}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button
+              ngbDropdownItem
+              *ngFor="let item of observationPeriod"
+              (click)="onSelectObservation(item)"
             >
               {{ item.name }}
             </button>
@@ -124,32 +153,37 @@
   <div class="row">
     <div class="col-12 col-xl-12 stretch-card">
       <div class="row flex-grow-1">
-        <div class="col-md-4 grid-margin stretch-card">
-          <div
-            class="card"
-            style="background-color: #e9f7ea; border: 1px solid #82ec9e"
-          >
+        <div class="col-md-3 grid-margin stretch-card">
+          <div class="card">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-baseline">
                 <h6 class="card-title mb-0">Accumulated Rainfall</h6>
               </div>
               <div class="row">
                 <div class="col-6 col-md-12 col-xl-5">
-                  <h3 class="mb-2">
+                  <h3 class="my-2">
                     {{ rainfallPeriodTotal }}
                     mm
                   </h3>
-                  <!-- <div class="d-flex align-items-baseline">
-                    <p class="text-success">
+                  <div
+                    class="alert"
+                    [ngClass]="{
+                      green: rainFallAlertLevel == 'RA-0',
+                      yellow: rainFallAlertLevel == 'RA-1',
+                      orange: rainFallAlertLevel == 'RA-2',
+                      red: rainFallAlertLevel == 'RA-3'
+                    }"
+                    *ngIf="isObservation"
+                  >
+                    <p>
                       <i
                         data-feather="alert-octagon"
                         appFeatherIcon
                         class="icon-sm mb-1"
-                        style="color: green"
                       ></i>
-                      <span class="fw-bold" style="color: green">RA-1</span>
+                      <span class="fw-bold">{{ rainFallAlertLevel }}</span>
                     </p>
-                  </div> -->
+                  </div>
                 </div>
                 <div class="col-6 col-md-12 col-xl-7">
                   <div class="mt-md-3 mt-xl-0">
@@ -170,29 +204,34 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 grid-margin stretch-card">
-          <div
-            class="card"
-            style="background-color: #e9f7ea; border: 1px solid #82ec9e"
-          >
+        <div class="col-md-3 grid-margin stretch-card">
+          <div class="card">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-baseline">
                 <h6 class="card-title mb-0">Soil Moisture</h6>
               </div>
               <div class="row">
                 <div class="col-6 col-md-12 col-xl-5">
-                  <h3 class="mb-2">{{ calculatedSoilMoisture }}%</h3>
-                  <!-- <div class="d-flex align-items-baseline">
-                    <p class="text-success">
+                  <h3 class="my-2">{{ calculatedSoilMoisture }}%</h3>
+                  <div
+                    class="alert"
+                    [ngClass]="{
+                      green: soilMoistureAlertLevel == 'S-0',
+                      yellow: soilMoistureAlertLevel == 'S-1',
+                      orange: soilMoistureAlertLevel == 'S-2',
+                      red: soilMoistureAlertLevel == 'S-3'
+                    }"
+                    *ngIf="selectedSensor.value !== 0"
+                  >
+                    <p>
                       <i
                         data-feather="alert-octagon"
                         appFeatherIcon
                         class="icon-sm mb-1"
-                        style="color: green"
                       ></i>
-                      <span class="fw-bold" style="color: green">WC-0</span>
+                      <span class="fw-bold">{{ soilMoistureAlertLevel }}</span>
                     </p>
-                  </div> -->
+                  </div>
                 </div>
                 <!-- <div class="col-6 col-md-12 col-xl-7">
                   <div class="mt-md-3 mt-xl-0">
@@ -210,18 +249,15 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 grid-margin stretch-card">
-          <div
-            class="card"
-            style="background-color: #e9f7ea; border: 1px solid #82ec9e"
-          >
+        <div class="col-md-3 grid-margin stretch-card">
+          <div class="card">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-baseline">
                 <h6 class="card-title mb-0">Soil Movement</h6>
               </div>
               <div class="row">
                 <div class="col-6 col-md-12 col-xl-5">
-                  <h3 class="mb-2">414 mm</h3>
+                  <h3 class="my-2">No data</h3>
                   <!-- <div class="d-flex align-items-baseline">
                     <p class="text-success">
                       <i
@@ -246,6 +282,45 @@
                     ></apx-chart>
                   </div>
                 </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 grid-margin stretch-card">
+          <div
+            class="card"
+            [ngClass]="{
+              green: landSlideAlertLevel == 'LA-0',
+              yellow: landSlideAlertLevel == 'LA-1',
+              orange: landSlideAlertLevel == 'LA-2',
+              red: landSlideAlertLevel == 'LA-3'
+            }"
+          >
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-baseline">
+                <h6
+                  class="card-title mb-0"
+                  (click)="triggerAlert(scrollableModal)"
+                >
+                  Landslide Alert Level
+                </h6>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md-12 col-xl-12">
+                  <h3 class="my-2">{{ landSlideAlertLevel }}</h3>
+                  <p>{{ getAlertDescription() }}</p>
+                  <!-- <div class="d-flex align-items-baseline">
+                    <p class="text-success">
+                      <i
+                        data-feather="alert-octagon"
+                        appFeatherIcon
+                        class="icon-sm mb-1"
+                        style="color: green"
+                      ></i>
+                      <span class="fw-bold" style="color: green">SM-0</span>
+                    </p>
+                  </div> -->
+                </div>
               </div>
             </div>
           </div>
@@ -347,41 +422,6 @@
   </div>
 
   <div class="row">
-    <div class="col-12 col-xl-12 grid-margin stretch-card">
-      <div class="card overflow-hidden">
-        <div class="card-body">
-          <div
-            class="d-flex justify-content-between align-items-baseline mb-4 mb-md-3"
-          >
-            <h6 class="card-title mb-0">Landslide Alert Level</h6>
-          </div>
-          <div class="row align-items-start">
-            <div class="col-md-7">
-              <p class="text-muted tx-13 mb-3 mb-md-0">
-                Table shows the warning alert records for the selected
-                Municipality.
-              </p>
-            </div>
-            <div class="col-md-5 d-flex justify-content-md-end">
-              <div
-                class="btn-group mb-3 mb-md-0"
-                role="group"
-                aria-label="Basic example"
-              >
-                <button type="button" class="btn btn-outline-primary">
-                  Today
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="flot-wrapper"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- row -->
-
-  <div class="row">
     <div class="col-lg-12 col-xl-12 stretch-card">
       <div class="card">
         <div class="card-body">
@@ -447,3 +487,100 @@
     </div>
   </div>
 </ng-container>
+
+<ng-template #scrollableModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Landslide Alert Warning</h5>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.close('by: close icon')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <p class="fw-bold">Landslide Alert level: LA-3</p>
+    <p>Critical Site Conditions to Trigger a Landslide</p>
+    <div class="my-3">
+      <label for="exampleFormControlSelect1" class="form-label"
+        >Recommendation</label
+      >
+      <select class="form-select" id="exampleFormControlSelect1">
+        <option value="" disabled>Select</option>
+        <option *ngFor="let item of recommendations" [value]="item">
+          {{ item }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.close('by: close button')"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="submitRecommendation()"
+    >
+      Submit Recommendation
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #mayorModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Submit Evacuation</h5>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.close('by: close icon')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="mb-3">
+        <h4>The council has recommended the following evacuation status:</h4>
+        <div
+          style="
+            border-radius: 10px;
+            border: 1px solid red;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            color: red;
+          "
+        >
+          Pre-Emptive Evacuation.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Input your passcode to continue</label>
+        <input
+          type="password"
+          class="form-control"
+          id="exampleInputPassword1"
+          autocomplete="off"
+          placeholder="Password"
+        />
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.close('by: close button')"
+    >
+      Close
+    </button>
+    <button type="button" class="btn btn-primary" (click)="mayorSubmit()">
+      Submit
+    </button>
+  </div>
+</ng-template>

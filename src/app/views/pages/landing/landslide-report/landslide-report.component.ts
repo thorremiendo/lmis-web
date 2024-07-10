@@ -103,6 +103,7 @@ export class LandslideReportComponent implements OnInit {
     this.marker.on('dragend', (e) => {
       this.lng = e.target._lngLat.lng;
       this.lat = e.target._lngLat.lat;
+      console.log(this.lng, this.lat)
     });
   }
 

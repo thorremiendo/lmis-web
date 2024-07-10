@@ -16,14 +16,15 @@
         />
       </div>
     </form>
-    <button
+    <!-- <button
+      *ngIf="user.username == 'lmis-mayor'"
       type="button"
       class="btn btn-danger"
       style="background-color: red"
       (click)="openScrollableModal(scrollableModal)"
     >
       Submit Evacuation
-    </button>
+    </button> -->
     <ul class="navbar-nav">
       <li class="nav-item nav-notifications" ngbDropdown>
         <a class="nav-link" ngbDropdownToggle id="notificationDropdown">
@@ -126,36 +127,4 @@
   </div>
 </nav>
 
-<ng-template #scrollableModal let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Submit Evacuation</h5>
-    <button
-      type="button"
-      class="btn-close"
-      (click)="modal.close('by: close icon')"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="modal-body">
-    <form [formGroup]="form">
-      <div class="mb-3">
-        <h4>The council has recommended the following evacuation status:</h4>
-        <div style="border-radius: 10px; border: 1px solid red; padding: 10px; text-align: center; margin-top: 20px; font-weight: bold; color: red;">
-          Pre-Emptive Evacuation.
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-secondary"
-      (click)="modal.close('by: close button')"
-    >
-      Close
-    </button>
-    <button type="button" class="btn btn-primary" (click)="submit()">
-      Submit
-    </button>
-  </div>
-</ng-template>
+

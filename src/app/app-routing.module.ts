@@ -41,8 +41,7 @@ const routes: Routes = [
         path: 'apps',
         loadChildren: () => import('./views/pages/apps/apps.module').then(m => m.AppsModule)
       },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      // { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
+      { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
   {

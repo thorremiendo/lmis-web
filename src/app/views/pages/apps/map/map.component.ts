@@ -129,10 +129,8 @@ export class MapComponent implements OnInit {
     this.map.on('load', () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
-          // this.directions.setOrigin([position.coords.longitude, position.coords.latitude])
-          this.directions.setOrigin([120.5585654, 16.3773406])
+          this.directions.setOrigin([position.coords.longitude, position.coords.latitude])
           // this.directions.setOrigin([120.5585654, 16.3773406])
-          // this.directions.setDestination([120.5669193, 16.3778389])
         })
       }
     })

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl/dist/mapbox-gl';
 import { NgbDateStruct, NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { SensorsService } from '../apps/services/sensors.service';
@@ -11,6 +11,8 @@ import { ChartService } from 'src/app/core/services/chart.service';
 import { ChartData } from 'chart.js';
 import { start } from 'repl';
 import { ThresholdService } from 'src/app/core/services/threshold.service';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +21,10 @@ import { ThresholdService } from 'src/app/core/services/threshold.service';
   preserveWhitespaces: true
 })
 export class DashboardComponent implements OnInit {
+  public rainFallAlertLevel: string
+  public soilMoistureAlertLevel: string = 'S-0'
+  public landSlideAlertLevel: string = 'LA-0'
+  public isObservation = true
   public selectedSensor: any
   public rainfallRecording = [];
   public rainfallPeriodTotal: any
@@ -83,6 +89,24 @@ export class DashboardComponent implements OnInit {
       value: 4
     }
   ]
+  public observationPeriod = [
+    {
+      name: '1hr - 24 hrs',
+      value: 1
+    },
+    {
+      name: '1hr - 48hrs',
+      value: 2
+    },
+    {
+      name: '1hr - 72hrs',
+      value: 3
+    },
+    {
+      name: '1hr - 120hrs',
+      value: 4
+    }
+  ]
   public barChartData
   public barChartOptions
   public barChartPlugins
@@ -108,7 +132,11 @@ export class DashboardComponent implements OnInit {
   public currentMarkers = [];
   public rainfallChartOptions: any = {};
   public selectedPeriod: any
+  public selectedObservation: any
   currentDate: NgbDateStruct;
+  public userDetails;
+  public recommendations = ["Pre-emptive Evacuation", "Forced Evacuation", "Status Quo"]
+  @ViewChild('mayorModal') mayorModal: TemplateRef<any>;
 
   constructor(
     private calendar: NgbCalendar,
@@ -116,7 +144,9 @@ export class DashboardComponent implements OnInit {
     private swal: SwalService,
     public formatter: NgbDateParserFormatter,
     private chartService: ChartService,
-    private threshold: ThresholdService
+    private threshold: ThresholdService,
+    private router: Router,
+    private modalService: NgbModal
   ) {
     this.barChartData = this.chartService.barChartData
     this.barChartOptions = this.chartService.barChartOptions
@@ -136,9 +166,13 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.swal.showWarning("A landslide alert has been issued at Critical Alert Level 3. Immediate action is required. ", "WARNING", "Proceed")
-    this.selectedSensor = this.sensors[0]
+    this.userDetails = JSON.parse(localStorage.getItem('lmisUser'))
+    if (!this.userDetails) {
+      this.router.navigate(['/home'])
+    }
+    this.selectedSensor = this.sensors[1]
     this.selectedPeriod = this.period[0]
+    this.selectedObservation = this.observationPeriod[0]
     this.currentDate = this.calendar.getToday();
     this.buildMap()
     this.sensors.forEach((site) => {
@@ -150,6 +184,37 @@ export class DashboardComponent implements OnInit {
     })
     this.fetchSensorDataPeriod()
   }
+
+  submitRecommendation() {
+    this.swal.showSuccessMessage("Recommendation Forwarded!")
+    setTimeout(() => {
+      this.modalService.dismissAll()
+    }, 1000);
+  }
+
+  mayorSubmit() {
+    this.swal.showFullSuccess("Evacuation Notifications sent on Mobile App and SMS!")
+  }
+
+  triggerAlert(content?: TemplateRef<any>) {
+    this.calculatedSoilMoisture = 81.32
+    this.rainfallPeriodTotal = 643
+    this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal)
+    this.soilMoistureAlertLevel = this.threshold.determineSoilMoistureWarningRange(this.selectedSensor.value, this.calculatedSoilMoisture)
+    this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
+    if (this.userDetails.username !== 'lmis-mayor') {
+      setTimeout(() => {
+        this.modalService.open(content, { scrollable: true }).result.then((result) => {
+          console.log("Modal closed" + result);
+        }).catch((res) => { });
+      }, 1000);
+    } else {
+      setTimeout(() => this.modalService.open(this.mayorModal), 2000);
+    }
+
+  }
+
+
 
   fetchSensorDataPeriod() {
     this.barChartData.labels = []
@@ -164,24 +229,42 @@ export class DashboardComponent implements OnInit {
     this.isLoading = true
     let startDate: Date
     let endDate: Date
-    if (this.selectedPeriod.value == 4) { //DATE RANGE
-      startDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
-      endDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
-    } else if (this.selectedPeriod.value == 1) { //1 DAY
-      startDate = new Date(new Date().setDate(new Date().getDate() - 1));
-      endDate = new Date();
-    } else if (this.selectedPeriod.value == 2) {//1 WEEK
-      startDate = new Date(new Date().setDate(new Date().getDate() - 7));
-      endDate = new Date();
-    } else if (this.selectedPeriod.value == 3) {//1 MONTH
-      startDate = new Date(new Date().setDate(new Date().getDate() - 30));
-      endDate = new Date();
+    if (!this.isObservation) {
+      if (this.selectedPeriod.value == 4) { //DATE RANGE
+        startDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
+        endDate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
+      } else if (this.selectedPeriod.value == 1) { //1 DAY
+        startDate = new Date(new Date().setDate(new Date().getDate() - 1));
+        endDate = new Date();
+      } else if (this.selectedPeriod.value == 2) {//1 WEEK
+        startDate = new Date(new Date().setDate(new Date().getDate() - 7));
+        endDate = new Date();
+      } else if (this.selectedPeriod.value == 3) {//1 MONTH
+        startDate = new Date(new Date().setDate(new Date().getDate() - 30));
+        endDate = new Date();
+      }
+    } else {
+      if (this.selectedObservation.value == 1) {
+        startDate = new Date(new Date().setHours(new Date().getHours() - 24));
+        endDate = new Date();
+      } else if (this.selectedObservation.value == 2) {
+        startDate = new Date(new Date().setHours(new Date().getHours() - 48));
+        endDate = new Date();
+      } else if (this.selectedObservation.value == 3) {
+        startDate = new Date(new Date().setHours(new Date().getHours() - 72));
+        endDate = new Date();
+      } else if (this.selectedObservation.value == 4) {
+        startDate = new Date(new Date().setHours(new Date().getHours() - 120));
+        endDate = new Date();
+      }
     }
 
     if (this.selectedSensor.value !== 0) {
+      //SPECIFIC SITES
       this.fetchRainfallData(startDate, endDate)
       this.fetchSoilMoisture(startDate, endDate)
     } else {
+      //ALL SITES
       this.fetchAllRainfallData(startDate, endDate)
       this.fetchAllSoilMoisture(startDate, endDate)
     }
@@ -205,10 +288,14 @@ export class DashboardComponent implements OnInit {
       this.rainfallPeriodTotal = total.reduce((total, current) => total + current, 0).toFixed(2)
       total.forEach((rainfall) => {
         this.barChartData.datasets[0].data.push(rainfall)
+        // this.barChartData.datasets[0].backgroundColor.push(this.threshold.getAlertLevelColor(this.threshold.determineRainfallAlertLevel('1-24', rainfall)))
       })
       devices.forEach((device) => {
         this.barChartData.labels.push(this.chartService.getKeyByValue(device))
       })
+      this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal)
+      this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
+      console.log(this.landSlideAlertLevel)
       this.isLoading = false
     });
   }
@@ -235,6 +322,9 @@ export class DashboardComponent implements OnInit {
         this.lineChartData.datasets[0].data.push(rainfall.value)
         this.lineChartData.datasets[0].label = this.chartService.getKeyByValue(device)
       })
+      this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal)
+      this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
+      console.log(this.landSlideAlertLevel)
       this.isLoading = false
     }, err => {
       this.errorMessage = "Please try again."
@@ -263,6 +353,9 @@ export class DashboardComponent implements OnInit {
         this.soilMoistureChartData.datasets[0].data.push(rainfall.value)
         this.soilMoistureChartData.datasets[0].label = this.chartService.getKeyByValue(device)
       })
+      this.soilMoistureAlertLevel = this.threshold.determineSoilMoistureWarningRange(this.selectedSensor.value, this.calculatedSoilMoisture)
+      this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
+      console.log(this.landSlideAlertLevel)
       this.isLoading = false
     }, err => {
       this.errorMessage = "Please try again."
@@ -300,8 +393,6 @@ export class DashboardComponent implements OnInit {
           })
         }
       })
-
-
     });
   }
 
@@ -333,6 +424,19 @@ export class DashboardComponent implements OnInit {
   onSelectPeriod(e) {
     this.selectedPeriod = e
     this.fetchSensorDataPeriod()
+  }
+
+  onSelectObservation(e) {
+    this.selectedObservation = e
+    this.fetchSensorDataPeriod()
+  }
+
+  onObsevationChange(e) {
+    this.fetchSensorDataPeriod()
+  }
+
+  getAlertDescription() {
+    return this.threshold.getAlertDescription(this.landSlideAlertLevel)
   }
 
   getRainfallAlertLevel(): any {

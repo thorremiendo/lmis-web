@@ -55,7 +55,7 @@ export class SwalService {
       title: "SUCCESS",
       text: message,
       icon: "success",
-      confirmButtonText: "Proceed"
+      confirmButtonText: "Close"
     });
   }
 

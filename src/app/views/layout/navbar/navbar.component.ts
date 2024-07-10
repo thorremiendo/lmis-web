@@ -11,6 +11,8 @@ import { SwalService } from 'src/app/core/services/swal.service';
 })
 export class NavbarComponent implements OnInit {
   public recommendations = ["Pre-emptive Evacuation", "Forced Evacuation", "Status Quo"]
+  public user
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
@@ -20,6 +22,7 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('lmisUser'))
   }
 
   submit() {

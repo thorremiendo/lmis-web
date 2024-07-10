@@ -1,0 +1,45 @@
+.green {
+    background-color: #0FB050;
+
+    p {
+        color: black;
+    }
+}
+
+.yellow {
+    background-color: yellow;
+
+    p {
+        color: black;
+    }
+}
+
+.orange {
+    background-color: #E1AA00;
+
+    p {
+        color: black;
+    }
+}
+
+.red {
+    background-color: #FF0000;
+
+    p {
+        color: black;
+    }
+}
+
+.alert {
+    display: inline-block;
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: white;
+    font-weight: bold;
+    margin: 0;
+
+    p {
+        display: inline-block;
+        margin: 0;
+    }
+}

@@ -67,5 +67,15 @@ export const MENU: MenuItem[] = [
     icon: 'book',
     link: '/apps/contact-list'
   },
+  {
+    label: 'Settings',
+    icon: 'alert-triangle',
+    subItems: [
+      {
+        label: 'Thresholds',
+        link: '/apps/settings/thresholds',
+      },
+    ]
+  },
 
 ];
