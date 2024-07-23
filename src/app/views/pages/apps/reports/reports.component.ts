@@ -17,51 +17,65 @@ export class ReportsComponent implements OnInit {
   public ColumnMode = ColumnMode;
   public selectedRow
   public form: FormGroup
+  public actions = ["Ongoing", "Resolved", "Others"]
   public landslideCategories = [
     {
       name: "Rockfall",
-      value: "RockFall"
+      value: 1
     },
     {
       name: "Block Slide",
-      value: "BlockSlide"
+      value: 2
     },
     {
       name: "Debris Flow",
-      value: "DebrisFlow"
+      value: 3
     },
     {
       name: "Debris Avalanche",
-      value: "DebrisAvalanche"
+      value: 4
     },
     {
       name: "Creep",
-      value: "Creep"
+      value: 5
     },
     {
       name: "Rotational",
-      value: "Rotational"
+      value: 6
     },
     {
       name: "Translational",
-      value: "Translational"
+      value: 7
     },
     {
       name: "Topple",
-      value: "Topple"
+      value: 8
     },
     {
       name: "Earth Flow",
-      value: "EarthFlow"
+      value: 9
     },
     {
       name: "Lateral Spread",
-      value: "LateralSpread"
+      value: 10
     },
 
   ]
 
-  public susceptibility = ["High", "Medium", "Low"]
+  public susceptibility = [
+    {
+      name: "High",
+      value: 1,
+    },
+    {
+      name: "Medium",
+      value: 2,
+    },
+    {
+      name: "Low",
+      value: 3,
+    },
+  ]
 
   public status = [
     {
@@ -84,13 +98,12 @@ export class ReportsComponent implements OnInit {
       latitude: [null],
       longitude: [null],
       approvedBy: [null],
-      roadNetworks: [null],
       builtUpAreas: [null],
       displaced: [null],
       injured: [null],
       dead: [null],
-      landslideCategory: [null],
-      triggeringMechanism: [null],
+      category: [null],
+      triggerMechanism: [null],
       remarks: [''],
       landslideSusceptibility: [null],
       floodingSusceptibility: [null],
@@ -148,8 +161,12 @@ export class ReportsComponent implements OnInit {
   onSaveEdit() {
     this.form.patchValue({
       dateOfIncident: this.convertToIsoDate(this.form.value.dateOfIncident),
+      category: parseInt(this.form.controls.category.value),
+      landslideSusceptibility: parseInt(this.form.controls.landslideSusceptibility.value),
+      floodingSusceptibility: parseInt(this.form.controls.floodingSusceptibility.value),
     })
     this.form.removeControl('dateReported')
+    debugger
     this.dataService.updateReport(this.selectedRow.id, this.form.value).subscribe((data: any) => {
       console.log(data)
       this.swalService.showSuccessMessage("Updated successfully!")

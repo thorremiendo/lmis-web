@@ -177,11 +177,14 @@ export class LandslideReportComponent implements OnInit {
       "municipalityId": municipality.value,
       "barangayId": barangay.value,
       "remarks": remarks.value,
+      "longitude": this.lng,
+      "latitude": this.lat
     }
 
     this.dataService.submitReport(body).subscribe(res => {
       this.swalService.showSuccess()
       this.isLoading = false
+      window.location.reload()
     })
   }
 
