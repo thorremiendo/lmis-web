@@ -164,6 +164,7 @@ export class ReportsComponent implements OnInit {
       category: parseInt(this.form.controls.category.value),
       landslideSusceptibility: parseInt(this.form.controls.landslideSusceptibility.value),
       floodingSusceptibility: parseInt(this.form.controls.floodingSusceptibility.value),
+      actionsTaken: parseInt(this.form.controls.actionsTaken.value),
     })
     this.form.removeControl('dateReported')
     debugger

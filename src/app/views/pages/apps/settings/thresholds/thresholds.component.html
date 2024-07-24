@@ -1,1 +1,201 @@
-<p>thresholds works!</p>
+<div class="row" *ngIf="rainfallThresholdsData.length">
+  <div class="col-md-12 stretch-card grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Rainfall Thresholds</h6>
+        <button class="mt-2 btn btn-outline-primary" (click)="handleReset()">
+          Reset
+        </button>
+        <div class="table-responsive">
+          <ngx-datatable
+            class="bootstrap"
+            [rows]="rainfallThresholdsData"
+            [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force"
+            [footerHeight]="50"
+            [limit]="10"
+            rowHeight="auto"
+          >
+            <ngx-datatable-column
+              name="Observation Period"
+              prop="observationPeriod"
+            >
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ getPeriod(value) }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="RA-0 Min" prop="ra0Min">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="RA-0 Max" prop="ra0Max">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="RA-1 Min" prop="ra1Min">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="RA-1 Max" prop="ra1Max">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="RA-2 Min" prop="ra2Min">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="RA-2 Max" prop="ra2Max">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="RA-3 Min" prop="ra3Min">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="RA-3 Max" prop="ra3Max">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Update Threshold">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button
+                  class="mt-2 btn btn-outline-primary"
+                  (click)="openScrollableModal(scrollableModal, row)"
+                >
+                  Edit
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #scrollableModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Edit Threshoold</h5>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.close('by: close icon')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div [formGroup]="form">
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">RA-0 Min</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="ra0Min"
+            placeholder="Input Value"
+          />
+        </div>
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">RA-0 Max</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="ra0Max"
+            placeholder="Input Value"
+          />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">RA-1 Min</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="ra1Min"
+            placeholder="Input Value"
+          />
+        </div>
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">RA-1 Max</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="ra1Max"
+            placeholder="Input Value"
+          />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">RA-2 Min</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="ra2Min"
+            placeholder="Input Value"
+          />
+        </div>
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">RA-2 Max</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="ra2Max"
+            placeholder="Input Value"
+          />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">RA-3 Min</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="ra3Min"
+            placeholder="Input Value"
+          />
+        </div>
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">RA-3 Max</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="ra3Max"
+            placeholder="Input Value"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.close('by: close button')"
+    >
+      Close
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onSaveEdit()">
+      Save changes
+    </button>
+  </div>
+</ng-template>

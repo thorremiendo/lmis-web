@@ -1,3 +1,8 @@
+<link
+  href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css"
+  rel="stylesheet"
+/>
+
 <div class="row">
   <div class="col-md-12 stretch-card grid-margin">
     <div class="card">
@@ -23,11 +28,6 @@
                 {{ value ? value : "No data" }}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Date Reported" prop="dateReported">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
             <ngx-datatable-column name="Municipality" prop="municipalityName">
               <ng-template let-value="value" ngx-datatable-cell-template>
                 {{ value ? value : "No data" }}
@@ -38,71 +38,6 @@
                 {{ value ? value : "No data" }}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Latitude" prop="latitude">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Longitude" prop="longitude">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Source of Information" prop="source">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Road Networks" prop="roadNetwork">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Displaced" prop="displaced">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Injured" prop="injured">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Dead" prop="dead">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column name="Landslide Category" prop="category">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column
-              name="Triggering Mechanism"
-              prop="triggeringMechanism"
-            >
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column
-              name="Landslide Susceptibility"
-              prop="susceptibility"
-            >
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column
-              name="Flooding Susceptibility"
-              prop="floodingSusceptibility"
-            >
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
-              </ng-template>
-            </ngx-datatable-column>
-
             <ngx-datatable-column name="Remarks" prop="remarks">
               <ng-template let-value="value" ngx-datatable-cell-template>
                 {{ value ? value : "No data" }}
@@ -114,9 +49,168 @@
                 {{ value == "1" ? "Verified" : "Unverified" }}
               </ng-template>
             </ngx-datatable-column>
+            <ngx-datatable-column name="Action">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button
+                  class="mt-2 btn btn-outline-primary"
+                  (click)="openScrollableModal(scrollableModal, row)"
+                >
+                  View
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
           </ngx-datatable>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #scrollableModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Edit Report</h5>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.close('by: close icon')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="mb-3">
+        <label for="exampleInputText1" class="form-label">Built-up Areas</label>
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputText1"
+          formControlName="builtUpAreas"
+          placeholder="Input Value"
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputText1" class="form-label">Displaced</label>
+        <input
+          type="number"
+          class="form-control"
+          id="exampleInputText1"
+          formControlName="displaced"
+          placeholder="Input Value"
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputText1" class="form-label">Injured</label>
+        <input
+          type="number"
+          class="form-control"
+          id="exampleInputText1"
+          formControlName="injured"
+          placeholder="Input Value"
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputText1" class="form-label">Dead</label>
+        <input
+          type="number"
+          class="form-control"
+          id="exampleInputText1"
+          formControlName="dead"
+          placeholder="Input Value"
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputText1" class="form-label"
+          >Trigger Mechanism</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputText1"
+          formControlName="triggerMechanism"
+          placeholder="Input Value"
+          disabled
+        />
+      </div>
+      <div class="mb-3">
+        <label for="exampleFormControlSelect1" class="form-label"
+          >Landslide Category</label
+        >
+        <select
+          class="form-select"
+          id="exampleFormControlSelect1"
+          formControlName="category"
+          disabled
+        >
+          <option value="" disabled>Select</option>
+          <option *ngFor="let item of landslideCategories" [value]="item.value">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleFormControlSelect1" class="form-label"
+          >Landslide Susceptibility</label
+        >
+        <select
+          class="form-select"
+          id="exampleFormControlSelect1"
+          formControlName="landslideSusceptibility"
+          disabled
+        >
+          <option value="" disabled>Select</option>
+          <option *ngFor="let item of susceptibility" [value]="item.value">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="exampleFormControlSelect1" class="form-label"
+          >Flooding Susceptibility</label
+        >
+        <select
+          class="form-select"
+          id="exampleFormControlSelect1"
+          formControlName="floodingSusceptibility"
+          disabled
+        >
+          <option value="" disabled>Select</option>
+          <option *ngFor="let item of susceptibility" [value]="item.value">
+            {{ item.name }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="exampleFormControlSelect1" class="form-label"
+          >Actions Taken</label
+        >
+        <select
+          class="form-select"
+          id="exampleFormControlSelect1"
+          formControlName="actionsTaken"
+          disabled
+        >
+          <option value="" disabled>Select</option>
+          <option *ngFor="let item of actions; let i = index" [value]="i + 1">
+            {{ item }}
+          </option>
+        </select>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.close('by: close button')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<div class="map" id="map" class="match-parent"></div>

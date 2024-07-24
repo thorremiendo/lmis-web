@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DataService } from './data.service';
 
 
 export type RainfallThresholds = {
@@ -20,7 +21,8 @@ export type SoilMoistureRanges = {
 
 export class ThresholdService {
 
-  constructor() { }
+  constructor(private dataService: DataService) {
+  }
 
   public getAlertLevelColor(alertLevel: string) {
     if (alertLevel === 'RA-0') {
@@ -62,33 +64,53 @@ export class ThresholdService {
     }
   }
 
-  public determineRainfallAlertLevel(observationPeriod: string, rainfallAmount: number): string {
-    const thresholds: { [key: string]: RainfallThresholds } = {
-      '1': { RA0: [0, 202], RA1: [203, 404], RA2: [405, 606], RA3: 607 },
-      '2': { RA0: [0, 247], RA1: [248, 494], RA2: [495, 742], RA3: 743 },
-      '3': { RA0: [0, 278], RA1: [279, 556], RA2: [557, 834], RA3: 835 },
-      '4': { RA0: [0, 323], RA1: [324, 645], RA2: [646, 968], RA3: 969 },
-    };
+  // public determineRainfallAlertLevel(observationPeriod: string, rainfallAmount: number): string {
+  //   const thresholds: { [key: string]: RainfallThresholds } = {
+  //     '1': { RA0: [0, 202], RA1: [203, 404], RA2: [405, 606], RA3: 607 },
+  //     '2': { RA0: [0, 247], RA1: [248, 494], RA2: [495, 742], RA3: 743 },
+  //     '3': { RA0: [0, 278], RA1: [279, 556], RA2: [557, 834], RA3: 835 },
+  //     '4': { RA0: [0, 323], RA1: [324, 645], RA2: [646, 968], RA3: 969 },
+  //   };
 
-    const periodThresholds = thresholds[observationPeriod];
+  //   const periodThresholds = thresholds[observationPeriod];
+  //   if (!periodThresholds) {
+  //     return 'Invalid observation period';
+  //   }
+
+  //   if (rainfallAmount >= periodThresholds.RA3) {
+  //     return 'RA-3';
+  //   } else if (rainfallAmount >= periodThresholds.RA2[0] && rainfallAmount <= periodThresholds.RA2[1]) {
+  //     return 'RA-2';
+  //   } else if (rainfallAmount >= periodThresholds.RA1[0] && rainfallAmount <= periodThresholds.RA1[1]) {
+  //     return 'RA-1';
+  //   } else if (rainfallAmount >= periodThresholds.RA0[0] && rainfallAmount <= periodThresholds.RA0[1]) {
+  //     return 'RA-0';
+  //   } else {
+  //     return 'Below RA-0';
+  //   }
+  // }
+
+  public determineRainfallAlertLevel(observationPeriod: string, rainfallAmount: number, rainFallThresholds): string {
+    const periodThresholds = rainFallThresholds.find(threshold => threshold.observationPeriod == observationPeriod);
+
     if (!periodThresholds) {
       return 'Invalid observation period';
     }
-
-    if (rainfallAmount >= periodThresholds.RA3) {
+    
+    if (rainfallAmount >= periodThresholds.ra3Min && rainfallAmount <= periodThresholds.ra3Max) {
       return 'RA-3';
-    } else if (rainfallAmount >= periodThresholds.RA2[0] && rainfallAmount <= periodThresholds.RA2[1]) {
+    } else if (rainfallAmount >= periodThresholds.ra2Min && rainfallAmount <= periodThresholds.ra2Max) {
       return 'RA-2';
-    } else if (rainfallAmount >= periodThresholds.RA1[0] && rainfallAmount <= periodThresholds.RA1[1]) {
+    } else if (rainfallAmount >= periodThresholds.ra1Min && rainfallAmount <= periodThresholds.ra1Max) {
       return 'RA-1';
-    } else if (rainfallAmount >= periodThresholds.RA0[0] && rainfallAmount <= periodThresholds.RA0[1]) {
+    } else if (rainfallAmount >= periodThresholds.ra0Min && rainfallAmount <= periodThresholds.ra0Max) {
       return 'RA-0';
     } else {
       return 'Below RA-0';
     }
   }
 
-  calculateSoilMoisture(site, avgRaw) {
+  public calculateSoilMoisture(site, avgRaw) {
     if (site === 1) {
       const numerator = (1.003978 * avgRaw) - 1799.78
       const denominator = 8.103809 + (0.002828 * avgRaw)

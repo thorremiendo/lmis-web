@@ -13,6 +13,7 @@ import { start } from 'repl';
 import { ThresholdService } from 'src/app/core/services/threshold.service';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DataService } from 'src/app/core/services/data.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -136,6 +137,7 @@ export class DashboardComponent implements OnInit {
   currentDate: NgbDateStruct;
   public userDetails;
   public recommendations = ["Pre-emptive Evacuation", "Forced Evacuation", "Status Quo"]
+  public rainFallThresholds
   @ViewChild('mayorModal') mayorModal: TemplateRef<any>;
 
   constructor(
@@ -146,7 +148,8 @@ export class DashboardComponent implements OnInit {
     private chartService: ChartService,
     private threshold: ThresholdService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private dataService: DataService
   ) {
     this.barChartData = this.chartService.barChartData
     this.barChartOptions = this.chartService.barChartOptions
@@ -182,7 +185,11 @@ export class DashboardComponent implements OnInit {
           .addTo(this.map);
       }
     })
-    this.fetchSensorDataPeriod()
+    this.dataService.getRainfallThresholds().subscribe((data: any) => {
+      this.rainFallThresholds = data
+      this.fetchSensorDataPeriod()
+
+    })
   }
 
   submitRecommendation() {
@@ -199,7 +206,7 @@ export class DashboardComponent implements OnInit {
   triggerAlert(content?: TemplateRef<any>) {
     this.calculatedSoilMoisture = 81.32
     this.rainfallPeriodTotal = 643
-    this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal)
+    this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal, this.rainFallThresholds)
     this.soilMoistureAlertLevel = this.threshold.determineSoilMoistureWarningRange(this.selectedSensor.value, this.calculatedSoilMoisture)
     this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
     if (this.userDetails.username !== 'lmis-mayor') {
@@ -293,7 +300,7 @@ export class DashboardComponent implements OnInit {
       devices.forEach((device) => {
         this.barChartData.labels.push(this.chartService.getKeyByValue(device))
       })
-      this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal)
+      this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal, this.rainFallThresholds)
       this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
       console.log(this.landSlideAlertLevel)
       this.isLoading = false
@@ -322,7 +329,7 @@ export class DashboardComponent implements OnInit {
         this.lineChartData.datasets[0].data.push(rainfall.value)
         this.lineChartData.datasets[0].label = this.chartService.getKeyByValue(device)
       })
-      this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal)
+      this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal, this.rainFallThresholds)
       this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
       console.log(this.landSlideAlertLevel)
       this.isLoading = false

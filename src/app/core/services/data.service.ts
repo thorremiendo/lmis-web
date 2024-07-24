@@ -66,4 +66,50 @@ export class DataService {
   }
 
 
+  getVerifiedReports() {
+    const url = `/reports/status/verified`
+
+    return this.apiService.get(url).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  getRainfallThresholds() {
+    const url = `/rainfall-thresholds`
+
+    return this.apiService.get(url).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  getRainfallThresholdsByPeriod(id: number) {
+    const url = `/rainfall-thresholds/${id}`
+
+    return this.apiService.get(url).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  updateRainfallThreshold(id: number, body) {
+    const url = `/rainfall-thresholds/${id}`
+
+    return this.apiService.put(url, body).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  resetRainfallThresholds() {
+    const url = `/rainfall-thresholds/reset`
+    
+    return this.apiService.post(url, "");
+  }
+
 }

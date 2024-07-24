@@ -197,6 +197,21 @@
           </option>
         </select>
       </div>
+      <div class="mb-3">
+        <label for="exampleFormControlSelect1" class="form-label"
+          >Actions Taken</label
+        >
+        <select
+          class="form-select"
+          id="exampleFormControlSelect1"
+          formControlName="actionsTaken"
+        >
+          <option value="" disabled>Select</option>
+          <option *ngFor="let item of actions; let i = index" [value]="i + 1">
+            {{ item }}
+          </option>
+        </select>
+      </div>
     </form>
   </div>
   <div class="modal-footer">
