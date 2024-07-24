@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject, Renderer2, TemplateRef } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { DatePipe, DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from 'src/app/core/services/swal.service';
+import { DataService } from 'src/app/core/services/data.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,17 +13,22 @@ import { SwalService } from 'src/app/core/services/swal.service';
 export class NavbarComponent implements OnInit {
   public recommendations = ["Pre-emptive Evacuation", "Forced Evacuation", "Status Quo"]
   public user
+  public notifications
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
     private router: Router,
     private modalService: NgbModal,
-    private swal: SwalService
+    private swal: SwalService,
+    private dataService: DataService,
   ) { }
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('lmisUser'))
+    this.dataService.getNotificationsByUserId(this.user.id).subscribe(res => {
+      this.notifications = res
+    })
   }
 
   submit() {

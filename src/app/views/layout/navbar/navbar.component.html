@@ -41,7 +41,7 @@
           <div
             class="px-3 py-2 me-3 d-flex align-items-center justify-content-between border-bottom"
           >
-            <a href="" (click)="(false)" class="text-muted">Clear all</a>
+            <a href="" (click)="(false)" class="text-muted">Notifications</a>
           </div>
           <div class="p-1">
             <a
@@ -50,20 +50,21 @@
               class="dropdown-item d-flex align-items-center py-2"
             >
               <div
-                class="wd-30 ht-30 d-flex align-items-center justify-content-center bg-primary rounded-circle me-3"
+                class="wd-30 ht-30 d-flex align-items-center justify-content-center bg-danger rounded-circle me-3"
               >
                 <i class="feather icon-alert-circle icon-sm text-white"></i>
               </div>
-              <div class="flex-grow-1 me-2">
-                <p>Notification Here!</p>
-                <p class="tx-12 text-muted">1 hrs ago</p>
+              <div class="flex-grow-1 me-2" *ngFor="let item of notifications">
+                <p>{{ item.body }}</p>
+                <p class="tx-12 text-muted">
+                  {{ item.dateTime | date : "MMMM d, y h:mm a" }}
+                </p>
               </div>
             </a>
           </div>
           <div
             class="px-3 py-2 d-flex align-items-center justify-content-center border-top"
           >
-            <a href="" (click)="(false)">View all</a>
           </div>
         </div>
       </li>
@@ -87,8 +88,10 @@
               />
             </div>
             <div class="text-center">
-              <p class="tx-16 fw-bolder">LMIS USER</p>
-              <p class="tx-12 text-muted">lmis@test.com</p>
+              <p class="tx-16 fw-bolder">
+                {{ user.firstName }} {{ user.lastName }}
+              </p>
+              <p class="tx-12 text-muted">{{ user.contactNumber }}</p>
             </div>
           </div>
           <ul class="list-unstyled p-1">
@@ -96,18 +99,6 @@
               <a routerLink="/general/profile" class="d-flex text-body ms-0">
                 <i class="feather icon-user me-2 icon-md"></i>
                 <span>Profile</span>
-              </a>
-            </li>
-            <li class="dropdown-item py-2">
-              <a href="" (click)="(false)" class="d-flex text-body ms-0">
-                <i class="feather icon-edit me-2 icon-md"></i>
-                <span>Edit Profile</span>
-              </a>
-            </li>
-            <li class="dropdown-item py-2">
-              <a href="" (click)="(false)" class="d-flex text-body ms-0">
-                <i class="feather icon-repeat me-2 icon-md"></i>
-                <span>Switch User</span>
               </a>
             </li>
             <li class="dropdown-item py-2">
@@ -126,5 +117,3 @@
     </ul>
   </div>
 </nav>
-
-

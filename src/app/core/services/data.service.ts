@@ -108,8 +108,38 @@ export class DataService {
 
   resetRainfallThresholds() {
     const url = `/rainfall-thresholds/reset`
-    
+
     return this.apiService.post(url, "");
+  }
+
+  createContact(body) {
+    const url = "/contacts";
+    return this.apiService.post(url, body);
+  }
+
+  getContacts() {
+    const url = `/contacts`
+
+    return this.apiService.get(url).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  createNotification(body) {
+    const url = "/notification";
+    return this.apiService.post(url, body);
+  }
+
+  getNotificationsByUserId(userId: number) {
+    const url = `/notification/user/${userId}`
+
+    return this.apiService.get(url).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
   }
 
 }

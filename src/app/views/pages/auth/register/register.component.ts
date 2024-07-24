@@ -83,6 +83,7 @@ export class RegisterComponent implements OnInit {
       firstName: this.signupForm.value.firstName,
       lastName: this.signupForm.value.lastName,
       barangay: this.selectedBarangay.id,
+      municipality: this.selectedMunicipality.id,
       role: "Others"
     }
 

@@ -1,5 +1,5 @@
 <input type="file" hidden #fileInput />
-<button
+<!-- <button
   *ngIf="user.role !== 'Others'"
   type="button"
   class="btn btn-primary btn-icon-text my-3"
@@ -7,59 +7,12 @@
 >
   <i class="feather icon-check-square btn-icon-prepend"></i>
   Import
+</button> -->
+<button class="btn btn-primary" (click)="openScrollableModal(scrollableModal)">
+  Add
 </button>
 
-<div class="row mb-3">
-  <div class="col-12">
-    <div class="input-group">
-      <input
-        class="form-control"
-        [value]="selectedMunicipality?.name"
-        readonly
-      />
-      <div ngbDropdown>
-        <button
-          type="button"
-          class="btn btn-primary dropdown-toggle"
-          ngbDropdownToggle
-        >
-          Select Municipality
-        </button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button
-            type="button"
-            ngbDropdownItem
-            *ngFor="let municipality of municipalities"
-            (click)="selectMunicipality(municipality)"
-          >
-            {{ municipality.name }}
-          </button>
-        </div>
-      </div>
-      <input class="form-control" [value]="selectedBarangay?.name" readonly />
-      <div ngbDropdown>
-        <button
-          type="button"
-          class="btn btn-primary dropdown-toggle"
-          ngbDropdownToggle
-        >
-          Select Barangay
-        </button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button
-            type="button"
-            ngbDropdownItem
-            *ngFor="let barangay of barangays"
-            (click)="selectBarangay(barangay)"
-          >
-            {{ barangay.name }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row" *ngIf="reportsData.length">
+<div class="row mt-3" *ngIf="contactsData.length">
   <div class="col-md-12 stretch-card grid-margin">
     <div class="card">
       <div class="card-body">
@@ -67,26 +20,46 @@
         <div class="table-responsive">
           <ngx-datatable
             class="bootstrap"
-            [rows]="reportsData"
+            [rows]="contactsData"
             [loadingIndicator]="loadingIndicator"
             [columnMode]="ColumnMode.force"
             [footerHeight]="50"
             [limit]="10"
             rowHeight="auto"
           >
+            <ngx-datatable-column name="Municipality" prop="municipality">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
             <ngx-datatable-column name="Barangay" prop="barangay">
               <ng-template let-value="value" ngx-datatable-cell-template>
                 {{ value ? value : "No data" }}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Name" prop="name">
+            <ngx-datatable-column name="First Name" prop="firstName">
               <ng-template let-value="value" ngx-datatable-cell-template>
                 {{ value ? value : "No data" }}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Contact" prop="contact">
+            <ngx-datatable-column name="Last Name" prop="lastName">
               <ng-template let-value="value" ngx-datatable-cell-template>
                 {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Contact" prop="contactNumber">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value ? value : "No data" }}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Update Threshold">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button
+                  class="mt-2 btn btn-outline-primary"
+                  (click)="handleSms(row)"
+                >
+                  Send SMS
+                </button>
               </ng-template>
             </ngx-datatable-column>
           </ngx-datatable>
@@ -95,3 +68,101 @@
     </div>
   </div>
 </div>
+
+<ng-template #scrollableModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Add a Contact</h5>
+    <button
+      type="button"
+      class="btn-close"
+      (click)="modal.close('by: close icon')"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div [formGroup]="form">
+      <div class="row mb-3">
+        <div class="col-12">
+          <label for="exampleFormControlSelect1" class="form-label"
+            >Select Municipality</label
+          >
+          <select
+            class="form-select"
+            id="exampleFormControlSelect1"
+            formControlName="municipalityId"
+            (change)="onMunicipalityChange($event)"
+          >
+            <option *ngFor="let item of municipalities" [value]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="barangays.length !== 0">
+        <div class="col-12">
+          <label for="exampleFormControlSelect1" class="form-label"
+            >Select Barangay</label
+          >
+          <select
+            class="form-select"
+            id="exampleFormControlSelect1"
+            formControlName="barangayId"
+          >
+            <option *ngFor="let item of barangays" [value]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="firstName"
+            placeholder="Input Value"
+          />
+        </div>
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="lastName"
+            placeholder="Input Value"
+          />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-lg-6">
+          <label for="exampleInputText1" class="form-label"
+            >Contact Number</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputText1"
+            formControlName="contactNumber"
+            placeholder="Input Value"
+          />
+        </div>
+        <div class="col-lg-6"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="modal.close('by: close button')"
+    >
+      Close
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onSave()">
+      Add Contact
+    </button>
+  </div>
+</ng-template>
