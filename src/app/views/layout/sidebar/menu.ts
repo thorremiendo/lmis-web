@@ -68,6 +68,11 @@ export const MENU: MenuItem[] = [
     link: '/apps/contact-list'
   },
   {
+    label: 'Landslide Risk Warning',
+    icon: 'map',
+    link: '/apps/landslide-risk-warning'
+  },
+  {
     label: 'Settings',
     icon: 'alert-triangle',
     subItems: [

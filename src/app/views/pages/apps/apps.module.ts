@@ -57,6 +57,7 @@ import { LandslideInventoryComponent } from './landslide-inventory/landslide-inv
 import { RapidRiskAssessmentComponent } from './rapid-risk-assessment/rapid-risk-assessment.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ThresholdsComponent } from './settings/thresholds/thresholds.component';
+import { LandslideRiskWarningComponent } from './landslide-risk-warning/landslide-risk-warning.component';
 
 const routes: Routes = [
   {
@@ -143,6 +144,10 @@ const routes: Routes = [
         component: RapidRiskAssessmentComponent
       },
       {
+        path: 'landslide-risk-warning',
+        component: LandslideRiskWarningComponent
+      },
+      {
         path: 'settings',
         component: SettingsComponent,
         children: [
@@ -187,6 +192,7 @@ const routes: Routes = [
     RapidRiskAssessmentComponent,
     SettingsComponent,
     ThresholdsComponent,
+    LandslideRiskWarningComponent,
   ],
   imports: [
     NgbModule,
