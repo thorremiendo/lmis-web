@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-
 import MetisMenu from 'metismenujs';
-
 import { MENU } from './menu';
 import { MenuItem } from './menu.model';
 import { Router, NavigationEnd } from '@angular/router';
+import { environment } from "../../../../environments/environment.prod";
 
 @Component({
   selector: 'app-sidebar',
@@ -14,6 +13,7 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
   public user = JSON.parse(localStorage.getItem('lmisUser'));
+  version = environment.version;
 
   @ViewChild('sidebarToggler') sidebarToggler: ElementRef;
 
@@ -42,6 +42,18 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.menuItems = MENU;
+    console.log(this.menuItems)
+    console.log(this.user)
+    if (this.user.username === 'lmis-mayor') {
+      this.menuItems = this.menuItems.filter(item => item.label === 'Main' || item.label === 'Dashboard' || item.label === "Web Apps" || item.label === 'Landslide Risk Warning')
+    } else if (this.user.role === 'Others') {
+      this.menuItems = this.menuItems.filter(item => item.label === "Web Apps" || item.label === "Landslide Evacuation" || item.label === "Landslide Risk Warning")
+    } else if (this.user.role === 'LGU') {
+      this.menuItems = this.menuItems.filter(item => item.label !== "Settings")
+    }
+
+
+
 
     /**
      * Sidebar-folded on desktop (min-width:992px and max-width: 1199px)

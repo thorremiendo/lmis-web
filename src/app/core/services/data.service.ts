@@ -142,4 +142,25 @@ export class DataService {
     );
   }
 
+  getAlertWarningById() {
+    const url = `/alertwarning/1`
+
+    return this.apiService.get(url).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+
+  updateAlertWarning(body) {
+    const url = `/alertwarning/1`
+
+    return this.apiService.put(url, body).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
 }

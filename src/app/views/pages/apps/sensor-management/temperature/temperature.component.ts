@@ -5,6 +5,7 @@ import { SensorSites } from '../../models/sensor-site-type.enum';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
+import { CsvService } from 'src/app/core/services/csv.service';
 
 @Component({
   selector: 'app-temperature',
@@ -55,7 +56,8 @@ export class TemperatureComponent implements OnInit {
   constructor(
     private sensorService: SensorsService,
     private calendar: NgbCalendar,
-    public formatter: NgbDateParserFormatter
+    public formatter: NgbDateParserFormatter,
+    private csv: CsvService
   ) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getToday();
@@ -119,6 +121,18 @@ export class TemperatureComponent implements OnInit {
         return "Itogon"
       default:
         return "No site selected"
+    }
+  }
+
+  exportToCsv(type) {
+    if (type === 1) {
+      this.csv.exportToCSV(this.airTempRows)
+    } else if (type === 2) {
+      this.csv.exportToCSV(this.atmosphericRows)
+    } else if (type === 3) {
+      this.csv.exportToCSV(this.vaporPressureRows)
+    } else if (type === 4) {
+      this.csv.exportToCSV(this.referencePressureRows)
     }
   }
 

@@ -106,6 +106,14 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">Air Temperature</h6>
+        <button
+          *ngIf="this.airTempRows"
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportToCsv(1)"
+        >
+          Export to CSV
+        </button>
         <apx-chart
           [series]="airTempOptions.series"
           [chart]="airTempOptions.chart"
@@ -127,6 +135,14 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">Atmospheric Pressure</h6>
+        <button
+          *ngIf="this.atmosphericRows"
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportToCsv(2)"
+        >
+          Export to CSV
+        </button>
         <apx-chart
           [series]="atmoshpericOptions.series"
           [chart]="atmoshpericOptions.chart"
@@ -148,6 +164,14 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">VPD</h6>
+        <button
+          *ngIf="this.vaporPressureRows"
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportToCsv(3)"
+        >
+          Export to CSV
+        </button>
         <apx-chart
           [series]="vaporOptions.series"
           [chart]="vaporOptions.chart"
@@ -169,6 +193,14 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">Reference Pressure</h6>
+        <button
+          *ngIf="this.referencePressureRows"
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportToCsv(4)"
+        >
+          Export to CSV
+        </button>
         <apx-chart
           [series]="refPressureOptions.series"
           [chart]="refPressureOptions.chart"

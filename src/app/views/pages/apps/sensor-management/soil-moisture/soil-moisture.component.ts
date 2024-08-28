@@ -5,6 +5,7 @@ import { SensorSites } from '../../models/sensor-site-type.enum';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin } from 'rxjs';
+import { CsvService } from 'src/app/core/services/csv.service';
 
 @Component({
   selector: 'app-soil-moisture',
@@ -54,13 +55,24 @@ export class SoilMoistureComponent implements OnInit {
   constructor(
     private sensorService: SensorsService,
     private calendar: NgbCalendar,
-    public formatter: NgbDateParserFormatter
+    public formatter: NgbDateParserFormatter,
+    private csv: CsvService
   ) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getToday();
   }
 
   ngOnInit(): void {
+  }
+
+  exportToCsv(type) {
+    if (type === 1) {
+      this.csv.exportToCSV(this.waterContentRows)
+    } else if (type === 2) {
+      this.csv.exportToCSV(this.soilTempRows)
+    } else if (type === 3) {
+      this.csv.exportToCSV(this.saturationExtractRows)
+    }
   }
 
 

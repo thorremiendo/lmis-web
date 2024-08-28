@@ -102,7 +102,14 @@
       <div class="card">
         <div class="card-body">
           <h6 class="card-title">Precipitation</h6>
-
+          <button
+            *ngIf="precipitationRows.length > 0"
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="exportToCsv(1)"
+          >
+            Export to CSV
+          </button>
           <apx-chart
             [series]="precipitationOptions.series"
             [chart]="precipitationOptions.chart"
@@ -123,8 +130,15 @@
     <div class="col-xl-12 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h6 class="card-title">Max Precipitation</h6>
-
+          <h6 class="card-title">Rain Intensity</h6>
+          <button
+            *ngIf="maxPreciptationRows.length > 0"
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="exportToCsv(2)"
+          >
+            Export to CSV
+          </button>
           <apx-chart
             [series]="maxPrepOptions.series"
             [chart]="maxPrepOptions.chart"
@@ -167,7 +181,7 @@
     <div class="col-6 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h6 class="card-title">Max Precipitation</h6>
+          <h6 class="card-title">Rain Intensity</h6>
           <div class="table-responsive">
             <ngx-datatable
               class="bootstrap"

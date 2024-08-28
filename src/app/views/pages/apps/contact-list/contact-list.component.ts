@@ -82,8 +82,8 @@ export class ContactListComponent implements OnInit {
     this.dataService.getContacts().subscribe(res => {
       this.contactsData = res
       this.contactsData.forEach(contact => {
-        contact.municipality = contact.Municipality.name
-        contact.barangay = contact.Barangay.name
+        contact.municipality = contact.Municipality?.name
+        contact.barangay = contact.Barangay?.name
       })
     })
   }

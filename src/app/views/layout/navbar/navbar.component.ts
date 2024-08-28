@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from 'src/app/core/services/swal.service';
 import { DataService } from 'src/app/core/services/data.service';
+import { environment } from "../../../../environments/environment.prod";
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ export class NavbarComponent implements OnInit {
   public recommendations = ["Pre-emptive Evacuation", "Forced Evacuation", "Status Quo"]
   public user
   public notifications
+  version = environment.version;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,

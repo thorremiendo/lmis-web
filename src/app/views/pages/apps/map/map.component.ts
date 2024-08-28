@@ -17,57 +17,57 @@ export class MapComponent implements OnInit {
   sites = [
     {
       id: 1,
-      municipality: "Baguio City",
+      municipality: "Baguio City - Dontogan",
       coords: { lng: 120.5659538, lat: 16.3772419 }
     },
     {
       id: 2,
-      municipality: "La Trinidad",
+      municipality: "La Trinidad - Puguis A",
       coords: { lng: 120.573431, lat: 16.4481207 },
     },
     {
       id: 3,
-      municipality: "La Trinidad",
+      municipality: "La Trinidad - Puguis B",
       coords: { lng: 120.5731177, lat: 16.44873 },
     },
     {
       id: 4,
-      municipality: "Itogon",
+      municipality: "Itogon - Ampucao A",
       coords: { lng: 120.6306466, lat: 16.3463546 },
     },
     {
       id: 5,
-      municipality: "Itogon",
+      municipality: "Itogon - Ampucao B",
       coords: { lng: 120.652561, lat: 16.3254651 },
     },
     {
       id: 6,
-      municipality: "Sablan",
+      municipality: "Sablan - Banangan A",
       coords: { lng: 120.5133252, lat: 16.478773 },
     },
     {
       id: 7,
-      municipality: "Sablan",
+      municipality: "Sablan - Banangan B",
       coords: { lng: 120.5138543, lat: 16.4786505 },
     },
     {
       id: 8,
-      municipality: "Tuba",
+      municipality: "Tuba - Camp 3 A",
       coords: { lng: 120.5877935, lat: 16.2892371 },
     },
     {
       id: 9,
-      municipality: "Tuba",
+      municipality: "Tuba - Camp 3 B",
       coords: { lng: 120.5900898, lat: 16.2895354 },
     },
     {
       id: 10,
-      municipality: "Tublay",
+      municipality: "Tublay - Ambassador A",
       coords: { lng: 120.651141, lat: 16.4974758 },
     },
     {
       id: 11,
-      municipality: "Tublay",
+      municipality: "Tublay - Ambassador B",
       coords: { lng: 120.6508378, lat: 16.4972556 },
     },
   ]
@@ -138,8 +138,10 @@ export class MapComponent implements OnInit {
     this.map.addControl(new mapboxgl.FullscreenControl(), 'top-right')
   }
 
-  public selectSite(site: number) {
-    switch (site) {
+  public selectSite(event: Event) {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    console.log('Selected Site ID:', selectedValue);
+    switch (parseInt(selectedValue)) {
       case 1:
         setTimeout(() => {
           const site = this.sites.find(e => e.id === 1)

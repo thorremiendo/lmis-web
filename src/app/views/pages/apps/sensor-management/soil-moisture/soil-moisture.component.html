@@ -101,6 +101,14 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">Water Content</h6>
+        <button
+          *ngIf="this.waterContentRows"
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportToCsv(1)"
+        >
+          Export to CSV
+        </button>
         <apx-chart
           [series]="waterContentOptions.series"
           [chart]="waterContentOptions.chart"
@@ -122,6 +130,14 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">Soil Temperature</h6>
+        <button
+          *ngIf="this.soilTempRows"
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportToCsv(2)"
+        >
+          Export to CSV
+        </button>
         <apx-chart
           [series]="soilTempOptions.series"
           [chart]="soilTempOptions.chart"
@@ -143,6 +159,14 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">Saturation Extract</h6>
+        <button
+          *ngIf="this.saturationExtractRows"
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportToCsv(3)"
+        >
+          Export to CSV
+        </button>
         <apx-chart
           [series]="saturationExtOptions.series"
           [chart]="saturationExtOptions.chart"

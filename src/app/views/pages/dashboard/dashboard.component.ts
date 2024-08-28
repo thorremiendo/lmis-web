@@ -14,6 +14,7 @@ import { ThresholdService } from 'src/app/core/services/threshold.service';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from 'src/app/core/services/data.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +23,7 @@ import { DataService } from 'src/app/core/services/data.service';
   preserveWhitespaces: true
 })
 export class DashboardComponent implements OnInit {
+  public isAlertOpened: boolean = false
   public rainFallAlertLevel: string
   public soilMoistureAlertLevel: string = 'S-0'
   public landSlideAlertLevel: string = 'LA-0'
@@ -118,7 +120,29 @@ export class DashboardComponent implements OnInit {
   public lineChartPlugins
   public soilMoistureChartData
   public soilMoistureBarChartData
-
+  public eprProtocol = [
+    {
+      title: "Standby",
+      description: "No to Very Low Risk"
+    },
+    {
+      title: "Alpha",
+      description: "Low Risk"
+    },
+    {
+      title: "Bravo",
+      description: "Moderate Risk"
+    },
+    {
+      title: "Charlie",
+      description: "High Risk"
+    },
+  ]
+  public selectedEpr;
+  public evacuationStatus
+  public evacuationLevel
+  public submitting = false
+  public evacuationLevelId
   from: any;
   until: any
   hoveredDate: NgbDate | null = null;
@@ -139,7 +163,10 @@ export class DashboardComponent implements OnInit {
   public recommendations = ["Pre-emptive Evacuation", "Forced Evacuation", "Status Quo"]
   public rainFallThresholds
   @ViewChild('mayorModal') mayorModal: TemplateRef<any>;
-
+  @ViewChild('scrollableModal') scrollableModal: TemplateRef<any>;
+  public recommendationControl = new FormControl()
+  public mayorPassword = new FormControl()
+  public rainfall24PeriodTotal
   constructor(
     private calendar: NgbCalendar,
     private sensorService: SensorsService,
@@ -151,6 +178,7 @@ export class DashboardComponent implements OnInit {
     private modalService: NgbModal,
     private dataService: DataService
   ) {
+    this.userDetails = JSON.parse(localStorage.getItem('lmisUser'))
     this.barChartData = this.chartService.barChartData
     this.barChartOptions = this.chartService.barChartOptions
     this.barChartPlugins = this.chartService.barChartPlugins
@@ -169,9 +197,12 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userDetails = JSON.parse(localStorage.getItem('lmisUser'))
+    this.isAlertOpened = false
     if (!this.userDetails) {
       this.router.navigate(['/home'])
+    }
+    if (this.userDetails.role === 'Others') {
+      this.router.navigate(['/apps/evacuation'])
     }
     this.selectedSensor = this.sensors[1]
     this.selectedPeriod = this.period[0]
@@ -193,30 +224,65 @@ export class DashboardComponent implements OnInit {
   }
 
   submitRecommendation() {
-    this.swal.showSuccessMessage("Recommendation Forwarded!")
-    setTimeout(() => {
-      this.modalService.dismissAll()
-    }, 1000);
+    const alertLevel = this.landSlideAlertLevel === 'LA-1' ? 1 : this.landSlideAlertLevel === 'LA-2' ? 2 : this.landSlideAlertLevel === 'LA-3' ? 3 : 0
+    const body = {
+      recommendation: alertLevel,
+      remarks: this.recommendationControl.value,
+    }
+    this.dataService.updateAlertWarning(body).subscribe(res => {
+      this.swal.showSuccessMessage("Recommendation Forwarded!")
+      setTimeout(() => {
+        this.modalService.dismissAll()
+      }, 1000);
+    })
+
   }
 
   mayorSubmit() {
-    this.swal.showFullSuccess("Evacuation Notifications sent on Mobile App and SMS!")
+    console.log(this.mayorPassword.value)
+    if (this.mayorPassword.value == 'secret') {
+      this.sendNotification()
+    }
   }
 
-  triggerAlert(content?: TemplateRef<any>) {
-    this.calculatedSoilMoisture = 81.32
-    this.rainfallPeriodTotal = 643
-    this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal, this.rainFallThresholds)
-    this.soilMoistureAlertLevel = this.threshold.determineSoilMoistureWarningRange(this.selectedSensor.value, this.calculatedSoilMoisture)
-    this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
-    if (this.userDetails.username !== 'lmis-mayor') {
-      setTimeout(() => {
-        this.modalService.open(content, { scrollable: true }).result.then((result) => {
-          console.log("Modal closed" + result);
-        }).catch((res) => { });
-      }, 1000);
-    } else {
-      setTimeout(() => this.modalService.open(this.mayorModal), 2000);
+  triggerAlert(alertLevel) {
+    this.isAlertOpened = true
+    if (this.userDetails) {
+      switch (alertLevel) {
+        case "LA-1":
+          this.selectedEpr = this.eprProtocol[1]
+          console.log(this.selectedEpr)
+          break;
+        case "LA-2":
+          this.selectedEpr = this.eprProtocol[2]
+          console.log(this.selectedEpr)
+          break;
+        case "LA-3":
+          this.selectedEpr = this.eprProtocol[3]
+          console.log(this.selectedEpr)
+          break;
+        default:
+          break;
+      }
+      this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal, this.rainFallThresholds)
+      this.soilMoistureAlertLevel = this.threshold.determineSoilMoistureWarningRange(this.selectedSensor.value, this.calculatedSoilMoisture)
+      this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
+      if (this.userDetails.role === 'LGA') {
+        setTimeout(() => {
+          this.modalService.open(this.scrollableModal, { scrollable: true }).result.then((result) => {
+            console.log("Modal closed" + result);
+            this.isAlertOpened = false
+          }).catch((res) => { });
+        }, 1000);
+      } else if (this.userDetails.username === 'lmis-mayor') {
+        this.dataService.getAlertWarningById().subscribe(res => {
+          this.evacuationLevelId = res.recommendation
+          this.evacuationStatus = res.remarks
+          this.evacuationLevel = res.recommendation === 1 ? "Alpha - Low Risk" : res.recommendation === 2 ? "Bravo - Moderate Risk" : res.recommendation === 3 ? "Charlie - High Risk" : "Standby - No to Very Low Risk"
+          setTimeout(() => this.modalService.open(this.mayorModal), 2000);
+        }
+        )
+      }
     }
 
   }
@@ -236,6 +302,7 @@ export class DashboardComponent implements OnInit {
     this.isLoading = true
     let startDate: Date
     let endDate: Date
+    this.fetch24hourRainfall(new Date(new Date().setHours(new Date().getHours() - 24)), new Date())
     if (!this.isObservation) {
       if (this.selectedPeriod.value == 4) { //DATE RANGE
         startDate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
@@ -302,9 +369,32 @@ export class DashboardComponent implements OnInit {
       })
       this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal, this.rainFallThresholds)
       this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
-      console.log(this.landSlideAlertLevel)
       this.isLoading = false
     });
+  }
+
+  fetch24hourRainfall(startDate, endDate) {
+    let recording = []
+    const device = this.selectedSensor.value == 1 ? SensorSites.Baguio : this.selectedSensor.value == 2 ? SensorSites.LaTrinidad : this.selectedSensor.value == 3 ? SensorSites.Itogon : this.selectedSensor.value == 4 ? SensorSites.Sablan : this.selectedSensor.value == 5 ? SensorSites.Tuba : SensorSites.Tublay;
+    let sensorParams: SensorParams = {
+      device_sn: device,
+      reading_type: "Precipitation",
+      from: this.convertToUTC(startDate.toISOString()),
+      until: this.convertToUTC(endDate.toISOString()),
+    };
+    //RAINFALL AMOUNT
+    this.sensorService.getSensorData(sensorParams).subscribe(res => {
+      recording = res
+      this.rainfall24PeriodTotal = parseFloat(recording.reduce((n, { value }) => n + value, 0).toFixed(2))
+      if (this.rainfall24PeriodTotal > 70) {
+        this.swal.showWarning("24-hour Rainfall Amount is greater than 70mm", "Rainfall Alert", "Close")
+      }
+
+      this.isLoading = false
+    }, err => {
+      this.errorMessage = "Please try again."
+      this.isLoading = false
+    })
   }
 
   fetchRainfallData(startDate, endDate) {
@@ -331,7 +421,11 @@ export class DashboardComponent implements OnInit {
       })
       this.rainFallAlertLevel = this.threshold.determineRainfallAlertLevel(this.selectedObservation.value, this.rainfallPeriodTotal, this.rainFallThresholds)
       this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
-      console.log(this.landSlideAlertLevel)
+      // if (this.landSlideAlertLevel !== 'LA-0' && this.landSlideAlertLevel !== undefined && this.landSlideAlertLevel !== 'Unknown') {
+      //   if (!this.isAlertOpened) {
+      //     this.triggerAlert(this.landSlideAlertLevel)
+      //   }
+      // }
       this.isLoading = false
     }, err => {
       this.errorMessage = "Please try again."
@@ -362,7 +456,11 @@ export class DashboardComponent implements OnInit {
       })
       this.soilMoistureAlertLevel = this.threshold.determineSoilMoistureWarningRange(this.selectedSensor.value, this.calculatedSoilMoisture)
       this.landSlideAlertLevel = this.threshold.getLandslideAlertLevel(this.rainFallAlertLevel, this.soilMoistureAlertLevel)
-      console.log(this.landSlideAlertLevel)
+      if (this.landSlideAlertLevel !== 'LA-0' && this.landSlideAlertLevel !== undefined && this.landSlideAlertLevel !== 'Unknown') {
+        if (!this.isAlertOpened) {
+          this.triggerAlert(this.landSlideAlertLevel)
+        }
+      }
       this.isLoading = false
     }, err => {
       this.errorMessage = "Please try again."
@@ -391,7 +489,6 @@ export class DashboardComponent implements OnInit {
         calculated.push(parseFloat(this.threshold.calculateSoilMoisture(index + 1, e).toFixed(2)))
         if (index == averages.length - 1) {
           this.calculatedSoilMoisture = parseFloat((calculated.reduce((total, current) => total + current, 0) / calculated.length).toFixed(2))
-          console.log(averages)
           calculated.forEach((rainfall) => {
             this.soilMoistureBarChartData.datasets[0].data.push(rainfall)
           })
@@ -537,9 +634,34 @@ export class DashboardComponent implements OnInit {
     const formattedDate = date.toLocaleDateString('en-US', options);
     return formattedDate;
   }
+
+
+  sendNotification() {
+    this.submitting = true
+    this.dataService.getContacts().subscribe((res: any) => {
+      res.forEach((contact, index) => {
+        const message =
+          this.evacuationLevelId === 1 ? "ALERT: Landslide Risk Level Alpha (Low Risk). Stay informed and be cautious of your surroundings. No immediate danger, but remain vigilant. " :
+            this.evacuationLevelId === 2 ? "ALERT: Landslide Risk Level Bravo (Moderate Risk). Be prepared to evacuate. Prepare your emergency kit and be ready to leave. " :
+              this.evacuationLevelId === 3 ? "ALERT: Landslide Risk Level Charlie (High Risk). Evacuate immediately. " : "ALERT: Landslide Risk Level Standby (No to Very Low Risk). No immediate danger. Stay informed and be cautious of your surroundings. "
+        const body = {
+          "contactNumber": contact.contactNumber,
+          "body": message,
+          "sender": this.userDetails.firstName + this.userDetails.lastName
+        }
+        this.dataService.createNotification(body).subscribe(data => {
+          if (index == res.length - 1) {
+            this.submitting = false
+            this.swal.showSuccessMessage("Notifications sent successfully")
+            setTimeout(() => {
+              this.modalService.dismissAll()
+            }, 1000);
+          }
+        })
+      })
+    })
+  }
 }
-
-
 
 
 

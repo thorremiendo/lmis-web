@@ -16,15 +16,6 @@
         />
       </div>
     </form>
-    <!-- <button
-      *ngIf="user.username == 'lmis-mayor'"
-      type="button"
-      class="btn btn-danger"
-      style="background-color: red"
-      (click)="openScrollableModal(scrollableModal)"
-    >
-      Submit Evacuation
-    </button> -->
     <ul class="navbar-nav">
       <li class="nav-item nav-notifications" ngbDropdown>
         <a class="nav-link" ngbDropdownToggle id="notificationDropdown">
@@ -43,7 +34,7 @@
           >
             <a href="" (click)="(false)" class="text-muted">Notifications</a>
           </div>
-          <div class="p-1">
+          <div class="p-1" *ngFor="let item of notifications">
             <a
               href=""
               (click)="(false)"
@@ -54,7 +45,7 @@
               >
                 <i class="feather icon-alert-circle icon-sm text-white"></i>
               </div>
-              <div class="flex-grow-1 me-2" *ngFor="let item of notifications">
+              <div class="me-2">
                 <p>{{ item.body }}</p>
                 <p class="tx-12 text-muted">
                   {{ item.dateTime | date : "MMMM d, y h:mm a" }}
@@ -64,8 +55,7 @@
           </div>
           <div
             class="px-3 py-2 d-flex align-items-center justify-content-center border-top"
-          >
-          </div>
+          ></div>
         </div>
       </li>
       <li class="nav-item nav-profile" ngbDropdown>
