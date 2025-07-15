@@ -1,72 +1,100 @@
-<div class="bg-image-container" id="home">
+<app-landing-navbar></app-landing-navbar>
+<div class="bg-image-container hero-animate" id="home">
   <div class="row">
-    <app-header
-      [title]="'Header'"
-      (scrollToSection)="onScrollToSection($event)"
-    ></app-header>
-    <div class="about">
-      <h1>MULAT-BLISTT Program</h1>
-      <p>
+    <div class="about animate-fade-in">
+      <h1 class="animate-slide-up">MULAT-BLISTT Program</h1>
+      <p class="animate-slide-up animate-delay-1">
         MODELLING AND UNDERSTANDING LANDSLIDE EVENTS IN BAGUIO-LA
         TRINIDAD-ITOGON-SABLAN-TUBLAY
       </p>
-      <button class="btn btn-transparent btn-read-more">
+      <button
+        class="btn btn-transparent btn-read-more animate-fade-in animate-delay-2"
+      >
         <a (click)="onClickScrollTo('about')">Read more</a>
       </button>
     </div>
   </div>
+  <div class="hero-animated-bg"></div>
 </div>
-<div class="container lg">
-  <div class="logos">
-    <img src="/assets/images/others/logos/upb-logo.webp" alt="upb-logo" />
-    <img src="/assets/images/others/logos/mgb-logo.webp" alt="mgb-logo" />
-    <img src="/assets/images/others/logos/uc-logo.webp" alt="uc-logo" />
-    <img src="/assets/images/others/logos/ub-logo.webp" alt="ub-logo" />
-    <img src="/assets/images/others/logos/dost-logo.png" alt="dost-logo" />
-    <img src="/assets/images/others/logos/pcieerd.png" alt="pcieerd-logo" />
-    <img src="/assets/images/others/logos/blistt-logo.webp" alt="blisst-logo" />
-  </div>
-</div>
-
-<div class="programs" id="about">
-  <app-programs></app-programs>
-</div>
-<div class="project1" id="project1">
-  <app-project1></app-project1>
-</div>
-<div class="project2" id="project2">
-  <app-project2></app-project2>
-</div>
-<div class="team" id="team">
-  <app-team></app-team>
-</div>
-<div class="app" id="app">
-  <div class="text-center">
-    <h1>Download the Mobile App</h1>
-    <div style="padding: 0 200px; line-height: 1.5">
-      <p class="mt-2">
-        Stay informed and stay safe with our mobile app for the Landslide
-        Monitoring and Information System. Designed for ease of use, our app
-        provides real-time data and alerts directly to your smartphone. Whether
-        you're a resident, local authority, or emergency responder, our app
-        equips you with the essential tools to monitor landslide risks in your
-        area.
-      </p>
-    </div>
-    <div class="mt-4">
-      <a
-        href="https://drive.google.com/file/d/1RsJo41oOiHmJloBEbM3Sq0qnFni8X26Z/view"
-        target="_blank"
-      >
+<div class="main-content-wrapper">
+  <div class="logos-section animate-fade-in">
+    <div class="logos" aria-label="Partner Logos">
+      <div class="logos-row logos-row-1">
         <img
-          style="width: 200px; cursor: pointer"
-          src="../../../../../assets/images/downloadapk.png"
-          alt=""
+          src="/assets/images/others/logos/upb-logo.webp"
+          alt="UPB Logo"
+          title="University of the Philippines Baguio"
         />
-      </a>
+        <img
+          src="/assets/images/others/logos/mgb-logo.webp"
+          alt="MGB Logo"
+          title="Mines and Geosciences Bureau"
+        />
+        <img
+          src="/assets/images/others/logos/uc-logo.webp"
+          alt="UC Logo"
+          title="University of the Cordilleras"
+        />
+        <img
+          src="/assets/images/others/logos/ub-logo.webp"
+          alt="UB Logo"
+          title="University of Baguio"
+        />
+      </div>
+      <div class="logos-row logos-row-2">
+        <img
+          src="/assets/images/others/logos/dost-logo.png"
+          alt="DOST Logo"
+          title="Department of Science and Technology"
+        />
+        <img
+          src="/assets/images/others/logos/pcieerd.png"
+          alt="PCIEERD Logo"
+          title="PCIEERD"
+        />
+        <img
+          src="/assets/images/others/logos/blistt-logo.webp"
+          alt="BLISTT Logo"
+          title="BLISTT"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="section-container" id="about">
+    <app-programs></app-programs>
+  </div>
+  <!-- Combined Projects Section Start -->
+  <div class="section-container" id="projects">
+    <app-projects-section></app-projects-section>
+  </div>
+  <!-- Combined Projects Section End -->
+  <div class="section-container" id="team">
+    <app-team></app-team>
+  </div>
+  <!-- Remove .section-container and restore .app for the download section -->
+  <div class="app" id="app">
+    <div class="text-center">
+      <h1>Download the Mobile App</h1>
+      <div class="app-text">
+        <p class="mt-2">
+          Stay informed and stay safe with our mobile app for the Landslide
+          Monitoring and Information System. Designed for ease of use, our app
+          provides real-time data and alerts directly to your smartphone. Whether
+          you're a resident, local authority, or emergency responder, our app
+          equips you with the essential tools to monitor landslide risks in your
+          area.
+        </p>
+      </div>
+      <div class="mt-4">
+        <a
+          href="https://drive.google.com/file/d/1RsJo41oOiHmJloBEbM3Sq0qnFni8X26Z/view"
+          target="_blank"
+        >
+          <img src="../../../../../assets/images/downloadapk.png" alt="" />
+        </a>
+      </div>
     </div>
   </div>
 </div>
-<div class="footer">
-  <app-footer></app-footer>
-</div>
+<app-landing-footer></app-landing-footer>

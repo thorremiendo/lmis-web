@@ -9,6 +9,16 @@ import { Lightbox } from 'ngx-lightbox';
 export class GalleryComponent implements OnInit {
   filteredImages: any[] = [];
   filter: string = 'all';
+  isMobile: boolean = false;
+  filterAccordionOpen: boolean = false;
+  showGallery: boolean = false;
+  viewAll: boolean = false;
+  categories = [
+    { label: 'ALL', value: 'all' },
+    { label: 'TRAINING', value: 'Training' },
+    { label: 'PARTNERSHIP', value: 'Partnership' },
+    { label: 'FIELDWORK', value: 'Fieldwork' }
+  ];
   images = [
     {
       src: '/assets/images/others/project1-gallery/moa-ltb.jpg',
@@ -128,6 +138,23 @@ export class GalleryComponent implements OnInit {
 
   ngOnInit(): void {
     this.filteredImages = this.images;
+    this.checkMobile();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkMobile();
+  }
+
+  checkMobile() {
+    this.isMobile = window.innerWidth <= 700;
+    if (!this.isMobile) {
+      this.filterAccordionOpen = false;
+    }
+  }
+
+  toggleFilterAccordion() {
+    this.filterAccordionOpen = !this.filterAccordionOpen;
   }
 
   openLightbox(index: number): void {
@@ -138,7 +165,6 @@ export class GalleryComponent implements OnInit {
       fadeDuration: 0.7,
       showImagNumberLaber: true
     })), index);
-    console.log(this.lightbox)
   }
 
   closeLightbox(): void {
@@ -152,6 +178,17 @@ export class GalleryComponent implements OnInit {
     } else {
       this.filteredImages = this.images.filter(image => image.category === category);
     }
+    if (this.isMobile) {
+      this.filterAccordionOpen = false;
+    }
+  }
+
+  toggleShowGallery() {
+    this.showGallery = !this.showGallery;
+  }
+
+  toggleViewAll() {
+    this.viewAll = !this.viewAll;
   }
 
   // @HostListener('document:keydown', ['$event'])

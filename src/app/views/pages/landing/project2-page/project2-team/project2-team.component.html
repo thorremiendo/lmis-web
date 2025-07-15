@@ -1,65 +1,13 @@
-<div class="container">
-    <h1>TEAM</h1>
-    <hr class="line1">
-    <div class="card-container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="/assets/images/others/team/project2/nvl.webp" alt="" class="circular-image">
-                    <h3>Engr. Nathaniel Vincent A. Lubrica</h3>
-                    <p>Project 1 Leader</p>
-                    <hr class="line">
-                    <p>University of the Philippines - Baguio</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="/assets/images/others/team/project2/Almuete.jpg" alt="" class="circular-image">
-                    <h3>Engr. Rolette R. Almuete</h3>
-                    <p>Project Technical Specialist I</p>
-                    <hr class="line">
-                    <p>University of the Cordilleras</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="/assets/images/others/profile.png/" alt="" class="circular-image">
-                    <h3>Christian Robert M. Sandoval</h3>
-                    <p>Project Technical Assistant IV</p>
-                    <hr class="line">
-                    <p>University of the Cordilleras</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="/assets/images/others/team/project2/Megan.jpg" alt="" class="circular-image">
-                    <h3>Megan R. Nabua</h3>
-                    <p>Project Staff I</p>
-                    <hr class="line">
-                    <p>University of the Cordilleras</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="/assets/images/others/team/project2/JR.jpg" alt="" class="circular-image">
-                    <h3>Engr. John Russel E. Torchangon</h3>
-                    <p>Project Technical Assistant II</p>
-                    <hr class="line">
-                    <p>University of the Cordilleras</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <img src="/assets/images/others/team/project2/Esican.jpg" alt="" class="circular-image">
-                    <h3>Brandon E. Esican</h3>
-                    <p>Project Technical Assistant II</p>
-                    <hr class="line">
-                    <p>University of the Cordilleras</p>
-                </div>
-            </div>
-          
-           
-
-        </div>
+<div class="team-section">
+  <h1 class="team-title">TEAM</h1>
+  <hr class="team-divider">
+  <div class="team-grid">
+    <div class="team-card" *ngFor="let member of team">
+      <img [src]="member.image" [alt]="member.alt" class="team-img" />
+      <h3 class="team-name">{{member.name}}</h3>
+      <p class="team-role">{{member.role}}</p>
+      <hr class="team-line">
+      <p class="team-affiliation">{{member.affiliation}}</p>
     </div>
+  </div>
 </div>

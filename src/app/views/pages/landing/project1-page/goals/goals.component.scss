@@ -81,3 +81,98 @@
 .icon-lg {
     font-size: 50px;
 }
+
+.goals-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+.goals-title {
+  color: #0f7c3f;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+.goals-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.goals-cards .card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  flex: 1 1 260px;
+  min-width: 220px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.goals-cards .card:hover {
+  box-shadow: 0 6px 24px rgba(15,124,63,0.13);
+  transform: translateY(-6px) scale(1.03);
+}
+.icon-container {
+  position: relative;
+  margin-bottom: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icon-lg {
+  font-size: 3.5rem;
+  color: #0f7c3f;
+}
+.card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f7c3f;
+  margin-bottom: 0.7rem;
+}
+.card p {
+  font-size: 0.98rem;
+  color: #222;
+  margin-bottom: 0.3rem;
+}
+.goals-cards .card .icon-container {
+  margin-bottom: 0.7rem;
+}
+@media (max-width: 900px) {
+  .goals-cards {
+    gap: 1.2rem;
+  }
+  .goals-title {
+    font-size: 1.4rem;
+  }
+}
+@media (max-width: 600px) {
+  .goals-cards {
+    flex-direction: column;
+    gap: 0.7rem;
+    align-items: center;
+    width: 100%;
+  }
+  .goals-section {
+    padding: 0 0.5rem;
+  }
+  .goals-title {
+    font-size: 1.7rem;
+  }
+  .goals-cards .card {
+    max-width: 100%;
+    min-width: 0;
+    width: 100%;
+    padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+    box-sizing: border-box;
+  }
+}

@@ -1,42 +1,48 @@
+<app-landing-navbar></app-landing-navbar>
 <div class="bg-image-container" id="home">
     <div class="row">
-        <app-top-nav [title]="'Header'" (scrollToSection)="onScrollToSection($event)"></app-top-nav>
-        <div class="about">
-
-            <img src="/assets/images/others/logos/calamit-logo.webp" alt="calamit-logo">
-            <h1>Project 2</h1>
-            <h5>CALAMI-T CORDILLERA ADMINISTRATIVE LANDSLIDE MONITORING INTEGRATED TOOLBOX</h5>
+        <div class="about animate-fade-in">
+            <img src="/assets/images/others/logos/calamit-logo.webp" alt="calamit-logo" class="animate-slide-up">
+            <h1 class="animate-slide-up">Project 2</h1>
+            <h5 class="animate-slide-up animate-delay-1">CALAMI-T CORDILLERA ADMINISTRATIVE LANDSLIDE MONITORING INTEGRATED TOOLBOX</h5>
         </div>
     </div>
-
 </div>
-<div class="container lg ">
-    <div class="logos">
-        <img src="/assets/images/others/logos/upb-logo.webp" alt="upb-logo">
-        <img src="/assets/images/others/logos/mgb-logo.webp" alt="mgb-logo">
-        <img src="/assets/images/others/logos/uc-logo.webp" alt="uc-logo">
-        <img src="/assets/images/others/logos/ub-logo.webp" alt="ub-logo">
-        <img src="/assets/images/others/logos/dost-logo.png" alt="dost-logo">
-        <img src="/assets/images/others/logos/pcieerd.png" alt="pcieerd-logo">
-        <img src="/assets/images/others/logos/blistt-logo.webp" alt="blisst-logo">
-
+<div class="main-content-wrapper">
+    <div class="logos-section animate-fade-in">
+      <div class="logos" aria-label="Partner Logos">
+        <div class="logos-row logos-row-1">
+          <img src="/assets/images/others/logos/upb-logo.webp" alt="UPB Logo" title="University of the Philippines Baguio" />
+          <img src="/assets/images/others/logos/mgb-logo.webp" alt="MGB Logo" title="Mines and Geosciences Bureau" />
+          <img src="/assets/images/others/logos/uc-logo.webp" alt="UC Logo" title="University of the Cordilleras" />
+          <img src="/assets/images/others/logos/ub-logo.webp" alt="UB Logo" title="University of Baguio" />
+        </div>
+        <div class="logos-row logos-row-2">
+          <img src="/assets/images/others/logos/dost-logo.png" alt="DOST Logo" title="Department of Science and Technology" />
+          <img src="/assets/images/others/logos/pcieerd.png" alt="PCIEERD Logo" title="PCIEERD" />
+          <img src="/assets/images/others/logos/blistt-logo.webp" alt="BLISTT Logo" title="BLISTT" />
+        </div>
+      </div>
+    </div>
+    <div class="section-container overview" id="about">
+        <div class="card">
+            <app-overview2></app-overview2>
+        </div>
+    </div>
+    <div class="section-container goals">
+        <div class="card">
+            <app-goals2></app-goals2>
+        </div>
+    </div>
+    <div class="section-container gallery">
+        <div class="card">
+            <app-gallery2></app-gallery2>
+        </div>
+    </div>
+    <div class="section-container team" id="team">
+        <div class="card">
+            <app-project2-team></app-project2-team>
+        </div>
     </div>
 </div>
-
- <div class="overview2" id="about">
-    <app-overview2></app-overview2>
-</div>
-<div class="goals2">
-    <app-goals2></app-goals2>
-</div>
-<div class="gallery2">
-    <app-gallery2></app-gallery2>
-</div>
-<div class="team2" id="team">
-    <app-project2-team></app-project2-team>
-</div> 
-
-
-
-
-<app-footer></app-footer>
+<app-landing-footer></app-landing-footer>

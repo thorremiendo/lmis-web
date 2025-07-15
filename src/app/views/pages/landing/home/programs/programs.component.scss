@@ -16,3 +16,106 @@
     box-sizing: border-box;
     margin: 10px ;
 }
+
+.programs-section {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.programs-cards {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5rem;
+  width: 100%;
+  /* Remove or increase max-width to allow full width */
+  max-width: none;
+  justify-content: center;
+}
+.program-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 2.2rem 2rem 2rem 2rem;
+  flex: 1 1 0;
+  min-width: 260px;
+  /* Remove or increase max-width for better scaling */
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  align-items: flex-start;
+  margin: 0;
+  opacity: 0;
+  animation: fadeInCard 1.2s ease forwards;
+}
+.animate-fade-in { opacity: 0; animation: fadeInCard 1.2s ease forwards; }
+.animate-delay-1 { animation-delay: 0.4s !important; }
+@keyframes fadeInCard { to { opacity: 1; } }
+.program-card h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f7c3f;
+  margin-bottom: 0.7rem;
+}
+.program-card h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+.program-card p {
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 0.3rem;
+}
+.program-card .project-list p {
+  margin-bottom: 0.2rem;
+  font-size: 1.02rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.program-card .project-list i {
+  color: #0f7c3f;
+  font-size: 1.1rem;
+}
+@media (max-width: 900px) {
+  .programs-cards {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    width: 100%;
+  }
+  .program-card {
+    max-width: 100%;
+    width: 100%;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 600px) {
+  .programs-section {
+    padding: 0 0.5rem 1.5rem 0.5rem;
+  }
+  .programs-cards {
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: center;
+    width: 100%;
+  }
+  .program-card {
+    padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+    margin: 0;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  }
+  .program-card h1, .program-card h5, .program-card p {
+    text-align: center;
+    width: 100%;
+  }
+  .program-card .project-list p {
+    justify-content: center;
+  }
+}

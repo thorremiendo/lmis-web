@@ -1,0 +1,122 @@
+<div class="projects-section-container">
+  <div class="projects-tabs">
+    <button [class.active]="selectedProject === 'project1'" (click)="selectProject('project1')">Project 1</button>
+    <button [class.active]="selectedProject === 'project2'" (click)="selectProject('project2')">Project 2</button>
+  </div>
+  <div class="projects-content">
+    <div *ngIf="selectedProject === 'project1'" class="project-content animate-fade-in">
+      <!-- Project 1 Content (migrated from old project1.component.html) -->
+      <div class="row align-items-center">
+        <div class="col-lg-4">
+          <h1><i class="feather icon-trending-up project-title-icon"></i> Project 1</h1>
+          <hr class="line">
+          <h4>Modelling Susceptibility and Generating Rainfall-Threshold for Rainfall-Induced Landslide</h4>
+          <p>One of the most exposed areas to rainfall-induced landslides is the BLISTT area of the Cordillera Administrative Region, which experienced nine out of ten of the country's greatest 24-hour rainfall totals during tropical cyclones.<br><br>The MULAT-BLISTT, which stands for Modelling and Understanding Landslide Events in BLISTT (Baguio, La Trinidad, Itogon, Sablan, Tuba, Tublay), is a research program funded by the DOST-PCIEERD. The program's objective is to increase disaster resilience in accordance with R.A. 10121, the "Philippine Disaster Risk Reduction and Management Act of 2010," and the UN 2030 Sustainable Development Goal.</p>
+          <div class="btn-container">
+            <button class="btn btn-transparent btn-read-more" routerLink="/home/project1">Read more</button>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="col align-items-center">
+            <div class="top-row">
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-file-text icon-lg"></i>
+                </div>
+                <h3>Catalogue of rainfall, extreme rainfall, and typhoon occurrence</h3>
+                <p>The catalogue summarizes rainfall, extreme rainfall events, and typhoon occurrences over the past two decades.</p>
+              </div>
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-file-text icon-lg"></i>
+                </div>
+                <h3>Catalogue and Database of Landslide reports</h3>
+                <p>The Catalogue and Database compiles comprehensive landslide reports for analysis and mitigation.</p>
+              </div>
+            </div>
+            <div class="bottom-row">
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-cloud-rain icon-lg"></i>
+                </div>
+                <h3>Rainfall Threshold for Landslides</h3>
+                <p>The rainfall threshold for a landslide can vary depending on factors like soil type and terrain.</p>
+              </div>
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-triangle icon-lg"></i>
+                </div>
+                <h3>Landslide Susceptibility, Vulnerability and Risk Maps</h3>
+                <p>Assess and mitigate the potential for landslides in a given area.</p>
+              </div>
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-edit-3 icon-lg"></i>
+                </div>
+                <h3>Publication of Journals</h3>
+                <p>Journals are published to disseminate the latest research findings and promote academic discourse.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="selectedProject === 'project2'" class="project-content animate-fade-in">
+      <!-- Project 2 Content (migrated from old project2.component.html) -->
+      <div class="row align-items-center">
+        <div class="col-lg-4">
+          <h1><i class="feather icon-tool project-title-icon"></i> Project 2</h1>
+          <hr class="line">
+          <h4>CALaMI-T - Cordillera Administrative Landslide Monitoring Integrated Toolbox</h4>
+          <p>Project CALaMI-T is a landslide mitigation research and development for BLISTT. It aims to develop a landslide movement model toolbox that can predict landslides and provide information on the impact of rain-induced landslides on communities, infrastructure, and the environment.<br><br>It is the Project 2 under the Program MULAT BLISTT: Modelling and Understanding LAndslide evenTs in Baguio-La Trinidad-Itogon-Sablan-Tuba-Tublay.</p>
+          <div class="btn-container">
+            <button class="btn btn-transparent btn-read-more" routerLink="/home/project2">Read more</button>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="col align-items-center">
+            <div class="top-row">
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-file-text icon-lg"></i>
+                </div>
+                <h3>Soil Moisture Threshold</h3>
+                <p>Determine soil moisture threshold values and other parameters for landslide.</p>
+              </div>
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-package icon-lg"></i>
+                </div>
+                <h3>Landslide Movement Model Toolbox Software</h3>
+                <p>Develop or adopt a suitable landslide movement model toolbox software.</p>
+              </div>
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-cloud-rain icon-lg"></i>
+                </div>
+                <h3>Landsilde Management Information System</h3>
+                <p>Develop and testing of a landslde management information system.</p>
+              </div>
+            </div>
+            <div class="bottom-row">
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-smartphone icon-lg"></i>
+                </div>
+                <h3>Mobile Application for Landslide</h3>
+                <p>Develop a mobile application for landslide warning and awareness, reporting and routing to evacuation areas or safe spots.</p>
+              </div>
+              <div class="card">
+                <div class="icon-container">
+                  <i class="feather icon-alert-octagon icon-lg"></i>
+                </div>
+                <h3>Early Warning System</h3>
+                <p>Develop a Web and SMS based early warning system with DRRMO Operation Center Dashboard.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

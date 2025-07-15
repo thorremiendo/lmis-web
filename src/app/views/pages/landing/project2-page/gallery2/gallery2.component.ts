@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Lightbox } from 'ngx-lightbox';
 
 @Component({
@@ -7,6 +7,8 @@ import { Lightbox } from 'ngx-lightbox';
   styleUrls: ['./gallery2.component.scss']
 })
 export class Gallery2Component implements OnInit {
+  showGallery: boolean = false;
+  viewAll: boolean = false;
   images = [
     {
       src: '/assets/images/others/project2-gallery/train-gis-dost.jpg',
@@ -125,12 +127,39 @@ export class Gallery2Component implements OnInit {
 
   
   ];
+  filteredImages: any[] = [];
+  filter: string = 'all';
+  isMobile: boolean = false;
+  filterAccordionOpen: boolean = false;
+  categories = [
+    { label: 'ALL', value: 'all' },
+    { label: 'MEETING', value: 'Meeting' },
+    { label: 'TRAINING', value: 'Training' },
+    { label: 'SITES', value: 'Site' },
+    { label: 'FIELDWORK', value: 'Fieldwork' }
+  ];
 
-  
   constructor(private lightbox: Lightbox) { }
 
   ngOnInit(): void {
     this.filteredImages = this.images;
+    this.checkMobile();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.checkMobile();
+  }
+
+  checkMobile() {
+    this.isMobile = window.innerWidth <= 700;
+    if (!this.isMobile) {
+      this.filterAccordionOpen = false;
+    }
+  }
+
+  toggleFilterAccordion() {
+    this.filterAccordionOpen = !this.filterAccordionOpen;
   }
 
   openLightbox(index: number): void {
@@ -141,23 +170,34 @@ export class Gallery2Component implements OnInit {
       fadeDuration: 0.7,
       showImagNumberLaber: true
     })), index);
-    console.log(this.lightbox )
   }
 
   closeLightbox(): void {
     this.lightbox.close();
   }
-  filteredImages: any[] = [];
-  filter: string = 'all';
-
 
   filterImages(category: string) {
-    this.filter = category
+    this.filter = category;
     if (category === 'all') {
-      this.filteredImages = this.images; 
+      this.filteredImages = this.images;
     } else {
-      this.filteredImages = this.images.filter(image => image.category.includes(category)); 
+      this.filteredImages = this.images.filter(image => {
+        if (Array.isArray(image.category)) {
+          return image.category.includes(category);
+        }
+        return image.category === category;
+      });
     }
-    console.log('Filtered Images:', this.filteredImages);
+    if (this.isMobile) {
+      this.filterAccordionOpen = false;
+    }
+  }
+
+  toggleShowGallery() {
+    this.showGallery = !this.showGallery;
+  }
+
+  toggleViewAll() {
+    this.viewAll = !this.viewAll;
   }
 }
