@@ -27,6 +27,10 @@ const routes: Routes = [
     component:
       LandslideReportComponent,
   },
+  {
+    path: 'glossary',
+    component: GlossaryComponent,
+  },
 ];
 
 const routerOptions: ExtraOptions = {

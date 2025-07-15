@@ -1,48 +1,153 @@
 .bg-image-container {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/others/hero-banner-bg.webp');
-    background-size: cover;
-    background-position: center;
-    max-height: 100vh;
-    overflow: auto;
-
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/assets/images/others/hero-banner-bg.webp');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding-bottom: 2rem;
 }
 
-.container {
-    height: auto;
-    margin-top: 150px;
+.report-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding-top: 120px;
+  padding-bottom: 2rem;
 }
 
-.card {
-    margin-left: 100px;
-    margin-right: 100px;
+.report-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.card-title {
-    font-size: x-large;
-    font-weight: 800;
-    padding-bottom: 20px;
+.report-title {
+  color: #0f7c3f;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
-.input-group-text {
-    cursor: pointer;
+.report-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.btn-dropdown {
-    border: #999;
+.form-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
 }
 
-.placeholder-text {
-    position: absolute;
-    top: 55%;
-    left: 58%;
-    color: #999;
+.date-time-row, .location-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.date-time-row input {
+  max-width: 180px;
+}
+.location-row {
+  gap: 1rem;
+}
+.dropdown-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 160px;
+  flex: 1 1 160px;
 }
 
-.dropdown-menu {
-    max-height: 280px;
-    overflow-y: auto;
+.report-input {
+  border-radius: 0.7rem;
+  border: 1.5px solid #ccc;
+  padding: 0.7rem 1.1rem;
+  font-size: 1.05rem;
+  outline: none;
+  transition: border 0.2s;
+}
+.report-input:focus {
+  border: 1.5px solid #0f7c3f;
 }
 
-.match-parent {
-    width: 100%;
+.report-dropdown-btn {
+  background: #0f7c3f;
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+  box-shadow: 0 2px 8px rgba(15,124,63,0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.report-dropdown-btn:hover, .report-dropdown-btn:focus {
+  background: #198754;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(15,124,63,0.13);
+}
+
+.report-map {
+  width: 100%;
+  height: 350px;
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  margin-top: 0.5rem;
+}
+
+.report-submit-btn {
+  background: #0f7c3f;
+  color: #fff;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.9rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1.2rem auto 0 auto;
+  display: block;
+  box-shadow: 0 2px 8px rgba(15,124,63,0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+  outline: none;
+  width: 100%;
+  max-width: 320px;
+}
+.report-submit-btn:hover, .report-submit-btn:focus {
+  background: #198754;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(15,124,63,0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+
+@media (max-width: 900px) {
+  .report-card {
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    max-width: 100vw;
+  }
+  .date-time-row, .location-row {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .report-map {
+    height: 220px;
+  }
+  .report-submit-btn {
+    font-size: 1rem;
+    padding: 0.8rem 1.2rem;
+    max-width: 100%;
+  }
 }
