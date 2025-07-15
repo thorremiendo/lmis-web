@@ -15,6 +15,7 @@
       <a routerLink="/home/project2" routerLinkActive="active" (click)="closeMobileMenu()">Project 2</a>
       <a routerLink="/home/glossary" routerLinkActive="active" (click)="closeMobileMenu()">Glossary</a>
       <a routerLink="/home/landslide-report" routerLinkActive="active" (click)="closeMobileMenu()">Report</a>
+      <a class="navbar-link login-btn" routerLink="/auth/login" (click)="closeMobileMenu()">Log In</a>
     </div>
   </div>
   <div *ngIf="mobileMenuOpen" class="navbar-backdrop" (click)="closeMobileMenu()"></div>

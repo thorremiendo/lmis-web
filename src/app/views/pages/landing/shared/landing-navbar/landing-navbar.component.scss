@@ -1,7 +1,7 @@
 .landing-navbar {
   width: 100%;
   background: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -29,7 +29,8 @@
     align-items: center;
     transition: all 0.3s;
   }
-  .navbar-links a, .navbar-link {
+  .navbar-links a,
+  .navbar-link {
     color: #222;
     font-size: 1rem;
     font-weight: 500;
@@ -39,10 +40,32 @@
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
   }
-  .navbar-links a:hover, .navbar-link:hover, .navbar-links a:focus, .navbar-link:focus {
+  .navbar-links a:hover,
+  .navbar-link:hover,
+  .navbar-links a:focus,
+  .navbar-link:focus {
     color: #0f7c3f;
     background: #f8f9fa;
     outline: none;
+  }
+
+  .login-btn {
+    background: #0f7c3f;
+    color: #fff !important;
+    font-weight: 600;
+    padding: 0.4rem 1.1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(15, 124, 63, 0.08);
+    transition: background 0.2s, color 0.2s;
+    border: none;
+    display: inline-block;
+    margin-left: 1.5rem;
+    text-align: center;
+  }
+  .login-btn:hover,
+  .login-btn:focus {
+    background: #0c6332;
+    color: #fff !important;
   }
   .navbar-hamburger {
     /* Hide by default, show in media query */
@@ -64,14 +87,14 @@
     width: 80vw;
     max-width: 320px;
     background: #fff;
-    box-shadow: -2px 0 16px rgba(0,0,0,0.10);
+    box-shadow: -2px 0 16px rgba(0, 0, 0, 0.1);
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     padding: 2.5rem 1.5rem 1.5rem 1.5rem;
     gap: 1rem;
     transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 110;
     opacity: 0;
     pointer-events: none;
@@ -87,6 +110,15 @@
     padding: 0.75rem 0.5rem;
     border-radius: 0.5rem;
     text-align: left;
+  }
+  .login-btn {
+    width: auto;
+    margin-left: 0 !important;
+    margin-top: 1.2rem;
+    padding: 0.6rem 1.2rem;
+    text-align: center;
+    display: block;
+    align-self: flex-start;
   }
   .navbar-hamburger {
     display: flex !important;
@@ -113,8 +145,11 @@
   }
   .navbar-backdrop {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.25);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.25);
     z-index: 100;
     transition: opacity 0.3s;
   }
