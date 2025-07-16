@@ -67,6 +67,24 @@
     background: #0c6332;
     color: #fff !important;
   }
+
+  .register-btn {
+    background: transparent;
+    color: #0f7c3f !important;
+    font-weight: 600;
+    padding: 0.4rem 1.1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #0f7c3f;
+    transition: background 0.2s, color 0.2s;
+    display: inline-block;
+    margin-left: 1rem;
+    text-align: center;
+  }
+  .register-btn:hover,
+  .register-btn:focus {
+    background: #0f7c3f;
+    color: #fff !important;
+  }
   .navbar-hamburger {
     /* Hide by default, show in media query */
     display: none;
@@ -115,6 +133,15 @@
     width: auto;
     margin-left: 0 !important;
     margin-top: 1.2rem;
+    padding: 0.6rem 1.2rem;
+    text-align: center;
+    display: block;
+    align-self: flex-start;
+  }
+  .register-btn {
+    width: auto;
+    margin-left: 0 !important;
+    margin-top: 0.8rem;
     padding: 0.6rem 1.2rem;
     text-align: center;
     display: block;
