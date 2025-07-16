@@ -16,8 +16,8 @@
   overflow: hidden;
   max-width: 900px;
   width: 100%;
-  min-height: 420px;
-  height: 100%;
+  min-height: 100vh;
+  height: 100vh;
 }
 .auth-card.split {
   padding: 0;
@@ -126,6 +126,15 @@
   padding: 0;
   background: none;
   border-radius: 0;
+  position: relative;
+}
+.auth-image.full-bg::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%);
+  z-index: 2;
 }
 .auth-image.full-bg img {
   width: 100%;
@@ -134,6 +143,8 @@
   border-radius: 0;
   box-shadow: none;
   display: block;
+  position: relative;
+  z-index: 1;
 }
 
 .spinner-overlay {

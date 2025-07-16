@@ -1,17 +1,37 @@
 <app-landing-navbar></app-landing-navbar>
 <div class="bg-image-container hero-animate" id="home">
-  <div class="row">
-    <div class="about animate-fade-in">
-      <h1 class="animate-slide-up">MULAT-BLISTT Program</h1>
-      <p class="animate-slide-up animate-delay-1">
-        MODELLING AND UNDERSTANDING LANDSLIDE EVENTS IN BAGUIO-LA
-        TRINIDAD-ITOGON-SABLAN-TUBLAY
-      </p>
+  <div class="hero-overlay-card">
+    <div class="hero-logo-row">
+      <img
+        src="/assets/images/others/logos/calamit-logo.webp"
+        alt="MULAT-BLISTT Logo"
+        class="hero-logo hero-logo-lg animate-pop-in"
+      />
+    </div>
+    <h1 class="hero-headline animate-slide-up">
+      Advancing Landslide Risk Reduction with High-Resolution, Up-to-Date
+      Information
+    </h1>
+    <p class="hero-subheadline animate-slide-up animate-delay-1">
+      MODELLING AND UNDERSTANDING LANDSLIDE EVENTS IN BAGUIO-LA
+      TRINIDAD-ITOGON-SABLAN-TUBLAY
+    </p>
+    <div class="hero-cta-row animate-fade-in animate-delay-2">
       <button
-        class="btn btn-transparent btn-read-more animate-fade-in animate-delay-2"
+        class="btn btn-primary hero-cta"
+        (click)="onClickScrollTo('about')"
       >
-        <a (click)="onClickScrollTo('about')">Read more</a>
+        Get Started
       </button>
+      <button
+        class="btn btn-outline-light hero-cta-secondary ms-3"
+        (click)="onClickScrollTo('projects')"
+      >
+        Learn More
+      </button>
+    </div>
+    <div class="hero-scroll-indicator animate-fade-in animate-delay-2">
+      <span class="scroll-arrow">&#8595;</span>
     </div>
   </div>
   <div class="hero-animated-bg"></div>
@@ -80,10 +100,10 @@
         <p class="mt-2">
           Stay informed and stay safe with our mobile app for the Landslide
           Monitoring and Information System. Designed for ease of use, our app
-          provides real-time data and alerts directly to your smartphone. Whether
-          you're a resident, local authority, or emergency responder, our app
-          equips you with the essential tools to monitor landslide risks in your
-          area.
+          provides real-time data and alerts directly to your smartphone.
+          Whether you're a resident, local authority, or emergency responder,
+          our app equips you with the essential tools to monitor landslide risks
+          in your area.
         </p>
       </div>
       <div class="mt-4">
