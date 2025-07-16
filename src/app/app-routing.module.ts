@@ -11,6 +11,7 @@ import { GlossaryComponent } from './views/pages/landing/glossary/glossary.compo
 
 
 const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'auth', loadChildren: () => import('./views/pages/auth/auth.module').then(m => m.AuthModule) },
   {
     path: 'home',

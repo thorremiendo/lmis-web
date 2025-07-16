@@ -1,66 +1,54 @@
-<div class="row w-100 mx-0 auth-page">
-  <div class="col-md-8 col-xl-6 mx-auto">
-    <div class="card">
-      <div class="row">
-        <div class="col-md-4 pe-md-0">
-          <div
-            class="auth-side-wrapper"
-            [ngStyle]="{
-              'background-image':
-                'url(https://www.dmcihomes.com/uploads/news/dmci-homes-eyes-eco-agri-mountain-resort-condotel-in-tuba-benguet-1709113085756.jpg)'
-            }"
-          ></div>
-        </div>
-        <div class="col-md-8 ps-md-0">
-          <div class="auth-form-wrapper px-4 py-5">
-            <a routerLink="." class="nobleui-logo d-block mb-2">LMIS Login</a>
-            <h5 class="text-muted fw-normal mb-4">
-              Landslide Monitoring and Information System
-            </h5>
-            <form class="forms-sample" [formGroup]="loginForm">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label"
-                  >Username</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  placeholder="Username"
-                  value="adminUser"
-                  formControlName="username"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label"
-                  >Password</label
-                >
-                <input
-                  type="password"
-                  class="form-control"
-                  id="exampleInputPassword1"
-                  autocomplete="current-password"
-                  placeholder="Password"
-                  value="12345678"
-                  formControlName="password"
-                />
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary me-2 mb-2 mb-md-0"
-                  (click)="onLoggedin($event)"
-                >
-                  Login
-                </button>
-              </div>
-              <a routerLink="/auth/register" class="d-block mt-3 text-muted">
-                Sign up here</a
-              >
-            </form>
-          </div>
-        </div>
+<app-landing-navbar></app-landing-navbar>
+<div class="auth-bg">
+  <div class="auth-card split">
+    <div class="auth-form">
+      <div *ngIf="loading" class="spinner-overlay">
+        <div class="spinner"></div>
       </div>
+      <a routerLink="." class="nobleui-logo d-block mb-2">LMIS Login</a>
+      <h5 class="text-muted fw-normal mb-4 text-center">
+        Landslide Monitoring and Information System
+      </h5>
+      <form class="forms-sample" [formGroup]="loginForm">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputEmail1"
+            placeholder="Username"
+            formControlName="username"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            autocomplete="current-password"
+            placeholder="Password"
+            formControlName="password"
+          />
+        </div>
+        <div>
+          <button
+            type="submit"
+            class="btn btn-primary w-100 modern-btn"
+            (click)="onLoggedin($event)"
+            [disabled]="loading"
+          >
+            Login
+          </button>
+        </div>
+        <a routerLink="/auth/register" class="d-block mt-3 text-muted text-center">
+          Sign up here
+        </a>
+      </form>
+    </div>
+    <div class="auth-image full-bg">
+      <img src="https://www.dmcihomes.com/uploads/news/dmci-homes-eyes-eco-agri-mountain-resort-condotel-in-tuba-benguet-1709113085756.jpg" alt="Login Illustration" />
     </div>
   </div>
 </div>
+<app-landing-footer></app-landing-footer>

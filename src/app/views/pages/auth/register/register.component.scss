@@ -1,11 +1,201 @@
-:host {
-  height: 100vh;
+.auth-bg {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(120deg, #e0f7fa 0%, #f8fafc 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.dropdown-menu {
-  max-height: 280px;
-  overflow-y: auto;
+.auth-card {
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  max-width: 900px;
+  width: 100%;
+  min-height: 420px;
+  height: 100%;
+}
+.auth-card.split {
+  padding: 0;
+}
+
+.auth-form {
+  flex: 1 1 0;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  min-width: 0;
+  max-width: none;
+}
+
+.name-fields {
+  display: flex;
+  gap: 1rem;
+}
+.first-name-field, .last-name-field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.first-name-field .form-control, .last-name-field .form-control {
+  width: 100%;
+}
+
+.location-group {
+  gap: 1rem !important;
+}
+.location-group .form-control {
+  border-radius: 0.7rem !important;
+  border: 1.5px solid #e0e0e0 !important;
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  background: #fff !important;
+  color: #222 !important;
+  box-shadow: none !important;
+  min-width: 0;
+}
+.location-group .dropdown-toggle::after {
+  float: right;
+  margin-top: 0.6rem;
+}
+.location-group .btn-outline-secondary {
+  border-color: #e0e0e0 !important;
+  color: #222 !important;
+  background: #fff !important;
+}
+.location-group .btn-outline-secondary:focus,
+.location-group .btn-outline-secondary:active,
+.location-group .btn-outline-secondary:hover {
+  border-color: #0f7c3f !important;
+  color: #0f7c3f !important;
+  background: #e0f7fa !important;
+}
+.location-group .dropdown-menu {
+  width: 100% !important;
+  min-width: 100% !important;
+  border-radius: 0.7rem;
+  box-shadow: 0 2px 8px rgba(15,124,63,0.08);
+}
+.location-group .dropdown-item {
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
+}
+
+.forms-sample .form-control {
+  border-radius: 0.7rem;
+  border: 1.5px solid #e0e0e0;
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.forms-sample .form-control:focus {
+  border-color: #0f7c3f;
+  box-shadow: 0 0 0 2px #e0f7fa;
+}
+
+.modern-btn {
+  border-radius: 0.7rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.7rem 0;
+  background: #0f7c3f;
+  border: none;
+  box-shadow: 0 2px 8px rgba(15,124,63,0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.modern-btn:hover, .modern-btn:focus {
+  background: #0c6332;
+  box-shadow: 0 4px 16px rgba(15,124,63,0.13);
+}
+
+.auth-image.full-bg {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+.auth-image.full-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  box-shadow: none;
+  display: block;
+}
+
+.spinner-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.7);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.2rem;
+}
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #e0f7fa;
+  border-top: 5px solid #0f7c3f;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.nobleui-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f7c3f;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 900px) {
+  .auth-card {
+    max-width: 98vw;
+  }
+  .auth-form {
+    min-width: 220px;
+    max-width: 100vw;
+    padding: 2rem 1rem;
+  }
+}
+@media (max-width: 700px) {
+  .auth-card {
+    flex-direction: column;
+    max-width: 98vw;
+    min-height: unset;
+    height: auto;
+    border-radius: 1.2rem;
+  }
+  .auth-form {
+    padding: 1.5rem 0.7rem 2rem 0.7rem;
+    min-width: unset;
+    max-width: unset;
+  }
+  .name-fields {
+    flex-direction: column;
+    gap: 0;
+  }
+  .auth-image.full-bg {
+    display: none;
+  }
 }

@@ -1,158 +1,137 @@
-<div class="row w-100 mx-0 auth-page">
-  <div class="col-md-8 col-xl-8 mx-auto">
-    <div class="card">
-      <div class="row">
-        <div class="col-md-4 pe-md-0">
-          <div
-            class="auth-side-wrapper"
-            [ngStyle]="{
-              'background-image':
-                'url(https://www.dmcihomes.com/uploads/news/dmci-homes-eyes-eco-agri-mountain-resort-condotel-in-tuba-benguet-1709113085756.jpg)'
-            }"
-          ></div>
+<app-landing-navbar></app-landing-navbar>
+<div class="auth-bg">
+  <div class="auth-card split">
+    <div class="auth-form">
+      <div *ngIf="loading" class="spinner-overlay">
+        <div class="spinner"></div>
+      </div>
+      <a routerLink="." class="nobleui-logo d-block mb-2">LMIS</a>
+      <h5 class="text-muted fw-normal mb-4 text-center">Create an account.</h5>
+      <form class="forms-sample" [formGroup]="signupForm">
+        <div class="mb-3">
+          <label for="exampleInputUsername1" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleInputUsername1"
+            autocomplete="Username"
+            placeholder="Username"
+            formControlName="username"
+          />
         </div>
-        <div class="col-md-8 ps-md-0">
-          <div class="auth-form-wrapper px-4 py-5">
-            <a routerLink="." class="nobleui-logo d-block mb-2">LMIS</a>
-            <h5 class="text-muted fw-normal mb-4">Create an account.</h5>
-            <form class="forms-sample" [formGroup]="signupForm">
-              <div class="mb-3">
-                <label for="exampleInputUsername1" class="form-label"
-                  >Username</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="exampleInputUsername1"
-                  autocomplete="Username"
-                  placeholder="Username"
-                  formControlName="username"
-                />
-              </div>
-              <div class="row mb-3">
-                <div class="col-lg-6">
-                  <label for="firstName" class="form-label">First Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="firstName"
-                    autocomplete="Username"
-                    placeholder="Username"
-                    formControlName="firstName"
-                  />
-                </div>
-                <div class="col-lg-6">
-                  <label for="lastName" class="form-label">Last Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="lastName"
-                    autocomplete="Username"
-                    placeholder="Username"
-                    formControlName="lastName"
-                  />
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label"
-                  >Contact Number</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  placeholder="Contact Number"
-                  formControlName="contactNumber"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="location" class="col-sm-3 col-form-label"
-                  >Location</label
-                >
-                <div class="col-sm-12">
-                  <div class="input-group">
-                    <input
-                      class="form-control"
-                      [value]="selectedMunicipality?.name"
-                      readonly
-                      formControlName="municipality"
-                    />
-                    <div ngbDropdown>
-                      <button
-                        type="button"
-                        class="btn btn-secondary dropdown-toggle"
-                        ngbDropdownToggle
-                      >
-                        Select Municipality
-                      </button>
-                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button
-                          type="button"
-                          ngbDropdownItem
-                          *ngFor="let municipality of municipalities"
-                          (click)="selectMunicipality(municipality)"
-                        >
-                          {{ municipality.name }}
-                        </button>
-                      </div>
-                    </div>
-                    <input
-                      class="form-control"
-                      [value]="selectedBarangay?.name"
-                      readonly
-                      formControlName="barangay"
-                    />
-                    <div ngbDropdown>
-                      <button
-                        type="button"
-                        class="btn btn-secondary dropdown-toggle"
-                        ngbDropdownToggle
-                      >
-                        Select Barangay
-                      </button>
-                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button
-                          type="button"
-                          ngbDropdownItem
-                          *ngFor="let barangay of barangays"
-                          (click)="selectBarangay(barangay)"
-                        >
-                          {{ barangay.name }}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label"
-                  >Password</label
-                >
-                <input
-                  type="password"
-                  class="form-control"
-                  id="exampleInputPassword1"
-                  autocomplete="current-password"
-                  placeholder="Password"
-                  formControlName="password"
-                />
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  class="btn btn-primary me-2 mb-2 mb-md-0"
-                  (click)="onRegister($event)"
-                >
-                  Sign up
-                </button>
-              </div>
-              <a routerLink="/auth/login" class="d-block mt-3 text-muted"
-                >Already a user? Sign in</a
-              >
-            </form>
+        <div class="mb-3 name-group">
+          <div class="name-fields">
+            <div class="first-name-field">
+              <label for="firstName" class="form-label">First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstName"
+                autocomplete="Username"
+                placeholder="First Name"
+                formControlName="firstName"
+              />
+            </div>
+            <div class="last-name-field">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="lastName"
+                autocomplete="Username"
+                placeholder="Last Name"
+                formControlName="lastName"
+              />
+            </div>
           </div>
         </div>
-      </div>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Contact Number</label>
+          <input
+            type="number"
+            class="form-control"
+            id="exampleInputEmail1"
+            placeholder="Contact Number"
+            formControlName="contactNumber"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          <div class="location-group d-flex flex-wrap gap-2">
+            <div class="flex-fill">
+              <div ngbDropdown class="w-100">
+                <button
+                  type="button"
+                  class="form-control btn btn-outline-secondary text-start dropdown-toggle"
+                  ngbDropdownToggle
+                >
+                  {{ selectedMunicipality?.name || 'Select Municipality' }}
+                </button>
+                <div ngbDropdownMenu class="w-100">
+                  <button
+                    type="button"
+                    ngbDropdownItem
+                    *ngFor="let municipality of municipalities"
+                    (click)="selectMunicipality(municipality)"
+                  >
+                    {{ municipality.name }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="flex-fill">
+              <div ngbDropdown class="w-100">
+                <button
+                  type="button"
+                  class="form-control btn btn-outline-secondary text-start dropdown-toggle"
+                  ngbDropdownToggle
+                  [disabled]="!selectedMunicipality"
+                >
+                  {{ selectedBarangay?.name || 'Select Barangay' }}
+                </button>
+                <div ngbDropdownMenu class="w-100">
+                  <button
+                    type="button"
+                    ngbDropdownItem
+                    *ngFor="let barangay of barangays"
+                    (click)="selectBarangay(barangay)"
+                  >
+                    {{ barangay.name }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="exampleInputPassword1"
+            autocomplete="current-password"
+            placeholder="Password"
+            formControlName="password"
+          />
+        </div>
+        <div>
+          <button
+            type="submit"
+            class="btn btn-primary w-100 modern-btn"
+            (click)="onRegister($event)"
+            [disabled]="loading"
+          >
+            Sign up
+          </button>
+        </div>
+        <a routerLink="/auth/login" class="d-block mt-3 text-muted text-center">
+          Already a user? Sign in
+        </a>
+      </form>
+    </div>
+    <div class="auth-image full-bg">
+      <img src="https://www.dmcihomes.com/uploads/news/dmci-homes-eyes-eco-agri-mountain-resort-condotel-in-tuba-benguet-1709113085756.jpg" alt="Register Illustration" />
     </div>
   </div>
 </div>
+<app-landing-footer></app-landing-footer>

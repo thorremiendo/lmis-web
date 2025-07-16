@@ -16,6 +16,7 @@ export class RegisterComponent implements OnInit {
   municipalities = []
   selectedBarangay
   selectedMunicipality
+  loading = false;
 
   constructor(
     private router: Router,
@@ -76,6 +77,7 @@ export class RegisterComponent implements OnInit {
 
   onRegister(e: Event) {
     e.preventDefault();
+    this.loading = true;
     const body = {
       username: this.signupForm.value.username,
       contactNumber: this.signupForm.value.contactNumber.toString(),
@@ -88,7 +90,10 @@ export class RegisterComponent implements OnInit {
     }
 
     this.authService.register(body).subscribe(res => {
-      this.swalService.showSuccessMessage("Signup Successful!")
+      this.loading = false;
+      this.swalService.showSuccessMessage(
+        '<b>Registration successful!</b><br>You can now log in with your new account.'
+      );
       localStorage.setItem('isLoggedin', 'true');
       localStorage.setItem('lmisUser', JSON.stringify(res.data));
       localStorage.setItem('lmisToken', res.token);
@@ -97,8 +102,12 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/auth/login']);
       }
     }, err => {
-      console.log(err)
-      this.swalService.showWarning(err.error.message, "Signup Failed", "Close")
+      this.loading = false;
+      this.swalService.showWarning(
+        (err.error.message || 'Please check your details and try again.'),
+        'Signup Failed',
+        'Close'
+      );
     })
 
   }

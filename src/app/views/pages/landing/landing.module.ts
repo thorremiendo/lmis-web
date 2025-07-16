@@ -61,6 +61,6 @@ import { ProjectsSectionComponent } from './home/projects-section/projects-secti
     ReactiveFormsModule,
     FormsModule
   ],
-  exports: [LandingNavbarComponent],
+  exports: [LandingNavbarComponent, LandingFooterComponent],
 })
 export class LandingModule { }

@@ -12,7 +12,8 @@ import { SwalService } from 'src/app/core/services/swal.service';
 export class LoginComponent implements OnInit {
 
   returnUrl: any;
-  public loginForm: FormGroup
+  public loginForm: FormGroup;
+  loading = false;
 
   constructor(private router: Router, private route: ActivatedRoute, private authService: AuthService, private swalService: SwalService) { }
 
@@ -28,25 +29,33 @@ export class LoginComponent implements OnInit {
 
   onLoggedin(e: Event) {
     e.preventDefault();
+    this.loading = true;
     const body = {
       username: this.loginForm.value.username,
       password: this.loginForm.value.password
     }
 
     this.authService.login(body).subscribe((res) => {
-      this.swalService.showSuccessMessage("Login Successful!")
+      this.swalService.showSuccessMessage(
+        '<b>Welcome back!</b><br>Your login was successful.'
+      );
       localStorage.setItem('isLoggedin', 'true');
       localStorage.setItem('lmisUser', JSON.stringify(res.data));
       localStorage.setItem('lmisToken', res.token);
 
       if (localStorage.getItem('lmisUser')) {
         setTimeout(() => {
+          this.loading = false;
           this.router.navigate([this.returnUrl]);
         }, 2000);
       }
     }, err => {
-      console.log(err)
-      this.swalService.showWarning(err.error.message, "Login Failed", "Close")
+      this.loading = false;
+      this.swalService.showWarning(
+        (err.error.message || 'Please check your credentials and try again.'),
+        'Login Failed',
+        'Close'
+      );
     })
 
   }
