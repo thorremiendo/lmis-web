@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./landing-navbar.component.scss']
 })
 export class LandingNavbarComponent {
+  public user = JSON.parse(localStorage.getItem('lmisUser'));
   mobileMenuOpen = false;
 
   toggleMobileMenu() {

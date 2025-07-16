@@ -13,11 +13,20 @@ import { SwalService } from 'src/app/core/services/swal.service';
 export class ReportsComponent implements OnInit {
   public user = JSON.parse(localStorage.getItem('lmisUser'));
   public reportsData = []
+  public filteredReportsData = []
   public loadingIndicator = true;
   public ColumnMode = ColumnMode;
   public selectedRow
   public form: FormGroup
   public actions = ["Ongoing", "Resolved", "Others"]
+
+  // Filter properties
+  public selectedMunicipality = '0';
+  public selectedBarangay = null;
+  public selectedVerifiedBy = '';
+  public municipalities = [];
+  public barangays = [];
+  public verifiedByList = [];
   public landslideCategories = [
     {
       name: "Rockfall",
@@ -114,17 +123,38 @@ export class ReportsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getReports()
+    this.getMunicipalities()
   }
   getReports() {
     this.dataService.getReports().subscribe((data: any) => {
-      this.reportsData = data.data.map((report: any) => {
-        report.dateOfIncident = this.convertISOTOLocalDate(report.dateOfIncident);
-        report.dateReported = this.convertISOTOLocalDate(report.dateReported);
-        report.municipalityName = report.Municipality.name;
-        report.barangayName = report.Barangay.name;
-        report.source = "No data";
-        return report;
-      });
+      this.reportsData = data.data
+        .filter((report: any) => {
+          // Filter out reports where timeOfIncident is not in HH:MM format
+          if (!report.timeOfIncident) return false;
+          const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+          return timeRegex.test(report.timeOfIncident);
+        })
+        .map((report: any) => {
+          report.dateOfIncident = this.convertISOTOLocalDate(report.dateOfIncident);
+          report.dateReported = this.convertISOTOLocalDate(report.dateReported);
+          report.municipalityName = report.Municipality.name;
+          report.barangayName = report.Barangay.name;
+          report.source = "No data";
+          // Add sortable date and time properties for proper sorting
+          report.sortableDateOfIncident = new Date(report.dateOfIncident);
+          report.sortableTimeOfIncident = this.convertTimeToMinutes(report.timeOfIncident);
+          return report;
+        })
+        .sort((a: any, b: any) => {
+          // Sort by date of incident (newest first), then by time of incident
+          const dateComparison = b.sortableDateOfIncident - a.sortableDateOfIncident;
+          if (dateComparison !== 0) return dateComparison;
+          return b.sortableTimeOfIncident - a.sortableTimeOfIncident;
+        });
+
+      // Initialize filtered data and populate filter options
+      this.filteredReportsData = [...this.reportsData];
+      this.populateFilterOptions();
     })
   }
 
@@ -134,6 +164,54 @@ export class ReportsComponent implements OnInit {
     const day = ("0" + date.getDate()).slice(-2);
     const year = date.getFullYear();
     return `${month}-${day}-${year}`;
+  }
+
+  convertTimeToMinutes(timeString: string): number {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
+  populateFilterOptions() {
+    // Get unique verified by names (excluding null/empty values)
+    this.verifiedByList = [...new Set(this.reportsData
+      .map(report => report.verifiedBy)
+      .filter(verifiedBy => verifiedBy && verifiedBy.trim() !== ''))].sort();
+  }
+
+  applyFilters() {
+    this.filteredReportsData = this.reportsData.filter(report => {
+      const municipalityMatch = !this.selectedMunicipality || report.Municipality.id === Number(this.selectedMunicipality)
+      const barangayMatch = !this.selectedBarangay || report.Barangay.id === Number(this.selectedBarangay);
+      const verifiedByMatch = !this.selectedVerifiedBy || report.verifiedBy === this.selectedVerifiedBy;
+
+      return municipalityMatch && barangayMatch && verifiedByMatch;
+    });
+  }
+
+  clearFilters() {
+    this.selectedMunicipality = '0';
+    this.selectedBarangay = null;
+    this.selectedVerifiedBy = '';
+    this.barangays = [];
+    this.filteredReportsData = [...this.reportsData];
+  }
+
+  getMunicipalities() {
+    this.dataService.getMunicipalities().subscribe(res => {
+      this.municipalities = res;
+    })
+  }
+
+  onMunicipalityChange(municipalityId: number) {
+    this.selectedBarangay = null;
+    this.barangays = [];
+
+    if (municipalityId && municipalityId.toString() !== '0') {
+      this.dataService.getBarangays(municipalityId).subscribe(res => {
+        this.barangays = res;
+      })
+    }
+    this.applyFilters();
   }
 
   openScrollableModal(content: TemplateRef<any>, row) {

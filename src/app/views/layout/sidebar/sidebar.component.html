@@ -2,13 +2,13 @@
   <div class="sidebar-header">
     <!--- Logo -->
     <a routerLink="/" class="sidebar-brand nobleui-logo"> LMIS </a>
-    <p style="font-size: 12px;">v{{ version }}-beta</p>
+    <p style="font-size: 12px">v{{ version }}-beta</p>
     <!-- <a routerLink="/" class="sidebar-brand nobleui-logo">
       <img src="assets/images/logo.png" alt="logo">
     </a> -->
 
     <!--- Toggler -->
-    <div
+    <!-- <div
       class="sidebar-toggler not-active"
       #sidebarToggler
       (click)="toggleSidebar($event)"
@@ -16,7 +16,7 @@
       <span></span>
       <span></span>
       <span></span>
-    </div>
+    </div> -->
   </div>
   <div
     class="sidebar-body"
@@ -148,6 +148,21 @@
         </div>
       </ng-container>
     </ul>
+
+    <div class="sidebar-footer">
+      <div class="text-center">
+        <div class="user">
+          <p class="tx-16 fw-bolder">
+            {{ user.firstName }} {{ user.lastName }}
+          </p>
+          <p class="tx-12 text-muted">{{ user.contactNumber }}</p>
+        </div>
+        <div (click)="onLogout($event)" class="my-2 cursor-pointer">
+          <i class="feather icon-log-out me-2 icon-md"></i>
+          <span>Log Out</span>
+        </div>
+      </div>
+    </div>
 
     <!--- Sidemenu end -->
   </div>

@@ -42,10 +42,12 @@ export class RegisterComponent implements OnInit {
 
   selectBarangay(barangay) {
     this.selectedBarangay = barangay;
+    this.signupForm.get('barangay').setValue(barangay.id);
   }
 
   selectMunicipality(municipality) {
     this.selectedMunicipality = municipality;
+    this.signupForm.get('municipality').setValue(municipality.id);
     this.dataService.getBarangays(municipality.id).subscribe(res => {
       this.barangays = res
       switch (this.selectedMunicipality.id) {
@@ -78,6 +80,7 @@ export class RegisterComponent implements OnInit {
   onRegister(e: Event) {
     e.preventDefault();
     if (this.signupForm.invalid || !this.selectedMunicipality || !this.selectedBarangay) {
+      debugger
       this.swalService.showWarning(
         'Please fill out all required fields correctly.',
         'Invalid Form',
@@ -103,13 +106,7 @@ export class RegisterComponent implements OnInit {
       this.swalService.showSuccessMessage(
         '<b>Registration successful!</b><br>You can now log in with your new account.'
       );
-      localStorage.setItem('isLoggedin', 'true');
-      localStorage.setItem('lmisUser', JSON.stringify(res.data));
-      localStorage.setItem('lmisToken', res.token);
-
-      if (localStorage.getItem('lmisUser')) {
         this.router.navigate(['/auth/login']);
-      }
     }, err => {
       this.loading = false;
       this.swalService.showWarning(

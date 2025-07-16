@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   menuItems: MenuItem[] = [];
   @ViewChild('sidebarMenu') sidebarMenu: ElementRef;
 
-  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, router: Router) {
+  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private router: Router) {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
 
@@ -273,4 +273,9 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   }
 
+  public onLogout(e: Event) {
+    e.preventDefault();
+    localStorage.clear();
+    this.router.navigate(['/auth/login']);
+  }
 }

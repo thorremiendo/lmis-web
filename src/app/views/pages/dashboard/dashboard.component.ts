@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from 'src/app/core/services/data.service';
 import { FormControl } from '@angular/forms';
+import { ColumnMode } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,6 +39,9 @@ export class DashboardComponent implements OnInit {
   public isLoading: boolean = false
   public errorMessage: string = ""
   public alertLevel: number
+  public reportsData = []
+  public loadingIndicator = true;
+  public ColumnMode = ColumnMode;
   public sensors = [
     {
       value: 0,
@@ -221,6 +225,7 @@ export class DashboardComponent implements OnInit {
       this.fetchSensorDataPeriod()
 
     })
+    this.getReports()
   }
 
   submitRecommendation() {
@@ -660,6 +665,51 @@ export class DashboardComponent implements OnInit {
         })
       })
     })
+  }
+
+  getReports() {
+    this.dataService.getReports().subscribe((data: any) => {
+      this.reportsData = data.data
+        .filter((report: any) => {
+          // Filter out reports where timeOfIncident is not in HH:MM format
+          if (!report.timeOfIncident) return false;
+          const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+          return timeRegex.test(report.timeOfIncident);
+        })
+        .map((report: any) => {
+          report.dateOfIncident = this.convertISOTOLocalDate(report.dateOfIncident);
+          report.dateReported = this.convertISOTOLocalDate(report.dateReported);
+          report.municipalityName = report.Municipality.name;
+          report.barangayName = report.Barangay.name;
+          report.source = "No data";
+          // Add sortable date and time properties for proper sorting
+          report.sortableDateOfIncident = new Date(report.dateOfIncident);
+          report.sortableTimeOfIncident = this.convertTimeToMinutes(report.timeOfIncident);
+          return report;
+        })
+        .sort((a: any, b: any) => {
+          // Sort by date of incident (newest first), then by time of incident
+          const dateComparison = b.sortableDateOfIncident - a.sortableDateOfIncident;
+          if (dateComparison !== 0) return dateComparison;
+          return b.sortableTimeOfIncident - a.sortableTimeOfIncident;
+        })
+        .slice(0, 10); // Show only the latest 10 reports
+      
+      this.loadingIndicator = false;
+    })
+  }
+
+  convertISOTOLocalDate(isoDate: string): string {
+    const date = new Date(isoDate);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are 0 based so we add 1
+    const day = ("0" + date.getDate()).slice(-2);
+    const year = date.getFullYear();
+    return `${month}-${day}-${year}`;
+  }
+
+  convertTimeToMinutes(timeString: string): number {
+    const [hours, minutes] = timeString.split(':').map(Number);
+    return hours * 60 + minutes;
   }
 }
 

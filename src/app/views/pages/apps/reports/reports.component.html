@@ -3,24 +3,80 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">Landslide Reports</h6>
+        
+        <!-- Filter Controls -->
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <label for="municipalityFilter" class="form-label">Municipality</label>
+            <select 
+              class="form-select" 
+              id="municipalityFilter"
+              [(ngModel)]="selectedMunicipality"
+              (change)="onMunicipalityChange($event.target.value)"
+            >
+              <option [value]="0">All Municipalities</option>
+              <option *ngFor="let municipality of municipalities" [value]="municipality.id">
+                {{ municipality.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="barangayFilter" class="form-label">Barangay</label>
+            <select 
+              class="form-select" 
+              id="barangayFilter"
+              [(ngModel)]="selectedBarangay"
+              (change)="applyFilters()"
+              [disabled]="!selectedMunicipality"
+            >
+              <option [ngValue]="null">All Barangays</option>
+              <option *ngFor="let barangay of barangays" [value]="barangay.id">
+                {{ barangay.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="verifiedByFilter" class="form-label">Verified By</label>
+            <select 
+              class="form-select" 
+              id="verifiedByFilter"
+              [(ngModel)]="selectedVerifiedBy"
+              (change)="applyFilters()"
+            >
+              <option value="">All Verifiers</option>
+              <option *ngFor="let verifier of verifiedByList" [value]="verifier">
+                {{ verifier }}
+              </option>
+            </select>
+          </div>
+          <div class="col-md-3 d-flex align-items-end">
+            <button 
+              class="btn btn-outline-secondary" 
+              (click)="clearFilters()"
+            >
+              Clear Filters
+            </button>
+          </div>
+        </div>
+
         <div class="table-responsive">
           <ngx-datatable
             class="bootstrap"
-            [rows]="reportsData"
+            [rows]="filteredReportsData"
             [loadingIndicator]="loadingIndicator"
             [columnMode]="ColumnMode.force"
             [footerHeight]="50"
             [limit]="10"
             rowHeight="auto"
           >
-            <ngx-datatable-column name="Date of Incident" prop="dateOfIncident">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
+            <ngx-datatable-column name="Date of Incident" prop="sortableDateOfIncident" [sortable]="true">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row.dateOfIncident ? row.dateOfIncident : "No data" }}
               </ng-template>
             </ngx-datatable-column>
-            <ngx-datatable-column name="Time of Incident" prop="timeOfIncident">
-              <ng-template let-value="value" ngx-datatable-cell-template>
-                {{ value ? value : "No data" }}
+            <ngx-datatable-column name="Time of Incident" prop="sortableTimeOfIncident" [sortable]="true">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row.timeOfIncident ? row.timeOfIncident : "No data" }}
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="Date Reported" prop="dateReported">

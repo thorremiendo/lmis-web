@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
-  // apiUrl: 'https://calami-t-io.uc-bcf.edu.ph/api',
+  // apiUrl: 'http://localhost:3000/api',
+  apiUrl: 'https://calami-t-io.uc-bcf.edu.ph/api',
   mapboxToken: 'pk.eyJ1IjoiZGV2LXRob3JyZW1pZW5kbyIsImEiOiJjbHh0bWx5cHAxdDFxMmlzaDl4YWViczk1In0.P0CFPqf7yCWyolgD8m4GxA'
 };
 

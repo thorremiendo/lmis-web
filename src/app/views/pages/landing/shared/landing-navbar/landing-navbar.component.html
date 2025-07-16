@@ -1,23 +1,81 @@
 <nav class="landing-navbar">
   <div class="navbar-container">
     <a class="navbar-logo" routerLink="/home">
-      <img src="/assets/images/others/logos/calamit-logo.webp" alt="MULAT-BLISTT Logo" style="height: 36px; margin-right: 10px; vertical-align: middle;" />
+      <img
+        src="/assets/images/others/logos/calamit-logo.webp"
+        alt="MULAT-BLISTT Logo"
+        style="height: 36px; margin-right: 10px; vertical-align: middle"
+      />
       MULAT-BLISTT
     </a>
-    <button class="navbar-hamburger" (click)="toggleMobileMenu()" aria-label="Toggle navigation menu" [attr.aria-expanded]="mobileMenuOpen">
+    <button
+      class="navbar-hamburger"
+      (click)="toggleMobileMenu()"
+      aria-label="Toggle navigation menu"
+      [attr.aria-expanded]="mobileMenuOpen"
+    >
       <span></span>
       <span></span>
       <span></span>
     </button>
     <div class="navbar-links" [ngClass]="{ 'mobile-open': mobileMenuOpen }">
-      <a routerLink="/home" routerLinkActive="active" (click)="closeMobileMenu()">Home</a>
-      <a routerLink="/home/project1" routerLinkActive="active" (click)="closeMobileMenu()">Project 1</a>
-      <a routerLink="/home/project2" routerLinkActive="active" (click)="closeMobileMenu()">Project 2</a>
-      <a routerLink="/home/glossary" routerLinkActive="active" (click)="closeMobileMenu()">Glossary</a>
-      <a routerLink="/home/landslide-report" routerLinkActive="active" (click)="closeMobileMenu()">Report</a>
-      <a class="navbar-link register-btn" routerLink="/auth/register" (click)="closeMobileMenu()">Register</a>
-      <a class="navbar-link login-btn" routerLink="/auth/login" (click)="closeMobileMenu()">Log In</a>
+      <a
+        routerLink="/home"
+        routerLinkActive="active"
+        (click)="closeMobileMenu()"
+        >Home</a
+      >
+      <a
+        routerLink="/home/project1"
+        routerLinkActive="active"
+        (click)="closeMobileMenu()"
+        >Project 1</a
+      >
+      <a
+        routerLink="/home/project2"
+        routerLinkActive="active"
+        (click)="closeMobileMenu()"
+        >Project 2</a
+      >
+      <a
+        routerLink="/home/glossary"
+        routerLinkActive="active"
+        (click)="closeMobileMenu()"
+        >Glossary</a
+      >
+      <a
+        routerLink="/home/landslide-report"
+        routerLinkActive="active"
+        (click)="closeMobileMenu()"
+        >Report</a
+      >
+      <div *ngIf="!user">
+        <a
+          class="navbar-link register-btn"
+          routerLink="/auth/register"
+          (click)="closeMobileMenu()"
+          >Register</a
+        >
+        <a
+          class="navbar-link login-btn"
+          routerLink="/auth/login"
+          (click)="closeMobileMenu()"
+          >Log In</a
+        >
+      </div>
+      <div *ngIf="user">
+        <a
+          class="navbar-link register-btn"
+          routerLink="/dashboard"
+          (click)="closeMobileMenu()"
+          >Dashboard</a
+        >
+      </div>
     </div>
   </div>
-  <div *ngIf="mobileMenuOpen" class="navbar-backdrop" (click)="closeMobileMenu()"></div>
+  <div
+    *ngIf="mobileMenuOpen"
+    class="navbar-backdrop"
+    (click)="closeMobileMenu()"
+  ></div>
 </nav>

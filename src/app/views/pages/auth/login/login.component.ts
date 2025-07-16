@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       if (localStorage.getItem('lmisUser')) {
         setTimeout(() => {
           this.loading = false;
-          this.router.navigate([this.returnUrl]);
+          this.router.navigate(['/dashboard']);
         }, 2000);
       }
     }, err => {
