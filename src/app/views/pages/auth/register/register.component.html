@@ -17,7 +17,29 @@
             autocomplete="Username"
             placeholder="Username"
             formControlName="username"
+            [ngClass]="{
+              'is-invalid':
+                signupForm.get('username').touched &&
+                signupForm.get('username').invalid
+            }"
           />
+          <div
+            *ngIf="
+              signupForm.get('username').touched &&
+              signupForm.get('username').invalid
+            "
+            class="invalid-feedback d-block"
+          >
+            <div *ngIf="signupForm.get('username').errors?.required">
+              Username is required.
+            </div>
+            <div *ngIf="signupForm.get('username').errors?.minlength">
+              Username must be at least 4 characters.
+            </div>
+            <div *ngIf="signupForm.get('username').errors?.maxlength">
+              Username must be at most 20 characters.
+            </div>
+          </div>
         </div>
         <div class="mb-3 name-group">
           <div class="name-fields">
@@ -30,7 +52,26 @@
                 autocomplete="Username"
                 placeholder="First Name"
                 formControlName="firstName"
+                [ngClass]="{
+                  'is-invalid':
+                    signupForm.get('firstName').touched &&
+                    signupForm.get('firstName').invalid
+                }"
               />
+              <div
+                *ngIf="
+                  signupForm.get('firstName').touched &&
+                  signupForm.get('firstName').invalid
+                "
+                class="invalid-feedback d-block"
+              >
+                <div *ngIf="signupForm.get('firstName').errors?.required">
+                  First name is required.
+                </div>
+                <div *ngIf="signupForm.get('firstName').errors?.maxlength">
+                  First name must be at most 30 characters.
+                </div>
+              </div>
             </div>
             <div class="last-name-field">
               <label for="lastName" class="form-label">Last Name</label>
@@ -41,19 +82,61 @@
                 autocomplete="Username"
                 placeholder="Last Name"
                 formControlName="lastName"
+                [ngClass]="{
+                  'is-invalid':
+                    signupForm.get('lastName').touched &&
+                    signupForm.get('lastName').invalid
+                }"
               />
+              <div
+                *ngIf="
+                  signupForm.get('lastName').touched &&
+                  signupForm.get('lastName').invalid
+                "
+                class="invalid-feedback d-block"
+              >
+                <div *ngIf="signupForm.get('lastName').errors?.required">
+                  Last name is required.
+                </div>
+                <div *ngIf="signupForm.get('lastName').errors?.maxlength">
+                  Last name must be at most 30 characters.
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Contact Number</label>
+          <label for="exampleInputEmail1" class="form-label"
+            >Contact Number</label
+          >
           <input
-            type="number"
+            type="text"
             class="form-control"
             id="exampleInputEmail1"
-            placeholder="Contact Number"
+            placeholder="09"
+            maxlength="11"
             formControlName="contactNumber"
+            inputmode="tel"
+            [ngClass]="{
+              'is-invalid':
+                signupForm.get('contactNumber').touched &&
+                signupForm.get('contactNumber').invalid
+            }"
           />
+          <div
+            *ngIf="
+              signupForm.get('contactNumber').touched &&
+              signupForm.get('contactNumber').invalid
+            "
+            class="invalid-feedback d-block"
+          >
+            <div *ngIf="signupForm.get('contactNumber').errors?.required">
+              Contact number is required.
+            </div>
+            <div *ngIf="signupForm.get('contactNumber').errors?.pattern">
+              Contact number must be 11 digits.
+            </div>
+          </div>
         </div>
         <div class="mb-3">
           <label class="form-label">Location</label>
@@ -64,9 +147,25 @@
                   type="button"
                   class="form-control btn btn-outline-secondary text-start dropdown-toggle"
                   ngbDropdownToggle
+                  [ngClass]="{
+                    'is-invalid':
+                      signupForm.get('municipality').touched &&
+                      (!selectedMunicipality ||
+                        signupForm.get('municipality').invalid)
+                  }"
                 >
-                  {{ selectedMunicipality?.name || 'Select Municipality' }}
+                  {{ selectedMunicipality?.name || "Select Municipality" }}
                 </button>
+                <div
+                  *ngIf="
+                    signupForm.get('municipality').touched &&
+                    (!selectedMunicipality ||
+                      signupForm.get('municipality').invalid)
+                  "
+                  class="invalid-feedback d-block"
+                >
+                  Municipality is required.
+                </div>
                 <div ngbDropdownMenu class="w-100">
                   <button
                     type="button"
@@ -86,9 +185,23 @@
                   class="form-control btn btn-outline-secondary text-start dropdown-toggle"
                   ngbDropdownToggle
                   [disabled]="!selectedMunicipality"
+                  [ngClass]="{
+                    'is-invalid':
+                      signupForm.get('barangay').touched &&
+                      (!selectedBarangay || signupForm.get('barangay').invalid)
+                  }"
                 >
-                  {{ selectedBarangay?.name || 'Select Barangay' }}
+                  {{ selectedBarangay?.name || "Select Barangay" }}
                 </button>
+                <div
+                  *ngIf="
+                    signupForm.get('barangay').touched &&
+                    (!selectedBarangay || signupForm.get('barangay').invalid)
+                  "
+                  class="invalid-feedback d-block"
+                >
+                  Barangay is required.
+                </div>
                 <div ngbDropdownMenu class="w-100">
                   <button
                     type="button"
@@ -112,7 +225,29 @@
             autocomplete="current-password"
             placeholder="Password"
             formControlName="password"
+            [ngClass]="{
+              'is-invalid':
+                signupForm.get('password').touched &&
+                signupForm.get('password').invalid
+            }"
           />
+          <div
+            *ngIf="
+              signupForm.get('password').touched &&
+              signupForm.get('password').invalid
+            "
+            class="invalid-feedback d-block"
+          >
+            <div *ngIf="signupForm.get('password').errors?.required">
+              Password is required.
+            </div>
+            <div *ngIf="signupForm.get('password').errors?.minlength">
+              Password must be at least 6 characters.
+            </div>
+            <div *ngIf="signupForm.get('password').errors?.maxlength">
+              Password must be at most 32 characters.
+            </div>
+          </div>
         </div>
         <div>
           <button
@@ -130,7 +265,10 @@
       </form>
     </div>
     <div class="auth-image full-bg">
-      <img src="https://www.dmcihomes.com/uploads/news/dmci-homes-eyes-eco-agri-mountain-resort-condotel-in-tuba-benguet-1709113085756.jpg" alt="Register Illustration" />
+      <img
+        src="https://www.dmcihomes.com/uploads/news/dmci-homes-eyes-eco-agri-mountain-resort-condotel-in-tuba-benguet-1709113085756.jpg"
+        alt="Register Illustration"
+      />
     </div>
   </div>
 </div>

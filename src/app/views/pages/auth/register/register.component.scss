@@ -179,6 +179,67 @@
   letter-spacing: 1px;
 }
 
+.is-invalid {
+  border-color: #e74c3c !important;
+  box-shadow: 0 0 0 2px #fdecea !important;
+}
+.invalid-feedback {
+  color: #e74c3c;
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+.input-group-text {
+  background: #f8fafc;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 0.7rem 0 0 0.7rem;
+  color: #222;
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+}
+.input-group .form-control {
+  border-radius: 0 0.7rem 0.7rem 0;
+  border-left: none;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.contact-row .form-label {
+  margin-bottom: 0;
+  min-width: 130px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.contact-row .input-group-text {
+  background: #f8fafc;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 0.7rem 0 0 0.7rem;
+  color: #222;
+  font-size: 1rem;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  border-right: none;
+  height: 100%;
+}
+.contact-row .form-control {
+  border-radius: 0 0.7rem 0.7rem 0;
+  border-left: none;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
 @media (max-width: 900px) {
   .auth-card {
     max-width: 98vw;
