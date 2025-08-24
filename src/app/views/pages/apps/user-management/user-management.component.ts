@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 })
 export class UserManagementComponent implements OnInit {
   users: User[] = [];
+  filteredUsers: User[] = [];
+  paginatedUsers: User[] = [];
   userForm: FormGroup;
   isEditing = false;
   editingUserId: number | null = null;
@@ -20,10 +22,24 @@ export class UserManagementComponent implements OnInit {
   successMessage = '';
   modalRef: NgbModalRef | null = null;
   
+  Math = Math;
+  
   barangays = [];
   municipalities = [];
   selectedBarangay: any;
   selectedMunicipality: any;
+
+  filterForm: FormGroup;
+  availableRoles = ['Admin', 'LGU', 'LGA', 'Others'];
+  availableMunicipalities: any[] = [];
+  availableBarangays: any[] = [];
+
+  pagination = {
+    currentPage: 1,
+    itemsPerPage: 20,
+    totalItems: 0,
+    totalPages: 0
+  };
 
   constructor(
     private userService: UserManagementService,
@@ -43,6 +59,12 @@ export class UserManagementComponent implements OnInit {
       municipalityId: [null],
       barangayId: [null]
     });
+
+    this.filterForm = this.fb.group({
+      role: [''],
+      municipalityId: [''],
+      barangayId: ['']
+    });
   }
 
   ngOnInit(): void {
@@ -55,11 +77,129 @@ export class UserManagementComponent implements OnInit {
     
     this.loadUsers();
     this.loadMunicipalities();
+    this.setupFilterListeners();
+  }
+
+  setupFilterListeners(): void {
+    this.filterForm.valueChanges.subscribe(() => {
+      this.applyFilters();
+    });
+  }
+
+  applyFilters(): void {
+    const filters = this.filterForm.value;
+    
+    this.filteredUsers = this.users.filter(user => {
+      let matchesRole = true;
+      let matchesMunicipality = true;
+      let matchesBarangay = true;
+
+      if (filters.role && filters.role !== '') {
+        matchesRole = user.role === filters.role;
+      }
+
+      if (filters.municipalityId && filters.municipalityId !== '') {
+        matchesMunicipality = user.municipalityId === parseInt(filters.municipalityId);
+      }
+
+      if (filters.barangayId && filters.barangayId !== '') {
+        matchesBarangay = user.barangayId === parseInt(filters.barangayId);
+      }
+
+      return matchesRole && matchesMunicipality && matchesBarangay;
+    });
+
+    this.updatePagination();
+    this.goToPage(1);
+  }
+
+  clearFilters(): void {
+    this.filterForm.reset();
+    this.filteredUsers = [...this.users];
+    this.updatePagination();
+    this.goToPage(1);
+  }
+
+  updatePagination(): void {
+    this.pagination.totalItems = this.filteredUsers.length;
+    this.pagination.totalPages = Math.ceil(this.pagination.totalItems / this.pagination.itemsPerPage);
+    
+    if (this.pagination.currentPage > this.pagination.totalPages) {
+      this.pagination.currentPage = 1;
+    }
+    
+    this.updatePaginatedUsers();
+  }
+
+  updatePaginatedUsers(): void {
+    const startIndex = (this.pagination.currentPage - 1) * this.pagination.itemsPerPage;
+    const endIndex = startIndex + this.pagination.itemsPerPage;
+    this.paginatedUsers = this.filteredUsers.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.pagination.totalPages) {
+      this.pagination.currentPage = page;
+      this.updatePaginatedUsers();
+    }
+  }
+
+  goToFirstPage(): void {
+    this.goToPage(1);
+  }
+
+  goToLastPage(): void {
+    this.goToPage(this.pagination.totalPages);
+  }
+
+  goToPreviousPage(): void {
+    this.goToPage(this.pagination.currentPage - 1);
+  }
+
+  goToNextPage(): void {
+    this.goToPage(this.pagination.currentPage + 1);
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const totalPages = this.pagination.totalPages;
+    const currentPage = this.pagination.currentPage;
+    
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 4) {
+        for (let i = 1; i <= 5; i++) {
+          pages.push(i);
+        }
+        pages.push(-1); // Ellipsis
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        pages.push(1);
+        pages.push(-1); // Ellipsis
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push(-1); // Ellipsis
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push(-1); // Ellipsis
+        pages.push(totalPages);
+      }
+    }
+    
+    return pages;
   }
 
   loadMunicipalities(): void {
     this.dataService.getMunicipalities().subscribe(res => {
       this.municipalities = res;
+      this.availableMunicipalities = res;
     });
   }
 
@@ -71,28 +211,7 @@ export class UserManagementComponent implements OnInit {
     
     this.dataService.getBarangays(municipality.id).subscribe(res => {
       this.barangays = res;
-    //   switch (this.selectedMunicipality.id) {
-    //     case 1:
-    //       this.barangays = this.barangays.filter(e => e.name.includes("DONTOGAN"));
-    //       break;
-    //     case 2:
-    //       this.barangays = this.barangays.filter(e => e.name.includes("PUGUIS"));
-    //       break;
-    //     case 3:
-    //       this.barangays = this.barangays.filter(e => e.name.includes("AMPUCAO"));
-    //       break;
-    //     case 4:
-    //       this.barangays = this.barangays.filter(e => e.name.includes("BANANGAN"));
-    //       break;
-    //     case 5:
-    //       this.barangays = this.barangays.filter(e => e.name.includes("CAMP 3"));
-    //       break;
-    //     case 6:
-    //       this.barangays = this.barangays.filter(e => e.name.includes("AMBASSADOR"));
-    //       break;
-    //     default:
-    //       break;
-    //   }
+      this.availableBarangays = res;
     });
   }
 
@@ -106,11 +225,32 @@ export class UserManagementComponent implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
+        this.filteredUsers = [...users];
         this.isLoading = false;
+        
+        this.loadAllBarangaysForFiltering();
+        this.updatePagination();
       },
       error: (error) => {
         this.errorMessage = 'Error loading users: ' + error.message;
         this.isLoading = false;
+      }
+    });
+  }
+
+  loadAllBarangaysForFiltering(): void {
+    const uniqueMunicipalityIds = [...new Set(this.users
+      .map(user => user.municipalityId)
+      .filter(id => id !== null && id !== undefined))];
+    
+    uniqueMunicipalityIds.forEach(municipalityId => {
+      if (municipalityId) {
+        this.dataService.getBarangays(municipalityId).subscribe(res => {
+          this.availableBarangays = [...this.availableBarangays, ...res];
+          this.availableBarangays = this.availableBarangays.filter((barangay, index, self) => 
+            index === self.findIndex(b => b.id === barangay.id)
+          );
+        });
       }
     });
   }
@@ -175,6 +315,7 @@ export class UserManagementComponent implements OnInit {
             this.successMessage = 'User updated successfully!';
             this.closeModal();
             this.resetForm();
+            this.applyFilters();
             this.isLoading = false;
           },
           error: (error) => {
@@ -189,6 +330,7 @@ export class UserManagementComponent implements OnInit {
             this.successMessage = 'User created successfully!';
             this.closeModal();
             this.resetForm();
+            this.applyFilters();
             this.isLoading = false;
           },
           error: (error) => {
@@ -206,6 +348,7 @@ export class UserManagementComponent implements OnInit {
       this.userService.updateUser(user.id!, { ...user, isActive: false }).subscribe({
         next: () => {
           this.users = this.users.filter(u => u.id !== user.id);
+          this.applyFilters();
           this.successMessage = 'User deleted successfully!';
           this.isLoading = false;
         },
@@ -243,5 +386,17 @@ export class UserManagementComponent implements OnInit {
       case 'Others': return 'badge bg-secondary';
       default: return 'badge bg-secondary';
     }
+  }
+
+  getMunicipalityName(municipalityId: number | null): string {
+    if (!municipalityId) return 'N/A';
+    const municipality = this.municipalities.find(m => m.id === municipalityId);
+    return municipality ? municipality.name : 'N/A';
+  }
+
+  getBarangayName(barangayId: number | null): string {
+    if (!barangayId) return 'N/A';
+    const barangay = this.barangays.find(b => b.id === barangayId);
+    return barangay ? barangay.name : 'N/A';
   }
 }

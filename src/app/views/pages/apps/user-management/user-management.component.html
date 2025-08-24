@@ -18,81 +18,194 @@
           <div class="card">
             <div class="card-header">
               <h5 class="card-title">Users List</h5>
-              <button
-                class="btn btn-sm btn-outline-primary"
-                (click)="loadUsers()"
-                [disabled]="isLoading"
-              >
-                <i class="feather icon-refresh-cw"></i> Refresh
-              </button>
+              <div class="d-flex gap-2">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="loadUsers()"
+                  [disabled]="isLoading"
+                >
+                  <i class="feather icon-refresh-cw"></i> Refresh
+                </button>
+              </div>
             </div>
-            <div class="card-body">
-              <div *ngIf="isLoading" class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
+                          <div class="card-body">
+                <!-- Filters Section -->
+                <div class="filters-section mb-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-muted mb-0">Filter Users</h6>
+                    <small class="text-muted">
+                      Showing {{ filteredUsers.length }} of {{ users.length }} users
+                    </small>
+                  </div>
+                  <form [formGroup]="filterForm" class="row g-3">
+                    <div class="col-md-3">
+                      <label class="form-label">User Role</label>
+                      <select class="form-select" formControlName="role">
+                        <option value="">All Roles</option>
+                        <option *ngFor="let role of availableRoles" [value]="role">{{ role }}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Municipality</label>
+                      <select class="form-select" formControlName="municipalityId">
+                        <option value="">All Municipalities</option>
+                        <option *ngFor="let municipality of availableMunicipalities" [value]="municipality.id">
+                          {{ municipality.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label">Barangay</label>
+                      <select class="form-select" formControlName="barangayId">
+                        <option value="">All Barangays</option>
+                        <option *ngFor="let barangay of availableBarangays" [value]="barangay.id">
+                          {{ barangay.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-secondary w-100"
+                        (click)="clearFilters()"
+                      >
+                        <i class="feather icon-x"></i> Clear
+                      </button>
+                    </div>
+                  </form>
                 </div>
-              </div>
 
-              <div *ngIf="!isLoading && users.length === 0" class="text-center py-4">
-                <i class="feather icon-users text-muted" style="font-size: 3rem;"></i>
-                <p class="text-muted mt-2">No users found</p>
-              </div>
+                <div *ngIf="isLoading" class="text-center py-4">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
 
-              <div *ngIf="!isLoading && users.length > 0" class="table-responsive">
+                                <div *ngIf="!isLoading && filteredUsers.length === 0" class="text-center py-4">
+                    <i class="feather icon-users text-muted" style="font-size: 3rem;"></i>
+                    <p class="text-muted mt-2">No users found matching the current filters</p>
+                  </div>
+
+                  <div *ngIf="!isLoading && filteredUsers.length > 0" class="table-responsive">
                 <table class="table table-hover">
                   <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Username</th>
-                      <th>Role</th>
-                      <th>Contact</th>
-                      <th>Created</th>
-                      <th>Actions</th>
-                    </tr>
+                                          <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Contact</th>
+                        <th>Location</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                      </tr>
                   </thead>
-                  <tbody>
-                    <tr *ngFor="let user of users">
-                      <td>
-                        <strong>{{ user.firstName }} {{ user.lastName }}</strong>
-                        <br>
-                        <small class="text-muted">{{ user.email || 'No email' }}</small>
-                      </td>
-                      <td>
-                        <code>{{ user.username }}</code>
-                      </td>
-                      <td>
-                        <span [class]="getRoleBadgeClass(user.role)">
-                          {{ user.role }}
-                        </span>
-                      </td>
-                      <td>{{ user.contactNumber }}</td>
-                      <td>
-                        <small class="text-muted">
-                          {{ user.createdAt | date:'short' }}
-                        </small>
-                      </td>
-                      <td>
-                        <div class="btn-group btn-group-sm">
-                          <button
-                            class="btn btn-outline-primary"
-                            (click)="openEditUserModal(editUserModal, user)"
-                            title="Edit User"
-                          >
-                            <i class="feather icon-edit-2"></i>
-                          </button>
-                          <button
-                            class="btn btn-outline-danger"
-                            (click)="deleteUser(user)"
-                            title="Delete User"
-                            [disabled]="user.role === 'Admin'"
-                          >
-                            <i class="feather icon-trash-2"></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
+                                      <tbody>
+                      <tr *ngFor="let user of paginatedUsers">
+                        <td>
+                          <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                          <br>
+                          <small class="text-muted">{{ user.email || 'No email' }}</small>
+                        </td>
+                        <td>
+                          <code>{{ user.username }}</code>
+                        </td>
+                        <td>
+                          <span [class]="getRoleBadgeClass(user.role)">
+                            {{ user.role }}
+                          </span>
+                        </td>
+                        <td>{{ user.contactNumber }}</td>
+                        <td>
+                          <small class="text-muted">
+                            <div><strong>Municipality:</strong> {{ getMunicipalityName(user.municipalityId) }}</div>
+                            <div><strong>Barangay:</strong> {{ getBarangayName(user.barangayId) }}</div>
+                          </small>
+                        </td>
+                        <td>
+                          <small class="text-muted">
+                            {{ user.createdAt | date:'short' }}
+                          </small>
+                        </td>
+                        <td>
+                          <div class="btn-group btn-group-sm">
+                            <button
+                              class="btn btn-outline-primary"
+                              (click)="openEditUserModal(editUserModal, user)"
+                              title="Edit User"
+                            >
+                              <i class="feather icon-edit-2"></i>
+                            </button>
+                            <button
+                              class="btn btn-outline-danger"
+                              (click)="deleteUser(user)"
+                              title="Delete User"
+                              [disabled]="user.role === 'Admin'"
+                            >
+                              <i class="feather icon-trash-2"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
                 </table>
+              </div>
+
+              <!-- Pagination Controls -->
+              <div *ngIf="pagination.totalPages > 1" class="pagination-section mt-4">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="pagination-info">
+                    <small class="text-muted">
+                      Showing {{ (pagination.currentPage - 1) * pagination.itemsPerPage + 1 }} to 
+                      {{ Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalItems) }} 
+                      of {{ pagination.totalItems }} users
+                    </small>
+                  </div>
+                  
+                  <nav aria-label="User pagination">
+                    <ul class="pagination pagination-sm mb-0">
+                      <!-- First Page -->
+                      <li class="page-item" [class.disabled]="pagination.currentPage === 1">
+                        <button class="page-link" (click)="goToFirstPage()" [disabled]="pagination.currentPage === 1">
+                          <i class="feather icon-chevrons-left"></i>
+                        </button>
+                      </li>
+                      
+                      <!-- Previous Page -->
+                      <li class="page-item" [class.disabled]="pagination.currentPage === 1">
+                        <button class="page-link" (click)="goToPreviousPage()" [disabled]="pagination.currentPage === 1">
+                          <i class="feather icon-chevron-left"></i>
+                        </button>
+                      </li>
+                      
+                      <!-- Page Numbers -->
+                      <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === pagination.currentPage">
+                        <button 
+                          *ngIf="page !== -1" 
+                          class="page-link" 
+                          (click)="goToPage(page)"
+                          [class.active]="page === pagination.currentPage"
+                        >
+                          {{ page }}
+                        </button>
+                        <span *ngIf="page === -1" class="page-link disabled">...</span>
+                      </li>
+                      
+                      <!-- Next Page -->
+                      <li class="page-item" [class.disabled]="pagination.currentPage === pagination.totalPages">
+                        <button class="page-link" (click)="goToNextPage()" [disabled]="pagination.currentPage === pagination.totalPages">
+                          <i class="feather icon-chevron-right"></i>
+                        </button>
+                      </li>
+                      
+                      <!-- Last Page -->
+                      <li class="page-item" [class.disabled]="pagination.currentPage === pagination.totalPages">
+                        <button class="page-link" (click)="goToLastPage()" [disabled]="pagination.currentPage === pagination.totalPages">
+                          <i class="feather icon-chevrons-right"></i>
+                        </button>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
               </div>
             </div>
           </div>
