@@ -26,10 +26,12 @@ export class UserManagementComponent implements OnInit {
   
   barangays = [];
   municipalities = [];
+  allBarangays: any[] = [];
   selectedBarangay: any;
   selectedMunicipality: any;
 
   filterForm: FormGroup;
+  searchForm: FormGroup;
   availableRoles = ['Admin', 'LGU', 'LGA', 'Others'];
   availableMunicipalities: any[] = [];
   availableBarangays: any[] = [];
@@ -65,6 +67,10 @@ export class UserManagementComponent implements OnInit {
       municipalityId: [''],
       barangayId: ['']
     });
+
+    this.searchForm = this.fb.group({
+      searchTerm: ['']
+    });
   }
 
   ngOnInit(): void {
@@ -84,15 +90,31 @@ export class UserManagementComponent implements OnInit {
     this.filterForm.valueChanges.subscribe(() => {
       this.applyFilters();
     });
+
+    this.searchForm.valueChanges.subscribe(() => {
+      this.applyFilters();
+    });
+
+    this.filterForm.get('municipalityId')?.valueChanges.subscribe(municipalityId => {
+      if (municipalityId) {
+        this.dataService.getBarangays(parseInt(municipalityId)).subscribe(res => {
+          this.availableBarangays = res;
+        });
+      } else {
+        this.loadAllBarangaysForFiltering();
+      }
+    });
   }
 
   applyFilters(): void {
     const filters = this.filterForm.value;
+    const searchTerm = this.searchForm.get('searchTerm')?.value?.toLowerCase().trim() || '';
     
     this.filteredUsers = this.users.filter(user => {
       let matchesRole = true;
       let matchesMunicipality = true;
       let matchesBarangay = true;
+      let matchesSearch = true;
 
       if (filters.role && filters.role !== '') {
         matchesRole = user.role === filters.role;
@@ -106,7 +128,17 @@ export class UserManagementComponent implements OnInit {
         matchesBarangay = user.barangayId === parseInt(filters.barangayId);
       }
 
-      return matchesRole && matchesMunicipality && matchesBarangay;
+      if (searchTerm) {
+        const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+        const username = user.username.toLowerCase();
+        const email = (user.email || '').toLowerCase();
+        
+        matchesSearch = fullName.includes(searchTerm) || 
+                       username.includes(searchTerm) || 
+                       email.includes(searchTerm);
+      }
+
+      return matchesRole && matchesMunicipality && matchesBarangay && matchesSearch;
     });
 
     this.updatePagination();
@@ -115,6 +147,7 @@ export class UserManagementComponent implements OnInit {
 
   clearFilters(): void {
     this.filterForm.reset();
+    this.searchForm.reset();
     this.filteredUsers = [...this.users];
     this.updatePagination();
     this.goToPage(1);
@@ -200,6 +233,7 @@ export class UserManagementComponent implements OnInit {
     this.dataService.getMunicipalities().subscribe(res => {
       this.municipalities = res;
       this.availableMunicipalities = res;
+      this.loadAllBarangaysForFiltering();
     });
   }
 
@@ -228,7 +262,6 @@ export class UserManagementComponent implements OnInit {
         this.filteredUsers = [...users];
         this.isLoading = false;
         
-        this.loadAllBarangaysForFiltering();
         this.updatePagination();
       },
       error: (error) => {
@@ -239,19 +272,21 @@ export class UserManagementComponent implements OnInit {
   }
 
   loadAllBarangaysForFiltering(): void {
-    const uniqueMunicipalityIds = [...new Set(this.users
-      .map(user => user.municipalityId)
-      .filter(id => id !== null && id !== undefined))];
+    this.availableBarangays = [];
+    this.allBarangays = [];
     
-    uniqueMunicipalityIds.forEach(municipalityId => {
-      if (municipalityId) {
-        this.dataService.getBarangays(municipalityId).subscribe(res => {
-          this.availableBarangays = [...this.availableBarangays, ...res];
-          this.availableBarangays = this.availableBarangays.filter((barangay, index, self) => 
-            index === self.findIndex(b => b.id === barangay.id)
-          );
-        });
-      }
+    this.municipalities.forEach(municipality => {
+      this.dataService.getBarangays(municipality.id).subscribe(res => {
+        this.availableBarangays = [...this.availableBarangays, ...res];
+        this.allBarangays = [...this.allBarangays, ...res];
+        
+        this.availableBarangays = this.availableBarangays.filter((barangay, index, self) => 
+          index === self.findIndex(b => b.id === barangay.id)
+        );
+        this.allBarangays = this.allBarangays.filter((barangay, index, self) => 
+          index === self.findIndex(b => b.id === barangay.id)
+        );
+      });
     });
   }
 
@@ -396,7 +431,7 @@ export class UserManagementComponent implements OnInit {
 
   getBarangayName(barangayId: number | null): string {
     if (!barangayId) return 'N/A';
-    const barangay = this.barangays.find(b => b.id === barangayId);
+    const barangay = this.allBarangays.find(b => b.id === barangayId);
     return barangay ? barangay.name : 'N/A';
   }
 }
