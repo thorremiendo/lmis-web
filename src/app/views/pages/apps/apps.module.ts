@@ -58,6 +58,8 @@ import { RapidRiskAssessmentComponent } from './rapid-risk-assessment/rapid-risk
 import { SettingsComponent } from './settings/settings.component';
 import { ThresholdsComponent } from './settings/thresholds/thresholds.component';
 import { LandslideRiskWarningComponent } from './landslide-risk-warning/landslide-risk-warning.component';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { AdminGuard } from 'src/app/core/guard/admin.guard';
 
 const routes: Routes = [
   {
@@ -148,6 +150,11 @@ const routes: Routes = [
         component: LandslideRiskWarningComponent
       },
       {
+        path: 'user-management',
+        component: UserManagementComponent,
+        canActivate: [AdminGuard]
+      },
+      {
         path: 'settings',
         component: SettingsComponent,
         children: [
@@ -193,6 +200,7 @@ const routes: Routes = [
     SettingsComponent,
     ThresholdsComponent,
     LandslideRiskWarningComponent,
+    UserManagementComponent,
   ],
   imports: [
     NgbModule,
@@ -214,6 +222,7 @@ const routes: Routes = [
   ],
   exports: [MapComponent],
   providers: [
+    AdminGuard,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

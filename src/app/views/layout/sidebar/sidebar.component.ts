@@ -51,6 +51,10 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     } else if (this.user.role === 'LGU') {
       this.menuItems = this.menuItems.filter(item => item.label !== "Settings")
     }
+    
+    if (this.user.role !== 'Admin') {
+      this.menuItems = this.menuItems.filter(item => item.label !== 'User Management')
+    }
 
 
 

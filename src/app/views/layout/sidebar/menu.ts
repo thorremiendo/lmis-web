@@ -82,5 +82,10 @@ export const MENU: MenuItem[] = [
       },
     ]
   },
+  {
+    label: 'User Management',
+    icon: 'users',
+    link: '/apps/user-management'
+  },
 
 ];
