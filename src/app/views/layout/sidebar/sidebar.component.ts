@@ -5,6 +5,7 @@ import { MENU } from './menu';
 import { MenuItem } from './menu.model';
 import { Router, NavigationEnd } from '@angular/router';
 import { environment } from "../../../../environments/environment.prod";
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,7 +21,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   menuItems: MenuItem[] = [];
   @ViewChild('sidebarMenu') sidebarMenu: ElementRef;
 
-  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private router: Router) {
+  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, private router: Router, private authService: AuthService) {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
 
@@ -42,8 +43,12 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.menuItems = MENU;
-    console.log(this.menuItems)
-    console.log(this.user)
+
+    if (!this.user) {
+      this.authService.logout()
+      return
+    }
+
     if (this.user.username === 'lmis-mayor') {
       this.menuItems = this.menuItems.filter(item => item.label === 'Main' || item.label === 'Dashboard' || item.label === "Web Apps" || item.label === 'Landslide Risk Warning')
     } else if (this.user.role === 'Others') {
@@ -51,7 +56,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
     } else if (this.user.role === 'LGU') {
       this.menuItems = this.menuItems.filter(item => item.label !== "Settings")
     }
-    
+
     if (this.user.role !== 'Admin') {
       this.menuItems = this.menuItems.filter(item => item.label !== 'User Management')
     }
