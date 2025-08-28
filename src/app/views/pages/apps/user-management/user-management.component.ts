@@ -4,6 +4,7 @@ import { UserManagementService, User } from 'src/app/core/services/user-manageme
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from 'src/app/core/services/data.service';
 import { Router } from '@angular/router';
+import { ViewChild, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-user-management',
@@ -11,6 +12,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-management.component.scss']
 })
 export class UserManagementComponent implements OnInit {
+  @ViewChild('deleteConfirmModal') deleteConfirmModal!: TemplateRef<any>;
+  
   users: User[] = [];
   filteredUsers: User[] = [];
   paginatedUsers: User[] = [];
@@ -21,6 +24,7 @@ export class UserManagementComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   modalRef: NgbModalRef | null = null;
+  userToDelete: User | null = null;
   
   Math = Math;
   
@@ -53,13 +57,13 @@ export class UserManagementComponent implements OnInit {
     this.userForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      email: ['', [Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
       role: ['LGU', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       contactNumber: ['', [Validators.required, Validators.pattern(/^09\d{9}$/)]],
-      municipalityId: [null],
-      barangayId: [null]
+      municipalityId: [null, Validators.required],
+      barangayId: [null, Validators.required]
     });
 
     this.filterForm = this.fb.group({
@@ -323,6 +327,11 @@ export class UserManagementComponent implements OnInit {
         this.selectedMunicipality = this.municipalities.find(m => m.id === user.municipalityId);
         this.selectedBarangay = this.barangays.find(b => b.id === user.barangayId);
       });
+    } else {
+      this.loadMunicipalities();
+      this.selectedMunicipality = null;
+      this.selectedBarangay = null;
+      this.barangays = [];
     }
     
     this.modalRef = this.modalService.open(content, { size: 'lg', centered: true });
@@ -374,30 +383,63 @@ export class UserManagementComponent implements OnInit {
           }
         });
       }
+    } else {
+      this.markFormGroupTouched();
     }
   }
 
+  markFormGroupTouched(): void {
+    Object.keys(this.userForm.controls).forEach(key => {
+      const control = this.userForm.get(key);
+      control?.markAsTouched();
+    });
+  }
+
   deleteUser(user: User): void {
-    if (confirm(`Are you sure you want to delete user ${user.username}?`)) {
+    if (user.role === 'Admin') {
+      this.errorMessage = 'Admin users cannot be deleted';
+      return;
+    }
+
+    this.userToDelete = user;
+    this.modalRef = this.modalService.open(this.deleteConfirmModal, { 
+      size: 'sm', 
+      centered: true,
+      backdrop: 'static'
+    });
+  }
+
+  confirmDelete(): void {
+    if (this.userToDelete) {
       this.isLoading = true;
-      this.userService.updateUser(user.id!, { ...user, isActive: false }).subscribe({
+      this.userService.deleteUser(this.userToDelete.id!).subscribe({
         next: () => {
-          this.users = this.users.filter(u => u.id !== user.id);
+          this.users = this.users.filter(u => u.id !== this.userToDelete?.id);
           this.applyFilters();
-          this.successMessage = 'User deleted successfully!';
+          this.successMessage = `User "${this.userToDelete.firstName} ${this.userToDelete.lastName}" has been deleted successfully!`;
+          this.closeModal();
+          this.userToDelete = null;
           this.isLoading = false;
         },
         error: (error) => {
-          this.errorMessage = 'Error deleting user: ' + error.message;
+          this.errorMessage = 'Error deleting user: ' + (error.error?.message || error.message || 'Unknown error occurred');
           this.isLoading = false;
         }
       });
     }
   }
 
+  cancelDelete(): void {
+    this.userToDelete = null;
+    this.closeModal();
+  }
+
   resetForm(): void {
     this.userForm.reset({
-      role: 'LGU'
+      role: 'LGU',
+      email: '',
+      municipalityId: null,
+      barangayId: null
     });
     this.isEditing = false;
     this.editingUserId = null;
@@ -421,6 +463,10 @@ export class UserManagementComponent implements OnInit {
       case 'Others': return 'badge bg-secondary';
       default: return 'badge bg-secondary';
     }
+  }
+
+  canDeleteUser(user: User): boolean {
+    return user.role !== 'Admin';
   }
 
   getMunicipalityName(municipalityId: number | null): string {

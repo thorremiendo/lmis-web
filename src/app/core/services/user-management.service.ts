@@ -42,4 +42,9 @@ export class UserManagementService {
     const url = `/auth/users/${id}`;
     return this.apiService.put(url, JSON.stringify(userData));
   }
+
+  deleteUser(id: number): Observable<any> {
+    const url = `/auth/users/${id}`;
+    return this.apiService.delete(url);
+  }
 }

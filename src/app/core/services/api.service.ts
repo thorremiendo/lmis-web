@@ -87,19 +87,17 @@ export class ApiService {
         return this.httpClient.patch(completeUrl, body, { headers: headers });
     }
 
+    delete(url: string): Observable<any> {
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'Access-Control-Allow-Origin': '*',
+        });
 
+        const completeUrl = this.generateUrl(url);
 
-    // delete(url: any, body: string): Observable<any> {
-    //   const headers = new HttpHeaders({
-    //     'Content-Type': 'application/json',
-    //     Accept: 'application/json',
-    //     'Access-Control-Allow-Origin': '*',
-    //   });
-
-    //   const completeUrl = this.generateUrl(url);
-    //   // const formData = this.createFormData(body);
-    //   return this.httpClient.delete(completeUrl, body);
-    // }
+        return this.httpClient.delete(completeUrl, { headers: headers });
+    }
 
     putFormData(url: any, body: string): Observable<any> {
         const headers = new HttpHeaders({
