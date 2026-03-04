@@ -20,9 +20,14 @@
     }
   }
 
-  // Fill alerts
+  // Fill alerts (Bootstrap 5 removed alert-variant mixin - use equivalent styles)
   .alert-fill-#{$state} {
-    @include alert-variant($value, $value, $white);
+    background-color: $value;
+    border-color: $value;
+    color: $white;
+    .alert-link {
+      color: rgba($white, 0.9);
+    }
     &.alert-fill-light {
       color: $text-muted;
     }

@@ -296,7 +296,8 @@ $pagination-active-bg: $primary;
 $pagination-active-border-color: $primary;
 
 
-// Cards
+// Cards (Bootstrap 5 uses var(--bs-body-bg) for $card-bg - define as Sass color for darken/lighten in components)
+$card-bg: $white;
 $card-box-shadow: 0 0 10px 0 rgba(183, 192, 206, .2); // custom variable
 $card-spacer-y: 1.5rem !default;
 $card-spacer-x: 1.5rem !default;

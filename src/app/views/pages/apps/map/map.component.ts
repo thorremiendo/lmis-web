@@ -108,7 +108,7 @@ export class MapComponent implements OnInit {
       voice_instructions: true,
       controls: {
         inputs: false,
-        instructions: false,
+        instructions: true,
         profileSwitcher: false
       }
     })

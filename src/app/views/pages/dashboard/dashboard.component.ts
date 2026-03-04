@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import * as mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+import * as mapboxgl from 'mapbox-gl';
 import { NgbDateStruct, NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { SensorsService } from '../apps/services/sensors.service';
 import { SensorParams } from '../apps/models/sensor-params';
@@ -197,7 +197,6 @@ export class DashboardComponent implements OnInit {
     this.fromDate = calendar.getPrev(this.toDate, 'd', 7);
     this.from = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
     this.until = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
-    mapboxgl.accessToken = environment.mapboxToken;
   }
 
   ngOnInit(): void {
@@ -570,6 +569,7 @@ export class DashboardComponent implements OnInit {
 
   buildMap() {
     this.map = new mapboxgl.Map({
+      accessToken: environment.mapboxToken,
       container: 'map',
       style: this.style,
       zoom: this.zoom,

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { Router, RouteConfigLoadStart, RouteConfigLoadEnd } from '@angular/router';
 
 @Component({
@@ -10,7 +11,10 @@ export class BaseComponent implements OnInit {
 
   isLoading: boolean;
 
-  constructor(private router: Router) { 
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private router: Router
+  ) { 
 
     // Spinner for lazyload modules
     router.events.forEach((event) => { 
@@ -25,6 +29,20 @@ export class BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  /**
+   * Close sidebar/settings when clicking the overlay on mobile
+   */
+  onBackdropClick(event: MouseEvent): void {
+    if (!window.matchMedia('(max-width: 991px)').matches) {
+      return;
+    }
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+    this.document.body.classList.remove('sidebar-open');
+    this.document.body.classList.remove('settings-open');
   }
 
 }

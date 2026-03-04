@@ -1,10 +1,12 @@
 .auth-bg {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
+  overflow-x: hidden;
   background: linear-gradient(120deg, #e0f7fa 0%, #f8fafc 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 .auth-card {
@@ -276,8 +278,14 @@
 }
 
 @media (max-width: 900px) {
+  .auth-bg {
+    padding: 1rem;
+  }
+
   .auth-card {
     max-width: 98vw;
+    min-height: unset;
+    height: auto;
   }
 
   .auth-form {
@@ -288,11 +296,18 @@
 }
 
 @media (max-width: 700px) {
+  .auth-bg {
+    padding: 1rem;
+    align-items: flex-start;
+  }
+
   .auth-card {
     flex-direction: column;
     max-width: 98vw;
     min-height: unset;
     height: auto;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
     border-radius: 1.2rem;
   }
 
@@ -307,7 +322,42 @@
     gap: 0;
   }
 
+  .location-group {
+    flex-direction: column;
+  }
+
+  .location-group .flex-fill {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
   .auth-image.full-bg {
     display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .auth-bg {
+    padding: 0.75rem;
+  }
+
+  .auth-card {
+    max-height: calc(100vh - 2rem);
+  }
+
+  .auth-form {
+    padding: 1rem 0.75rem 1.5rem 0.75rem;
+  }
+
+  .nobleui-logo {
+    font-size: 1.25rem;
+  }
+
+  .auth-form h5 {
+    font-size: 1rem;
+  }
+
+  .forms-sample .mb-3 {
+    margin-bottom: 0.75rem !important;
   }
 }

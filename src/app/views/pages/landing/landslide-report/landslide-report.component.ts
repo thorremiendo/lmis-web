@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { time } from 'console';
 import { DataService } from 'src/app/core/services/data.service';
 import { SwalService } from 'src/app/core/services/swal.service';
-import * as mapboxgl from 'mapbox-gl/dist/mapbox-gl';
+import * as mapboxgl from 'mapbox-gl';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -45,7 +45,6 @@ export class LandslideReportComponent implements OnInit {
 
   constructor(private calendar: NgbCalendar, private fb: FormBuilder, private dataService: DataService, private swalService: SwalService) {
     this.selectToday();
-    mapboxgl.accessToken = environment.mapboxToken;
   }
 
   ngOnInit(): void {
@@ -65,6 +64,7 @@ export class LandslideReportComponent implements OnInit {
 
   buildMap() {
     this.map = new mapboxgl.Map({
+      accessToken: environment.mapboxToken,
       container: 'map',
       style: this.style,
       zoom: this.zoom,

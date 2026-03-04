@@ -1,5 +1,29 @@
 .match-parent {
     width: 100%;
-    height: 500px;
+    height: 600px;
+}
+
+// Mapbox Directions visibility overrides
+:host ::ng-deep {
+    .directions-control.directions-control-directions {
+        background: rgba(0, 0, 0, 0.92) !important;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+        border-radius: 4px;
+    }
+
+    .mapbox-directions-route-summary {
+        background-color: rgba(0, 0, 0, 0.95) !important;
+        color: #fff;
+    }
+
+    .mapbox-directions-step {
+        color: rgba(255, 255, 255, 0.95) !important;
+        font-weight: 400;
+        padding: 20px 20px 20px 40px;
+    }
+
+    .mapbox-directions-step-distance {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
 }
 
